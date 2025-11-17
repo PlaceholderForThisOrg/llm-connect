@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 
 from llm_connect.errors import global_exception_handler, http_exception_handler
-from llm_connect.routes import private, public
+from llm_connect.routes import private, public, llm
 
 # 🧠 The main FastAPI app
 app = FastAPI(
@@ -16,6 +16,7 @@ app = FastAPI(
 # 🛣️ Different API routes
 app.include_router(router=public.router)
 app.include_router(router=private.router)
+app.include_router(router=llm.router)
 
 # ⁉️ Exception handler
 
