@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
+from llm_connect.configs.app import ORIGINS
 from llm_connect.errors import global_exception_handler, http_exception_handler
 from llm_connect.routes import llm, private, public
 
@@ -13,7 +15,7 @@ app = FastAPI(
     contact={"name": "Le Bui Trung Dung", "email": "trungdunglebui17112004@gmail.com"},
 )
 
-# 🛣️ Different API routes
+# 🛣️ API routes
 app.include_router(router=public.router)
 app.include_router(router=private.router)
 app.include_router(router=llm.router)
@@ -24,3 +26,15 @@ app.include_router(router=llm.router)
 app.add_exception_handler(HTTPException, http_exception_handler)
 # 🌍 Catch-all handler
 app.add_exception_handler(Exception, global_exception_handler)
+
+# 🖕 Middleware
+
+# CORS to tell the browser to allow that script to read
+# the response from the server (SOP)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

@@ -193,3 +193,6 @@ models/*.keras
 
 # Cache directories
 .cache/
+
+# private
+script
