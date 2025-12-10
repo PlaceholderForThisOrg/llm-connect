@@ -13,7 +13,7 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
 # 4. Set up the formatter of the handler
-formatter = logging.Formatter("🐛🐛🐛🐛 %(asctime)s - %(levelname)s - %(message)s")
+formatter = logging.Formatter("🐛 %(asctime)s - %(levelname)s - %(message)s")
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
