@@ -2,7 +2,7 @@ from azure.ai.inference.models import SystemMessage, UserMessage
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
-from llm_connect.clients.llm import client
+from llm_connect.clients.llm import LLM
 from llm_connect.configs import llm
 from llm_connect.schemas import chat_schema
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/v1/companion", tags=["Companion"])
 
 @router.post("/chat")
 def generate(request: chat_schema.ChatRequest):
-    response = client.complete(
+    response = LLM.complete(
         messages=[
             SystemMessage("You are an English companion"),
             UserMessage(request.message),
@@ -28,7 +28,7 @@ def generate(request: chat_schema.ChatRequest):
 def generate_stream(request: chat_schema.ChatRequest):
 
     def stream():
-        response = client.complete(
+        response = LLM.complete(
             messages=[
                 SystemMessage("You are an English companion"),
                 UserMessage(request.message),
