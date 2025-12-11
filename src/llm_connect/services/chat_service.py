@@ -8,8 +8,6 @@ from llm_connect.clients.redis import Redis
 from llm_connect.configs import llm
 from llm_connect.configs.redis import MESSAGE_STREAM
 from llm_connect.models.MessageStream import MessageStream, Role
-from llm_connect.schemas import chat_schema
-from llm_connect.types.auth import Payload
 
 
 async def stream(user_message: str, uid: str):
