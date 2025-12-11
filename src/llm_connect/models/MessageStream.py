@@ -9,7 +9,7 @@ class Role(Enum):
 
 
 class MessageStream(BaseModel):
-    uid: str
+    user_id: str
     role: str
     content: str
     timestamp: str

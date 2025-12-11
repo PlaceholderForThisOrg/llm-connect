@@ -10,7 +10,7 @@ from llm_connect.configs.redis import MESSAGE_STREAM
 from llm_connect.models.MessageStream import MessageStream, Role
 
 
-async def stream(user_message: str, uid: str):
+async def stream(user_message: str, user_id: str):
     response = LLM.complete(
         messages=[
             SystemMessage("You are an English companion"),
@@ -33,14 +33,14 @@ async def stream(user_message: str, uid: str):
 
     companion_messages = "".join(companion_messages)
 
-    asyncio.create_task(push_message(companion_messages, uid, Role.COMPANION))
+    asyncio.create_task(push_message(companion_messages, user_id, Role.COMPANION))
     # await push_message(companion_messages, uid, Role.COMPANION)
     yield "[END]"
 
 
-async def push_message(content: str, uid: str, role: Role):
+async def push_message(content: str, user_id: str, role: Role):
     message = MessageStream(
-        uid=uid,
+        user_id=user_id,
         role=str(role),
         content=content,
         timestamp=str(int(time.time() * 1000)),
