@@ -3,7 +3,7 @@ from azure.core.credentials import AzureKeyCredential
 
 from llm_connect.configs.llm import ENDPOINT, TOKEN
 
-client = ChatCompletionsClient(
+LLM = ChatCompletionsClient(
     endpoint=ENDPOINT,
     credential=AzureKeyCredential(TOKEN),
 )

@@ -16,6 +16,7 @@ dependencies = [
     "cryptography (>=46.0.3,<47.0.0)",
     "python-dotenv>=1.2.1",
     "azure-ai-inference>=1.0.0b9",
+    "redis>=7.1.0",
 ]
 
 [tool.poetry]
