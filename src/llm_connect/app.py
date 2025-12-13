@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from llm_connect.clients import lifespan
 from llm_connect.configs.app import ORIGINS
 from llm_connect.errors import global_exception_handler, http_exception_handler
-from llm_connect.routes import dictionary, llm, private, public
+from llm_connect.routes import dictionary, learner, llm, private, public
 
 # 🧠 The main FastAPI app
 app = FastAPI(
@@ -22,6 +22,7 @@ app.include_router(router=public.router)
 app.include_router(router=private.router)
 app.include_router(router=llm.router)
 app.include_router(router=dictionary.router)
+app.include_router(router=learner.router)
 
 # ⁉️ Exception handler
 

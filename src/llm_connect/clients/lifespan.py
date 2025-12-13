@@ -1,6 +1,7 @@
 import json
 from contextlib import asynccontextmanager
 
+import aioboto3
 import asyncpg
 import httpx
 import redis
@@ -13,6 +14,10 @@ from llm_connect import logger
 from llm_connect.configs.llm import ENDPOINT, TOKEN
 from llm_connect.configs.postgre import POSTGRE_URI
 from llm_connect.configs.redis import HOST, PORT
+from llm_connect.configs.s3 import (
+    AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY_ID,
+)
 
 
 # 🪼 Define the app lifespan
@@ -36,11 +41,18 @@ async def lifespan(app: FastAPI):
 
     app.state.http_client = httpx.AsyncClient()
 
+    app.state.s3_session = aioboto3.Session(
+        aws_access_key_id=AWS_ACCESS_KEY_ID(),
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ID(),
+    )
+
     logger.logger.info("Application start")
+
     yield
 
     await app.state.pool.close()
     app.state.llm.close()
-    await app.state.redis.close()
+    await app.state.redis.aclose()
     await app.state.http_client.aclose()
+
     logger.logger.info("Clean client resources")

@@ -15,3 +15,7 @@ def get_redis(request: Request):
 
 def get_http_client(request: Request):
     return request.app.state.http_client
+
+
+def get_s3_session(request: Request):
+    return request.app.state.s3_session
