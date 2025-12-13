@@ -1,3 +1,4 @@
+import json
 from contextlib import asynccontextmanager
 
 import asyncpg
@@ -17,8 +18,13 @@ from llm_connect.configs.redis import HOST, PORT
 # 🪼 Define the app lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    async def init_connection(conn):
+        await conn.set_type_codec(
+            "jsonb", encoder=json.dumps, decoder=json.loads, schema="pg_catalog"
+        )
+
     app.state.pool = await asyncpg.create_pool(
-        dsn=POSTGRE_URI(), min_size=1, max_size=5
+        dsn=POSTGRE_URI(), min_size=1, max_size=5, init=init_connection
     )
 
     app.state.llm = ChatCompletionsClient(

@@ -1,5 +1,3 @@
-from typing import List
-
 import httpx
 from asyncpg import Pool
 from fastapi import APIRouter, Depends
@@ -12,11 +10,11 @@ router = APIRouter(prefix="/api/v1/dictionary", tags=["Dictionary"])
 
 
 @router.get("")
-async def get_vocabulary(
+async def look_up_a_word(
     word: str = "",
     pool: Pool = Depends(get_postgre_pool),
     http_client: httpx.AsyncClient = Depends(get_http_client),
-) -> List[DictionaryResponse]:
-    entries = await look_up(word=word, pool=pool, http_client=http_client)
-    response = [DictionaryResponse(**entry.model_dump()) for entry in entries]
+) -> DictionaryResponse:
+    entry = await look_up(word=word.lower(), pool=pool, http_client=http_client)
+    response = DictionaryResponse(**entry)
     return response
