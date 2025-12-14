@@ -125,3 +125,18 @@ async def update_learner(
         raise HTTPException(status_code=404, detail="Learner not found")
 
     return row
+
+
+async def fetch_learner(user_id: str, pool: asyncpg.Pool):
+    sql = """
+    SELECT l.user_id, l.name, l.nickname, l.avatar_url, l.date_of_birth, l.settings
+    FROM learner as l
+    WHERE l.user_id = $1
+    """
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(sql, user_id)
+
+        if not row:
+            raise HTTPException(status_code=404, detail="Learner not foun")
+
+        return row

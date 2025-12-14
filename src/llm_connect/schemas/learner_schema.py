@@ -24,3 +24,16 @@ class LearnerUpdateResponse(BaseModel):
 class UploadAvatarResponse(BaseModel):
     user_id: str
     avatar_url: str
+
+
+class GetLearnerRequest(BaseModel):
+    None
+
+
+class GetLearnerResponse(BaseModel):
+    user_id: str
+    name: str
+    nickname: str
+    avatar_url: str
+    date_of_birth: date
+    settings: dict
