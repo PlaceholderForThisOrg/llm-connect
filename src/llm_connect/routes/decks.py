@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from asyncpg import Pool
 from fastapi import APIRouter, Depends
 
@@ -62,7 +64,7 @@ async def get_all_decks(
 
 @router.delete("/{id}")
 async def delete_deck(
-    id: int,
+    id: UUID,
     jwt_payload: Payload = Depends(verify_token),
     pool: Pool = Depends(get_postgre_pool),
 ) -> DeleteDeckResponse:
@@ -78,5 +80,5 @@ async def delete_deck(
 
 
 @router.patch("/{id}")
-async def update_deck(jwt_payload: Payload = Depends(verify_token)):
+async def update_deck(id: UUID, jwt_payload: Payload = Depends(verify_token)):
     None

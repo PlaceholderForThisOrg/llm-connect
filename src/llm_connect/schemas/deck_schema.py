@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -10,7 +11,7 @@ class CreateDeckRequest(BaseModel):
 
 
 class CreateDeckResponse(BaseModel):
-    id: int
+    id: UUID
     name: str
     description: str
     is_shared: bool
@@ -21,21 +22,21 @@ class DeleteDeckRequest(BaseModel):
 
 
 class DeleteDeckResponse(BaseModel):
-    id: int
+    id: UUID
     name: str
     description: str
     is_shared: bool
 
 
 class GetDeckSummary(BaseModel):
-    id: int
+    id: UUID
     name: str
     description: str
     is_shared: bool
 
 
 class GetDeckDetail(BaseModel):
-    id: int
+    id: UUID
     name: str
     description: str
     is_shared: bool

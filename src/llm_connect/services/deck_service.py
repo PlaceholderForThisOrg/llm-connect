@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from asyncpg import Pool
 from fastapi import HTTPException
 
@@ -18,7 +20,7 @@ async def create_new_deck(deck: CreateDeckRequest, user_id: str, pool: Pool):
         return row
 
 
-async def remove_deck(user_id: str, id: int, pool: Pool):
+async def remove_deck(user_id: str, id: UUID, pool: Pool):
     sql = """
     DELETE FROM srs.deck AS d
     WHERE d.user_id = $1 AND d.id = $2
