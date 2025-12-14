@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -23,3 +25,18 @@ class DeleteDeckResponse(BaseModel):
     name: str
     description: str
     is_shared: bool
+
+
+class GetDeckSummary(BaseModel):
+    id: int
+    name: str
+    description: str
+    is_shared: bool
+
+
+class GetDeckDetail(BaseModel):
+    id: int
+    name: str
+    description: str
+    is_shared: bool
+    created_at: datetime
