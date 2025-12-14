@@ -19,3 +19,23 @@ def make_meta(params: PaginationParams, total_items: int) -> PaginationMeta:
     )
 
     return meta
+
+
+# async def upload_file(
+#     key: str, file: UploadFile, s3_session: aioboto3.Session, bucket: str
+# ) -> str:
+#     async with s3_session.client(
+#         service_name=SERVICE_NAME,
+#         endpoint_url=ENDPOINT_URL(),
+#     ) as s3_client:
+#         await s3_client.upload_fileobj(
+#             file.file,
+#             bucket,
+#             key,
+#             ExtraArgs={"ContentType": file.content_type},
+#         )
+
+#     logger.logger.info("Upload media into MiniO")
+
+#     tem_url = await generate_avatar_url(bucket, key, s3_session)
+#     return tem_url
