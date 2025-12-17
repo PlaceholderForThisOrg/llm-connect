@@ -14,11 +14,11 @@ class LearnerUpdateRequest(BaseModel):
 
 class LearnerUpdateResponse(BaseModel):
     user_id: str
-    name: str
-    nickname: str
-    avatar_url: str
-    date_of_birth: date
-    settings: dict
+    name: Optional[str]
+    nickname: Optional[str]
+    avatar_url: Optional[str]
+    date_of_birth: Optional[date]
+    settings: Optional[dict]
 
 
 class UploadAvatarResponse(BaseModel):
@@ -32,8 +32,8 @@ class GetLearnerRequest(BaseModel):
 
 class GetLearnerResponse(BaseModel):
     user_id: str
-    name: str
-    nickname: str
-    avatar_url: str
-    date_of_birth: date
-    settings: dict
+    name: Optional[str]
+    nickname: Optional[str]
+    avatar_url: Optional[str]
+    date_of_birth: Optional[date]
+    settings: Optional[dict]

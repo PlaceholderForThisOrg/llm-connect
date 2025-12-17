@@ -39,3 +39,28 @@ def make_meta(params: PaginationParams, total_items: int) -> PaginationMeta:
 
 #     tem_url = await generate_avatar_url(bucket, key, s3_session)
 #     return tem_url
+
+
+def sm2_update(
+    *,
+    quality: int,
+    repetitions: int,
+    interval: int,
+    ease_factor: float,
+):
+    if quality < 3:
+        repetitions = 0
+        interval = 1
+    else:
+        repetitions += 1
+        if repetitions == 1:
+            interval = 1
+        elif repetitions == 2:
+            interval = 6
+        else:
+            interval = round(interval * ease_factor)
+
+    ease_factor = ease_factor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+    ease_factor = max(1.3, ease_factor)
+
+    return repetitions, interval, ease_factor

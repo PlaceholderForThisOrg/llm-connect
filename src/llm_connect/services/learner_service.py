@@ -137,6 +137,6 @@ async def fetch_learner(user_id: str, pool: asyncpg.Pool):
         row = await conn.fetchrow(sql, user_id)
 
         if not row:
-            raise HTTPException(status_code=404, detail="Learner not foun")
+            raise HTTPException(status_code=404, detail="Learner not found")
 
         return row
