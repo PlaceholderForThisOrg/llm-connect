@@ -17,6 +17,10 @@ dependencies = [
     "python-dotenv>=1.2.1",
     "azure-ai-inference>=1.0.0b9",
     "redis>=7.1.0",
+    "asyncpg>=0.31.0",
+    "httpx>=0.28.1",
+    "aioboto3>=15.5.0",
+    "python-multipart>=0.0.20",
 ]
 
 [tool.poetry]

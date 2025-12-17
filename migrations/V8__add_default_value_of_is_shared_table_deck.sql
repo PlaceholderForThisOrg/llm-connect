@@ -1,0 +1,2 @@
+ALTER TABLE srs.deck
+ALTER COLUMN is_shared SET DEFAULT FALSE;
