@@ -21,9 +21,9 @@ async def generate_stream(
     redis=Depends(get_redis),
 ):
     asyncio.create_task(
-        push_message(request.message, payload["sid"], Role.LEARNER, redis=redis)
+        push_message(request.message, payload["sub"], Role.LEARNER, redis=redis)
     )
     return StreamingResponse(
-        stream(request.message, payload["sid"], llm=llm, redis=redis),
+        stream(request.message, payload["sub"], llm=llm, redis=redis),
         media_type="text/event-stream",
     )
