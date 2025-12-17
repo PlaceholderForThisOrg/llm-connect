@@ -3,6 +3,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import jwt
 from jwt import PyJWKClient
 
+from llm_connect import logger
 from llm_connect.configs import key_cloak
 from llm_connect.types import Payload
 
@@ -11,6 +12,9 @@ jwk_client = PyJWKClient(key_cloak.JWK_URL)
 
 
 def get_public_key(token: str):
+
+    logger.logger.debug(key_cloak.JWK_URL)
+
     signing_key = jwk_client.get_signing_key_from_jwt(token)
     return signing_key.key
 
@@ -29,6 +33,6 @@ def verify_token(
         public_key,
         algorithms=[key_cloak.ALGORITHM],
         audience=key_cloak.AUDIENCE,
-        issuer=f"{key_cloak.URL}",
+        issuer=f"{key_cloak.URL()}",
     )
     return payload
