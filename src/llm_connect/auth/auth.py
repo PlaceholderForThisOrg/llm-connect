@@ -28,7 +28,7 @@ def verify_token(
         token,
         public_key,
         algorithms=[key_cloak.ALGORITHM],
-        audience=key_cloak.AUDIENCE,
-        issuer=f"{key_cloak.URL}",
+        # audience=key_cloak.AUDIENCE,
+        # issuer=f"{key_cloak.URL()}",
     )
     return payload
