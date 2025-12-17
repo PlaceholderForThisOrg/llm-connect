@@ -6,7 +6,7 @@ def REALM():
 
 
 def URL():
-    return f'S{os.environ["KEYCLOAK_URL"]}/${REALM()}'
+    return f'{os.environ["KEYCLOAK_URL"]}/realms/{REALM()}'
 
 
 ALGORITHM = "RS256"
