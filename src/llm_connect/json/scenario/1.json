@@ -1,0 +1,37 @@
+{
+    "scenario_id": "SC_RESTAURANT_A1_01",
+    "title": "Ordering Food at a Restaurant",
+    "domain": "service_interaction",
+    "target_level": "A1",
+    "knowledge_targets": [
+        "KR_A1_GR_01",
+        "KR_A1_GR_02",
+        "KR_A1_GR_03",
+        "KR_A1_GR_04",
+        "KR_A1_VOC_01",
+        "KR_A1_VOC_02",
+        "KR_A1_VOC_03",
+        "KR_A1_VOC_04",
+        "KR_A1_FS_01",
+        "KR_A1_FS_02",
+        "KR_A1_FS_03"
+    ],
+    "initial_state": "GREETING",
+    "states": {
+        "GREETING": {
+            "goal": "The user should respond to the waiter's greeting.",
+            "next_state": "ORDERING",
+            "trigger_intent": "user_is_ready_to_order"
+        },
+        "ORDERING": {
+            "goal": "The user must order at least one drink and one food item.",
+            "next_state": "CONFIRMATION",
+            "trigger_intent": "order_complete"
+        },
+        "CONFIRMATION": {
+            "goal": "The waiter repeats the order; user confirms.",
+            "next_state": "END",
+            "trigger_intent": "user_confirms_total"
+        }
+    }
+}

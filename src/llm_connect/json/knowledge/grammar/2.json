@@ -1,0 +1,17 @@
+{
+    "id": "KR_A1_GR_02",
+    "type": "grammar_pattern",
+    "title": "Request using 'Can I have...?'",
+    "description": "Learner can request food using 'Can I have...?' structure.",
+    "level": "A1",
+    "domain": "service_interaction",
+    "detectable_features": {
+        "required_patterns": [
+            "Can I have"
+        ]
+    },
+    "evaluation_logic": {
+        "must_contain_one_of_required": true
+    },
+    "pedagogical_focus": "basic request formation"
+}
