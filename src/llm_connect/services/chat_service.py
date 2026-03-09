@@ -46,3 +46,8 @@ async def push_message(content: str, user_id: str, role: Role, redis):
     )
 
     await redis.xadd(MESSAGE_STREAM, fields=message.model_dump())
+
+
+class Orchestrator:
+    def __init__(self):
+        pass

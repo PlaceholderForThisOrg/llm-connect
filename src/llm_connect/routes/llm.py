@@ -20,6 +20,7 @@ async def generate_stream(
     llm=Depends(get_llm),
     redis=Depends(get_redis),
 ):
+
     asyncio.create_task(
         push_message(request.message, payload["sub"], Role.LEARNER, redis=redis)
     )
@@ -27,3 +28,8 @@ async def generate_stream(
         stream(request.message, payload["sub"], llm=llm, redis=redis),
         media_type="text/event-stream",
     )
+
+
+# A scenario_template must be stored
+# The learner will start a scenario by using that scenario template
+# Scenario is created, the messages/states/everything will be related to that scenario
