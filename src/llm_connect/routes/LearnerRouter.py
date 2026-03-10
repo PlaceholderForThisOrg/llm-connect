@@ -3,15 +3,19 @@ import asyncpg
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 from llm_connect.auth.auth import verify_token
-from llm_connect.clients.dependencies import get_postgre_pool, get_s3_session
+from llm_connect.clients.dependencies import (
+    get_learner_service,
+    get_postgre_pool,
+    get_s3_session,
+)
 from llm_connect.schemas.learner_schema import (
     GetLearnerResponse,
     LearnerUpdateRequest,
     LearnerUpdateResponse,
     UploadAvatarResponse,
 )
-from llm_connect.services.learner_service import (
-    fetch_learner,
+from llm_connect.services.LearnerService import (
+    LearnerService,
     update_avatar,
     update_learner,
 )
@@ -56,18 +60,22 @@ async def update_infor(
     )
 
 
-@router.get("")
+@router.get(
+    path="",
+    description="Learner gets basic information",
+    response_model=GetLearnerResponse,
+)
 async def get_me(
     jwt_payload: Payload = Depends(verify_token),
-    pool: asyncpg.Pool = Depends(get_postgre_pool),
+    learner_service: LearnerService = Depends(get_learner_service),
 ) -> GetLearnerResponse:
     user_id = jwt_payload["sub"]
-    data = await fetch_learner(user_id, pool)
+    learner = await learner_service.get_learner_information(user_id)
     return GetLearnerResponse(
         user_id=user_id,
-        name=data["name"],
-        nickname=data["nickname"],
-        avatar_url=data["avatar_url"],
-        date_of_birth=data["date_of_birth"],
-        settings=data["settings"],
+        name=learner.name,
+        nickname=learner.nickname,
+        avatar_url=learner.avatar_url,
+        date_of_birth=learner.date_of_birth,
+        settings=learner.settings,
     )
