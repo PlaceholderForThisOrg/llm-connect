@@ -6,9 +6,8 @@ import asyncpg
 import httpx
 import redis
 import redis.asyncio
-from azure.ai.inference import ChatCompletionsClient
-from azure.core.credentials import AzureKeyCredential
 from fastapi import FastAPI
+from openai import AsyncOpenAI
 
 from llm_connect import logger
 from llm_connect.configs.llm import ENDPOINT, TOKEN
@@ -23,6 +22,7 @@ from llm_connect.configs.s3 import (
 # 🪼 Define the app lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 🗄️ database pools
     async def init_connection(conn):
         await conn.set_type_codec(
             "jsonb", encoder=json.dumps, decoder=json.loads, schema="pg_catalog"
@@ -32,21 +32,21 @@ async def lifespan(app: FastAPI):
         dsn=POSTGRE_URI(), min_size=1, max_size=5, init=init_connection
     )
 
-    app.state.llm = ChatCompletionsClient(
-        endpoint=ENDPOINT,
-        credential=AzureKeyCredential(TOKEN()),
-    )
+    app.state.llm = AsyncOpenAI(api_key=TOKEN(), base_url=ENDPOINT)
 
+    # 💨 Redis client
     app.state.redis = await redis.asyncio.Redis(host=HOST, port=PORT)
 
+    # 🛜 HTTP client
     app.state.http_client = httpx.AsyncClient()
 
+    # 🌲 AWS async client
     app.state.s3_session = aioboto3.Session(
         aws_access_key_id=AWS_ACCESS_KEY_ID(),
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ID(),
     )
 
-    logger.logger.info("Application start")
+    logger.info("🚀 Application start 🚀")
 
     yield
 
@@ -55,4 +55,4 @@ async def lifespan(app: FastAPI):
     await app.state.redis.aclose()
     await app.state.http_client.aclose()
 
-    logger.logger.info("Clean client resources")
+    logger.info("🚥 Clean client resources 🚥")

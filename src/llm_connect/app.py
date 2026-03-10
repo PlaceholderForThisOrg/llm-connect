@@ -26,7 +26,7 @@ app = FastAPI(
     lifespan=lifespan.lifespan,
 )
 
-# 🛣️ API routes
+# 🛣️ API routers, linked to app
 app.include_router(router=public.router)
 app.include_router(router=private.router)
 app.include_router(router=llm.router)

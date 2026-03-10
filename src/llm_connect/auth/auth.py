@@ -13,7 +13,7 @@ jwk_client = PyJWKClient(key_cloak.JWK_URL)
 
 def get_public_key(token: str):
 
-    logger.logger.debug(key_cloak.JWK_URL)
+    logger.debug(key_cloak.JWK_URL)
 
     signing_key = jwk_client.get_signing_key_from_jwt(token)
     return signing_key.key
