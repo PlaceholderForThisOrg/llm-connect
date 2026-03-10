@@ -7,7 +7,7 @@ from llm_connect.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service
 from llm_connect.models.MessageStream import Role
 from llm_connect.schemas import chat_schema
-from llm_connect.services.chat_service import ChatService
+from llm_connect.services.ChatService import ChatService
 from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/companion", tags=["Companion"])

@@ -4,7 +4,7 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.LearnerRepository import LearnerRepository
-from llm_connect.services.chat_service import (
+from llm_connect.services.ChatService import (
     ChatService,
     Evaluator,
     Orchestrator,

@@ -8,6 +8,7 @@ from redis.asyncio import Redis
 from llm_connect.configs.llm import GPT41
 from llm_connect.configs.redis import MESSAGE_STREAM
 from llm_connect.models.MessageStream import MessageStream, Role
+from llm_connect.proto.scenario import scenario, scenario_template
 
 
 class ChatService:
@@ -42,16 +43,16 @@ class ChatService:
 
         await self.redis.xadd(MESSAGE_STREAM, fields=message.model_dump())
 
+    async def scenario_immerse(self, scenario_id: int):
+        return self.orchestrator.prompt_builder.evaluate_intention()
+
 
 class Orchestrator:
-    def __init__(self, evaluator, prompt_builder):
+    def __init__(self, evaluator: Evaluator, prompt_builder: PromptBuilder):
         self.evaluator = evaluator
         self.prompt_builder = prompt_builder
 
     def orchestrate(self, input):
-        # scenario_id = self.scenario["id"]
-        # current_state = self.scenario["state"]
-
         self.prompt_builder.evaluate_intention()
         None
 
@@ -70,4 +71,4 @@ class PromptBuilder:
 
     def evaluate_intention(self):
         template = self.env.get_template(name="change_state.jinja")
-        print(template)
+        return template.render()
