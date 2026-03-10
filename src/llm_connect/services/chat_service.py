@@ -11,9 +11,15 @@ from llm_connect.models.MessageStream import MessageStream, Role
 
 
 class ChatService:
-    def __init__(self, llm: AsyncOpenAI, redis: Redis):
+    def __init__(
+        self,
+        llm: AsyncOpenAI,
+        redis: Redis,
+        orchestrator: Orchestrator,
+    ):
         self.llm = llm
         self.redis = redis
+        self.orchestrator = orchestrator
 
     async def stream(self, message: str, user_id: str):
         async with self.llm.chat.completions.stream(

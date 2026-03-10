@@ -14,6 +14,8 @@ from llm_connect.routes import (
     private,
     public,
     reviews,
+    scenario,
+    scenario_template,
 )
 
 # 🧠 The main FastAPI app
@@ -35,6 +37,8 @@ app.include_router(router=learner.router)
 app.include_router(router=decks.router)
 app.include_router(router=cards.router)
 app.include_router(router=reviews.router)
+app.include_router(router=scenario.router)
+app.include_router(router=scenario_template.router)
 
 # ⁉️ Exception handler
 

@@ -49,6 +49,8 @@ def get_orchestrator(
 
 
 def get_chat_service(
-    llm: AsyncOpenAI = Depends(get_llm), redis: Redis = Depends(get_redis)
+    llm: AsyncOpenAI = Depends(get_llm),
+    redis: Redis = Depends(get_redis),
+    orchestrator: Orchestrator = Depends(get_orchestrator),
 ):
-    return ChatService(llm, redis)
+    return ChatService(llm, redis, orchestrator)
