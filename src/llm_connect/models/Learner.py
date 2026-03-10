@@ -1,15 +1,32 @@
 import datetime
-from typing import Dict
+from typing import Any, Dict
 
-from pydantic import BaseModel
+from sqlalchemy import JSON, Date, DateTime, String
+from sqlalchemy.orm import Mapped, mapped_column
+
+from llm_connect.models.Base import Base
 
 
-class Learner(BaseModel):
-    user_id: str
-    name: str
-    nickname: str
-    avatar_url: str
-    date_of_birth: datetime.date
-    settings: Dict
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
+class Learner(Base):
+
+    __tablename__ = "learner"
+
+    user_id: Mapped[str] = mapped_column(String, primary_key=True)
+
+    name: Mapped[str] = mapped_column(String, nullable=False)
+
+    nickname: Mapped[str] = mapped_column(String, nullable=False)
+
+    avatar_url: Mapped[str] = mapped_column(String, nullable=True)
+
+    date_of_birth: Mapped[datetime.date] = mapped_column(Date, nullable=False)
+
+    settings: Mapped[Dict[str, Any]] = mapped_column(JSON, nullable=True)
+
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=datetime.datetime.utcnow
+    )
+
+    updated_at: Mapped[datetime.datetime] = mapped_column(
+        DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )

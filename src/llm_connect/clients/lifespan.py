@@ -8,10 +8,12 @@ import redis
 import redis.asyncio
 from fastapi import FastAPI
 from openai import AsyncOpenAI
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
 from llm_connect import logger
 from llm_connect.configs.llm import ENDPOINT, TOKEN
-from llm_connect.configs.postgre import POSTGRE_URI
+from llm_connect.configs.postgre import POSTGRE_URI, POSTGRE_URL_v1
 from llm_connect.configs.redis import HOST, PORT
 from llm_connect.configs.s3 import (
     AWS_ACCESS_KEY_ID,
@@ -32,6 +34,7 @@ async def lifespan(app: FastAPI):
         dsn=POSTGRE_URI(), min_size=1, max_size=5, init=init_connection
     )
 
+    # 🤓 LLM API
     app.state.llm = AsyncOpenAI(api_key=TOKEN(), base_url=ENDPOINT)
 
     # 💨 Redis client
@@ -46,12 +49,25 @@ async def lifespan(app: FastAPI):
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ID(),
     )
 
+    # 😵‍💫 Engine for SQLAlchemy
+    app.state.sqlalchemy_engine = create_async_engine(
+        url=POSTGRE_URL_v1(),
+        echo=True,
+        future=True,
+    )
+
+    app.state.session_maker = sessionmaker(
+        app.state.sqlalchemy_engine, class_=AsyncSession, expire_on_commit=False
+    )
+
     logger.info("🚀 Application start 🚀")
 
-    yield
+    ####################################
+    yield  # 😳
+    ####################################
 
     await app.state.pool.close()
-    app.state.llm.close()
+    await app.state.llm.close()
     await app.state.redis.aclose()
     await app.state.http_client.aclose()
 
