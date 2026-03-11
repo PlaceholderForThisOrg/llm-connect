@@ -15,5 +15,5 @@ async def immerse(
     payload: Payload = Depends(verify_token),
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    prompt_template = await chat_service.scenario_immerse(1)
-    return prompt_template
+    input = request.message
+    return await chat_service.scenario_immerse(input, 1)

@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.services.ChatService import (
+    Actor,
     ChatService,
     Evaluator,
     Orchestrator,
@@ -41,19 +42,30 @@ async def get_db_session(request: Request):
 
 # 😵‍💫 Controlled services/repositories
 # router is linked to app already
-def get_evaluator():
-    return Evaluator()
-
-
 def get_prompt_builder():
     return PromptBuilder()
 
 
-def get_orchestrator(
-    evaluator: Evaluator = Depends(get_evaluator),
+def get_evaluator(
+    client: AsyncOpenAI = Depends(get_llm),
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
 ):
-    return Orchestrator(evaluator, prompt_builder)
+    return Evaluator(client, prompt_builder)
+
+
+def get_actor(
+    client: AsyncOpenAI = Depends(get_llm),
+    prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+):
+    return Actor(client, prompt_builder)
+
+
+def get_orchestrator(
+    evaluator: Evaluator = Depends(get_evaluator),
+    actor: Actor = Depends(get_actor),
+    prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+):
+    return Orchestrator(evaluator, actor, prompt_builder)
 
 
 def get_chat_service(

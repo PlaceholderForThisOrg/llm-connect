@@ -1,37 +1,47 @@
 {
-    "scenario_id": "SC_RESTAURANT_A1_01",
+    "scenario_id": "SC_RESTAURANT",
     "title": "Ordering Food at a Restaurant",
+    "description": "The learner practices ordering food and drinks in a simple restaurant interaction.",
+    "location": "A small casual restaurant",
+    "situation": "The learner enters a restaurant, talks to the waiter, orders food and a drink, and confirms the order.",
+    "character": {
+        "name": "Alex",
+        "role": "Waiter",
+        "personality": "Friendly, patient, and helpful to customers who are learning English.",
+        "goal": "Help the customer order food and drinks and confirm the order."
+    },
     "domain": "service_interaction",
-    "target_level": "A1",
-    "knowledge_targets": [
-        "KR_A1_GR_01",
-        "KR_A1_GR_02",
-        "KR_A1_GR_03",
-        "KR_A1_GR_04",
-        "KR_A1_VOC_01",
-        "KR_A1_VOC_02",
-        "KR_A1_VOC_03",
-        "KR_A1_VOC_04",
-        "KR_A1_FS_01",
-        "KR_A1_FS_02",
-        "KR_A1_FS_03"
-    ],
     "initial_state": "GREETING",
-    "states": {
-        "GREETING": {
-            "goal": "The user should respond to the waiter's greeting.",
+    "states": [
+        {
+            "name": "GREETING",
+            "index": 0,
+            "description": "The waiter greets the customer and asks if they are ready to order.",
+            "goal": "The user should respond to the waiter's greeting and indicate they want to order.",
             "next_state": "ORDERING",
             "trigger_intent": "user_is_ready_to_order"
         },
-        "ORDERING": {
+        {
+            "name": "ORDERING",
+            "index": 1,
+            "description": "The customer orders food and a drink.",
             "goal": "The user must order at least one drink and one food item.",
             "next_state": "CONFIRMATION",
             "trigger_intent": "order_complete"
         },
-        "CONFIRMATION": {
-            "goal": "The waiter repeats the order; user confirms.",
+        {
+            "name": "CONFIRMATION",
+            "index": 2,
+            "description": "The waiter repeats the order to make sure it is correct.",
+            "goal": "The user confirms the order.",
             "next_state": "END",
             "trigger_intent": "user_confirms_total"
+        },
+        {
+            "name": "END",
+            "index": 3,
+            "description": "The conversation ends politely.",
+            "goal": "Close the conversation."
         }
-    }
+    ]
 }
