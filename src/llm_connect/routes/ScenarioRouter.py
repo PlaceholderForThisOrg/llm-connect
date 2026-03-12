@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
 
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service
@@ -15,5 +16,10 @@ async def immerse(
     payload: Payload = Depends(verify_token),
     chat_service: ChatService = Depends(get_chat_service),
 ):
+    user_id = payload["sub"]
     input = request.message
-    return await chat_service.scenario_immerse(input, 1)
+    # async for token in chat_service.scenario_immerse(input, 1):
+    #     yield token
+    return StreamingResponse(
+        chat_service.scenario_immerse(input, 1), media_type="text/event-stream"
+    )

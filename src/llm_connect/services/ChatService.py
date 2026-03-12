@@ -44,9 +44,8 @@ class ChatService:
         await self.redis.xadd(MESSAGE_STREAM, fields=message.model_dump())
 
     async def scenario_immerse(self, input: str, scenario_id: int):
-        return await self.orchestrator.orchestrate(scenario_id, input)
-
-        # return self.orchestrator.prompt_builder.evaluate_intention()
+        async for token in self.orchestrator.orchestrate(scenario_id, input):
+            yield token
 
 
 class Orchestrator:
@@ -63,24 +62,25 @@ class Orchestrator:
         scenario["messages"].append({"role": "learner", "content": input})
         # [2] Use that message/history to ask for the current state from the evaluator
         # get the result
-        # state = self.evaluator.next_state(input)
+        state = self.evaluator.next_state(input)
 
         # [2.1] Use the state to update the current state
-        # if state == "true":
-        #     # Move the scenario to the next state
-        #     # check for the end state
-        #     if scenario["index"] == len(scenario_template["states"]):
-        #         # conversation has done
-        #         return
+        if state == "true":
+            # Move the scenario to the next state
+            # check for the end state
+            if scenario["index"] == len(scenario_template["states"]):
+                # conversation has done
+                return
 
-        #     scenario["index"] += 1
-        #     scenario["state"] = scenario_template["states"][scenario["index"]]["name"]
+            scenario["index"] += 1
+            scenario["state"] = scenario_template["states"][scenario["index"]]["name"]
 
         # [3] Use that result to build the second prompt for the actor
         # send to the actor LLM
-        return await self.actor.say(input)
 
         # [4] Stream the result back to the learner/store the message
+        async for token in self.actor.say(input):
+            yield token
 
 
 class Evaluator:
@@ -105,8 +105,25 @@ class Actor:
         self.prompt_builder = prompt_builder
 
     async def say(self, input: str):
+        # [1] Building the prompt for the actor
         prompt = self.prompt_builder.actor_prompt(1, input)
-        return prompt
+
+        # [1.1] For accumuate the tokens
+        response = ""
+
+        # [2] Use that for the actor LLM and then stream the tokens back
+        async with self.client.chat.completions.stream(
+            model=GPT41, messages=[{"role": "user", "content": prompt}]
+        ) as stream_manager:
+            async for event in stream_manager:
+                if event.type == "content.delta":
+                    response += event.delta
+                    yield event.delta
+
+                if event.type == "content.done":
+                    # Store the response into scenario
+                    scenario["messages"].append({"role": "Actor", "content": response})
+                    yield "DONE"
 
 
 class PromptBuilder:
