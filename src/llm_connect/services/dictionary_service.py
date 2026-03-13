@@ -14,13 +14,13 @@ async def look_up(word: str, pool: Pool, http_client: httpx.AsyncClient):
 
     if entry is None:
         # 2. None, call free dictionary
-        logger.logger.info(f"Get {word} from free dictionary")
+        logger.info(f"Get {word} from free dictionary")
         free_entries = await look_up_free(word, http_client)
         # 3. Cache the entry
         await cache_entry(free_entries, pool)
         return free_entries[0]
 
-    logger.logger.info(f"Get {word} from database")
+    logger.info(f"Get {word} from database")
     return entry
 
 
@@ -43,7 +43,7 @@ async def cache_entry(entries, pool: Pool):
             entries,
         )
 
-    logger.logger.info(f"Store {first_entry["word"]} into database")
+    logger.info(f"Store {first_entry["word"]} into database")
 
 
 async def look_up_db(word: str, pool: Pool):
@@ -65,7 +65,7 @@ async def look_up_db(word: str, pool: Pool):
 
 async def look_up_free(word: str, http_client: httpx.AsyncClient):
     url = urljoin(URL, word)
-    logger.logger.debug(f"Built URL is {url}")
+    logger.debug(f"Built URL is {url}")
     response = await http_client.get(url=url)
 
     if response.status_code == 404:

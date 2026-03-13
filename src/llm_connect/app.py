@@ -6,14 +6,16 @@ from llm_connect.clients import lifespan
 from llm_connect.configs.app import ORIGINS
 from llm_connect.errors import global_exception_handler, http_exception_handler
 from llm_connect.routes import (
+    LearnerRouter,
+    ScenarioRouter,
     cards,
     decks,
     dictionary,
-    learner,
     llm,
     private,
     public,
     reviews,
+    scenario_template,
 )
 
 # 🧠 The main FastAPI app
@@ -26,15 +28,17 @@ app = FastAPI(
     lifespan=lifespan.lifespan,
 )
 
-# 🛣️ API routes
+# 🛣️ API routers, linked to app
 app.include_router(router=public.router)
 app.include_router(router=private.router)
 app.include_router(router=llm.router)
 app.include_router(router=dictionary.router)
-app.include_router(router=learner.router)
+app.include_router(router=LearnerRouter.router)
 app.include_router(router=decks.router)
 app.include_router(router=cards.router)
 app.include_router(router=reviews.router)
+app.include_router(router=ScenarioRouter.router)
+app.include_router(router=scenario_template.router)
 
 # ⁉️ Exception handler
 

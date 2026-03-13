@@ -1,0 +1,1 @@
+ALTER TABLE scenario.scenario ADD column state TEXT;

@@ -6,13 +6,14 @@ import asyncpg
 import httpx
 import redis
 import redis.asyncio
-from azure.ai.inference import ChatCompletionsClient
-from azure.core.credentials import AzureKeyCredential
 from fastapi import FastAPI
+from openai import AsyncOpenAI
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
 from llm_connect import logger
 from llm_connect.configs.llm import ENDPOINT, TOKEN
-from llm_connect.configs.postgre import POSTGRE_URI
+from llm_connect.configs.postgre import POSTGRE_URI, POSTGRE_URL_v1
 from llm_connect.configs.redis import HOST, PORT
 from llm_connect.configs.s3 import (
     AWS_ACCESS_KEY_ID,
@@ -23,6 +24,7 @@ from llm_connect.configs.s3 import (
 # 🪼 Define the app lifespan
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # 🗄️ database pools
     async def init_connection(conn):
         await conn.set_type_codec(
             "jsonb", encoder=json.dumps, decoder=json.loads, schema="pg_catalog"
@@ -32,27 +34,41 @@ async def lifespan(app: FastAPI):
         dsn=POSTGRE_URI(), min_size=1, max_size=5, init=init_connection
     )
 
-    app.state.llm = ChatCompletionsClient(
-        endpoint=ENDPOINT,
-        credential=AzureKeyCredential(TOKEN()),
-    )
+    # 🤓 LLM API
+    app.state.llm = AsyncOpenAI(api_key=TOKEN(), base_url=ENDPOINT)
 
+    # 💨 Redis client
     app.state.redis = await redis.asyncio.Redis(host=HOST, port=PORT)
 
+    # 🛜 HTTP client
     app.state.http_client = httpx.AsyncClient()
 
+    # 🌲 AWS async client
     app.state.s3_session = aioboto3.Session(
         aws_access_key_id=AWS_ACCESS_KEY_ID(),
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ID(),
     )
 
-    logger.logger.info("Application start")
+    # 😵‍💫 Engine for SQLAlchemy
+    app.state.sqlalchemy_engine = create_async_engine(
+        url=POSTGRE_URL_v1(),
+        echo=True,
+        future=True,
+    )
 
-    yield
+    app.state.session_maker = sessionmaker(
+        app.state.sqlalchemy_engine, class_=AsyncSession, expire_on_commit=False
+    )
+
+    logger.info("🚀 Application start 🚀")
+
+    ####################################
+    yield  # 😳
+    ####################################
 
     await app.state.pool.close()
-    app.state.llm.close()
+    await app.state.llm.close()
     await app.state.redis.aclose()
     await app.state.http_client.aclose()
 
-    logger.logger.info("Clean client resources")
+    logger.info("🚥 Clean client resources 🚥")

@@ -1,0 +1,14 @@
+{
+    "id": "KR_A1_FS_02",
+    "type": "functional_skill",
+    "title": "Ask about menu availability",
+    "description": "Learner can ask whether an item is available.",
+    "level": "A1",
+    "domain": "service_interaction",
+    "related_knowledge": [
+        "KR_A1_GR_03"
+    ],
+    "evaluation_logic": {
+        "requires_question_structure": true
+    }
+}

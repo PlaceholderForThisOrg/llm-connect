@@ -5,7 +5,16 @@ from fastapi import HTTPException, UploadFile
 
 from llm_connect import logger
 from llm_connect.configs.s3 import ENDPOINT_URL, SERVICE_NAME
+from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.schemas.learner_schema import LearnerUpdateRequest
+
+
+class LearnerService:
+    def __init__(self, learner_repository: LearnerRepository):
+        self.learner_repository = learner_repository
+
+    async def get_learner_information(self, user_id: str):
+        return await self.learner_repository.get_by_id(user_id)
 
 
 async def sync_learner(user_id: str, pool: Pool):

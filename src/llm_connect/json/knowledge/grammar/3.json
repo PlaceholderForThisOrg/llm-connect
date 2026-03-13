@@ -1,0 +1,17 @@
+{
+    "id": "KR_A1_GR_03",
+    "type": "grammar_pattern",
+    "title": "Availability question using 'Do you have...?'",
+    "description": "Learner can ask about availability of menu items.",
+    "level": "A1",
+    "domain": "service_interaction",
+    "detectable_features": {
+        "required_patterns": [
+            "Do you have"
+        ]
+    },
+    "evaluation_logic": {
+        "must_contain_one_of_required": true
+    },
+    "pedagogical_focus": "information request"
+}
