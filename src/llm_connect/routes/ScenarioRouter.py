@@ -16,7 +16,7 @@ async def immerse(
     payload: Payload = Depends(verify_token),
     chat_service: ChatService = Depends(get_chat_service),
 ):
-    user_id = payload["sub"]
+    # user_id = payload["sub"]
     input = request.message
     # async for token in chat_service.scenario_immerse(input, 1):
     #     yield token

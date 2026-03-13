@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/api/v1/scenario-templates")
+router = APIRouter(prefix="/api/v1/scenario-templates", tags=["Template"])
 
 
 @router.post(
