@@ -4,6 +4,7 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.LearnerRepository import LearnerRepository
+from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
@@ -55,12 +56,17 @@ def get_actor(
     return Actor(client, prompt_builder)
 
 
+def get_analyzer():
+    return Analyzer()
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+    analyzer: Analyzer = Depends(get_analyzer),
 ):
-    return Orchestrator(evaluator, actor, prompt_builder)
+    return Orchestrator(evaluator, actor, prompt_builder, analyzer)
 
 
 def get_chat_service(

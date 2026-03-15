@@ -1,17 +1,30 @@
+from fastapi import BackgroundTasks
+
 from llm_connect import logger
 from llm_connect.proto import scenario, scenario_template
+from llm_connect.services.analyzer.Analyzer import Analyzer
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
 
 
 class Orchestrator:
     def __init__(
-        self, evaluator: Evaluator, actor: Actor, prompt_builder: PromptBuilder
+        self,
+        evaluator: Evaluator,
+        actor: Actor,
+        prompt_builder: PromptBuilder,
+        analyzer: Analyzer,
     ):
         self.evaluator = evaluator
         self.actor = actor
         self.prompt_builder = prompt_builder
+        self.analyzer = analyzer
 
-    async def start(self, scenario_id: int, input: str):
+    async def start(
+        self,
+        scenario_id: int,
+        input: str,
+        engine: BackgroundTasks,
+    ):
         # [1] The orchestrator receives the message from the learner
         # store that message into the scenario object
         scenario["messages"].append({"role": "learner", "content": input})
@@ -49,3 +62,5 @@ class Orchestrator:
             # [4] Stream the result back to the learner/store the message
             async for token in self.actor.say(input):
                 yield token
+
+        self.analyzer.run(engine)
