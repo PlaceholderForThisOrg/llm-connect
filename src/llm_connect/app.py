@@ -20,7 +20,7 @@ from llm_connect.routes import (
 
 # 🧠 The main FastAPI app
 app = FastAPI(
-    title="LLM connect service",
+    title="My adaptive companion",
     description="Simple connector to the LLM service",
     version="1.0.0",
     docs_url="/docs",

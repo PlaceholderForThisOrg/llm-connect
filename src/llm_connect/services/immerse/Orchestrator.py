@@ -63,4 +63,4 @@ class Orchestrator:
             async for token in self.actor.say(input):
                 yield token
 
-        self.analyzer.run(engine)
+        self.analyzer.run(input, engine)
