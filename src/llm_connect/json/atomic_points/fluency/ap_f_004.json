@@ -1,0 +1,21 @@
+{
+    "id": "ap_f_004",
+    "type": "fluency",
+    "name": "Expression: 'Do you have any recommendations?'",
+    "description": "Used to ask staff for suggestions on what to order.",
+    "examples": [
+        "Do you have any recommendations?",
+        "What do you recommend?"
+    ],
+    "level": "B1",
+    "popularity": 0.9,
+    "tags": [
+        "restaurant",
+        "interaction"
+    ],
+    "related": [
+        "ap_v_002"
+    ],
+    "created_at": "2026-03-21",
+    "updated_at": "2026-03-21"
+}

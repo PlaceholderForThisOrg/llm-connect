@@ -1,0 +1,21 @@
+{
+    "id": "ap_f_001",
+    "type": "fluency",
+    "name": "Ordering expression: 'I'd like...'",
+    "description": "A common polite way to order food or drinks.",
+    "examples": [
+        "I'd like a cheeseburger.",
+        "I'd like a glass of red wine."
+    ],
+    "level": "B1",
+    "popularity": 0.97,
+    "tags": [
+        "restaurant",
+        "speaking"
+    ],
+    "related": [
+        "ap_g_001"
+    ],
+    "created_at": "2026-03-21",
+    "updated_at": "2026-03-21"
+}

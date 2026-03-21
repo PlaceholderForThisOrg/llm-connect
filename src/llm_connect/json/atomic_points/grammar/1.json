@@ -1,0 +1,46 @@
+[
+    {
+        "id": "ap_g_001",
+        "type": "grammar",
+        "name": "Polite requests with 'could' and 'would'",
+        "description": "Used to make polite requests in formal or service situations.",
+        "examples": [
+            "Could I see the menu, please?",
+            "Would you bring us some water?"
+        ],
+        "level": "B1",
+        "popularity": 0.95,
+        "tags": [
+            "restaurant",
+            "politeness",
+            "speaking"
+        ],
+        "related": [
+            "ap_f_001",
+            "ap_f_002"
+        ],
+        "created_at": "2026-03-21",
+        "updated_at": "2026-03-21"
+    },
+    {
+        "id": "ap_g_002",
+        "type": "grammar",
+        "name": "Countable and uncountable nouns with 'some' and 'any'",
+        "description": "Used to talk about quantities of food and drinks.",
+        "examples": [
+            "Can I have some water?",
+            "Do you have any vegetarian dishes?"
+        ],
+        "level": "B1",
+        "popularity": 0.9,
+        "tags": [
+            "food",
+            "quantity"
+        ],
+        "related": [
+            "ap_v_001"
+        ],
+        "created_at": "2026-03-21",
+        "updated_at": "2026-03-21"
+    }
+]
