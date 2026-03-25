@@ -2,10 +2,21 @@ from datetime import date
 
 today = str(date.today())
 
-atomic_points = [
-    # =========================
-    # Grammar Points
-    # =========================
+# ─────────────────────────────────────────────────────────────────
+# ATOMIC POINTS
+# Three types:
+#   grammar  — underlying rules (ap_g_*)
+#   vocabulary — individual words (ap_v_*)
+#   fluency  — fixed phrases / chunks (ap_f_*)
+#
+# related[] links follow three patterns:
+#   grammar  → fluency   : the rule is the foundation for the phrase
+#   vocab    → fluency   : the word slots into the phrase
+#   vocab    ↔ vocab     : sibling words taught together
+# ─────────────────────────────────────────────────────────────────
+
+atomic_points_v1 = [
+    # ── Grammar ───────────────────────────────────────────────────
     {
         "id": "ap_g_001",
         "type": "grammar",
@@ -18,6 +29,24 @@ atomic_points = [
         "related": ["ap_f_001", "ap_f_002"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'could I'",
+            "used 'would you'",
+            "used 'I'd like'",
+            "used 'I would like'",
+        ],
+        "evidence_of_confusion": [
+            "used 'I want' with no modal",
+            "stated item with no request verb",
+        ],
+        "hints": [
+            "Tip: in English, 'I want...' sounds a bit direct in a restaurant. "
+            "Try starting with 'I'd like...' or 'Could I have...' instead.",
+            "The two most natural patterns are: 'I'd like [item], please' "
+            "and 'Could I have [item]?'",
+            "Full example: 'Could I have the pasta, please?' "
+            "or 'I'd like a glass of water.'",
+        ],
     },
     {
         "id": "ap_g_002",
@@ -28,13 +57,26 @@ atomic_points = [
         "level": "B1",
         "popularity": 0.9,
         "tags": ["food", "quantity"],
-        "related": ["ap_v_002"],
+        "related": ["ap_v_002", "ap_v_007"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'some' in a positive request",
+            "used 'any' in a question",
+        ],
+        "evidence_of_confusion": [
+            "used 'any' in a positive request",
+            "used 'some' in a question",
+            "omitted determiner entirely",
+        ],
+        "hints": [
+            "Tip: use 'some' when making a request ('Can I have some water?') "
+            "and 'any' when asking a question ('Do you have any vegetarian options?').",
+            "Rule: 'some' for offers and requests, 'any' for questions and negatives.",
+            "Examples: 'Could I have some bread?' and 'Do you have any gluten-free options?'",
+        ],
     },
-    # =========================
-    # Vocabulary Points
-    # =========================
+    # ── Vocabulary ────────────────────────────────────────────────
     {
         "id": "ap_v_001",
         "type": "vocabulary",
@@ -47,19 +89,47 @@ atomic_points = [
         "related": ["ap_f_002"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'menu' correctly",
+            "asked for the menu by name",
+        ],
+        "evidence_of_confusion": [
+            "pointed or gestured instead of using the word",
+            "called it 'the card' or 'the book'",
+        ],
+        "hints": [
+            "The list of dishes is called 'the menu'. "
+            "You can ask: 'Could I see the menu, please?'",
+            "Full phrase: 'Could I have the menu, please?' — "
+            "this uses the same pattern as many other restaurant requests.",
+        ],
     },
     {
         "id": "ap_v_002",
         "type": "vocabulary",
         "name": "vegetarian",
-        "description": "A person who does not eat meat.",
-        "examples": ["I'm vegetarian.", "Do you have vegetarian options?"],
+        "description": "A person who does not eat meat, or a dish without meat.",
+        "examples": ["I'm vegetarian.", "Do you have any vegetarian dishes?"],
         "level": "B1",
         "popularity": 0.9,
         "tags": ["food", "diet"],
         "related": ["ap_g_002", "ap_f_004"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'vegetarian' correctly",
+            "asked about vegetarian options using the word",
+        ],
+        "evidence_of_confusion": [
+            "said 'I don't eat meat' without using the word 'vegetarian'",
+            "confused 'vegan' and 'vegetarian'",
+        ],
+        "hints": [
+            "The word is 'vegetarian' — it means no meat or fish. "
+            "You can say: 'I'm vegetarian' or 'Do you have any vegetarian dishes?'",
+            "Natural question: 'Do you have any vegetarian options?' — "
+            "notice 'any' because it is a question.",
+        ],
     },
     {
         "id": "ap_v_003",
@@ -73,25 +143,54 @@ atomic_points = [
         "related": ["ap_f_003"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'reservation' correctly",
+            "said 'I have a reservation'",
+            "said 'I booked a table'",
+        ],
+        "evidence_of_confusion": [
+            "didn't know how to say they had booked",
+            "said 'I have a booking' — acceptable but less natural",
+        ],
+        "hints": [
+            "If you booked a table in advance, say: 'I have a reservation.'",
+            "You can also say 'I booked a table' — both are correct. "
+            "If you want to book on the spot: 'I'd like to make a reservation.'",
+        ],
     },
     {
         "id": "ap_v_004",
         "type": "vocabulary",
         "name": "starter",
         "description": "A small dish served before the main course.",
-        "examples": ["I’ll have soup as a starter.", "What starters do you have?"],
+        "examples": ["I'll have soup as a starter.", "What starters do you have?"],
         "level": "B1",
         "popularity": 0.82,
         "tags": ["meal"],
         "related": ["ap_v_005"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'starter' correctly",
+            "used 'appetizer'",
+            "asked 'What starters do you have?'",
+        ],
+        "evidence_of_confusion": [
+            "called it 'the first dish' or 'the small plate'",
+            "didn't know the word and described it instead",
+        ],
+        "hints": [
+            "The small dish before the main meal is called a 'starter' "
+            "(or 'appetizer' in American English).",
+            "You can ask: 'What starters do you have?' "
+            "or order with: 'I'd like the soup as a starter, please.'",
+        ],
     },
     {
         "id": "ap_v_005",
         "type": "vocabulary",
         "name": "main course",
-        "description": "The main dish of a meal.",
+        "description": "The principal dish of a meal.",
         "examples": [
             "I'll have steak for the main course.",
             "The main course comes with rice.",
@@ -99,9 +198,22 @@ atomic_points = [
         "level": "B1",
         "popularity": 0.9,
         "tags": ["meal"],
-        "related": ["ap_v_004"],
+        "related": ["ap_v_004", "ap_f_001"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'main course' correctly",
+            "used 'main' as shorthand",
+            "ordered using 'for my main'",
+        ],
+        "evidence_of_confusion": [
+            "called it 'the big plate' or 'the second dish'",
+            "didn't distinguish it from the starter",
+        ],
+        "hints": [
+            "The main dish is called the 'main course', or just 'the main'.",
+            "Natural ordering phrase: 'For my main course, I'd like the pasta, please.'",
+        ],
     },
     {
         "id": "ap_v_006",
@@ -115,6 +227,20 @@ atomic_points = [
         "related": ["ap_f_002"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'bill' correctly",
+            "said 'Could I have the bill?'",
+            "said 'check' (American English equivalent)",
+        ],
+        "evidence_of_confusion": [
+            "said 'I want to pay' without using 'bill'",
+            "didn't know how to ask and waited in silence",
+        ],
+        "hints": [
+            "When you're ready to pay, ask: 'Could I have the bill, please?' "
+            "This uses the same phrase as asking for the menu — just swap the word.",
+            "'Bill' is British English; 'check' is American English — both are understood.",
+        ],
     },
     {
         "id": "ap_v_007",
@@ -125,63 +251,134 @@ atomic_points = [
         "level": "B1",
         "popularity": 0.98,
         "tags": ["drink"],
-        "related": ["ap_g_002"],
+        "related": ["ap_g_002", "ap_f_001"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "asked for water using a complete request",
+            "used 'some water' correctly",
+            "specified still or sparkling",
+        ],
+        "evidence_of_confusion": [
+            "just said 'water' with no request form",
+            "didn't know how to specify still vs sparkling",
+        ],
+        "hints": [
+            "To ask for water: 'Could I have some water, please?' "
+            "or 'I'd like some water.'",
+            "The waiter may ask 'Still or sparkling?' — "
+            "'still' means flat water, 'sparkling' means fizzy.",
+        ],
     },
-    # =========================
-    # Fluency Points
-    # =========================
+    # ── Fluency ───────────────────────────────────────────────────
     {
         "id": "ap_f_001",
         "type": "fluency",
         "name": "I'd like...",
-        "description": "A polite way to order food or drinks.",
+        "description": "A polite fixed phrase for ordering food or making requests.",
         "examples": ["I'd like a burger.", "I'd like some water."],
         "level": "B1",
         "popularity": 0.97,
-        "tags": ["speaking"],
-        "related": ["ap_g_001"],
+        "tags": ["speaking", "ordering"],
+        "related": ["ap_g_001", "ap_v_005", "ap_v_007"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'I'd like' to order",
+            "used 'I would like' in full form",
+        ],
+        "evidence_of_confusion": [
+            "used 'I want' instead",
+            "used bare infinitive with no modal",
+        ],
+        "hints": [
+            "'I'd like' is the contracted form of 'I would like' — "
+            "very natural and polite for ordering.",
+            "Pattern: 'I'd like [item], please.' — "
+            "for example: 'I'd like the pasta, please.'",
+        ],
     },
     {
         "id": "ap_f_002",
         "type": "fluency",
         "name": "Could I have...?",
-        "description": "A polite way to request something.",
+        "description": "A polite fixed phrase for requesting items.",
         "examples": ["Could I have the menu?", "Could I have the bill?"],
         "level": "B1",
         "popularity": 0.96,
-        "tags": ["politeness"],
-        "related": ["ap_g_001"],
+        "tags": ["politeness", "requesting"],
+        "related": ["ap_g_001", "ap_v_001", "ap_v_006"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'Could I have...' correctly",
+            "applied the frame to a new vocabulary item",
+        ],
+        "evidence_of_confusion": [
+            "used 'Can I have' (acceptable but less formal)",
+            "dropped 'could' and just named the item",
+        ],
+        "hints": [
+            "'Could I have...' is one of the most useful phrases in a restaurant. "
+            "You can use it for the menu, your food, the bill — anything.",
+            "Pattern: 'Could I have [item], please?' — "
+            "try it now: 'Could I have the menu, please?'",
+        ],
     },
     {
         "id": "ap_f_003",
         "type": "fluency",
         "name": "make a reservation",
-        "description": "To book a table at a restaurant.",
+        "description": "Fixed verb phrase for booking a table.",
         "examples": ["I'd like to make a reservation.", "We made a reservation."],
         "level": "B1",
         "popularity": 0.88,
-        "tags": ["restaurant"],
+        "tags": ["restaurant", "booking"],
         "related": ["ap_v_003"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'make a reservation'",
+            "said 'I have a reservation'",
+        ],
+        "evidence_of_confusion": [
+            "said 'I booked' without 'reservation'",
+            "didn't know the phrase",
+        ],
+        "hints": [
+            "To book a table: 'I'd like to make a reservation.' "
+            "To confirm you already booked: 'I have a reservation.'",
+        ],
     },
     {
         "id": "ap_f_004",
         "type": "fluency",
         "name": "Do you have any recommendations?",
-        "description": "Used to ask for suggestions from staff.",
+        "description": "Fixed phrase for asking staff for suggestions.",
         "examples": ["Do you have any recommendations?", "What do you recommend?"],
         "level": "B1",
         "popularity": 0.9,
-        "tags": ["interaction"],
-        "related": ["ap_v_002"],
+        "tags": ["interaction", "asking"],
+        "related": ["ap_g_002", "ap_v_002"],
         "created_at": today,
         "updated_at": today,
+        "evidence_of_grasp": [
+            "used 'recommendations' correctly",
+            "asked 'What do you recommend?'",
+            "asked for a suggestion naturally",
+        ],
+        "evidence_of_confusion": [
+            "said 'What is good?' — too informal",
+            "didn't know how to ask for a suggestion",
+        ],
+        "hints": [
+            "To ask the waiter what's good: 'Do you have any recommendations?' "
+            "or simply 'What do you recommend?'",
+            "After mentioning a dietary need, this pairs naturally: "
+            "'I'm vegetarian — do you have any recommendations?'",
+        ],
     },
 ]
+
+# ── Runtime lookup ─────────────────────────────────────────────
+ATOMIC_REGISTRY = {ap["id"]: ap for ap in atomic_points_v1}
