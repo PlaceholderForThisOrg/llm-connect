@@ -1,9 +1,13 @@
+from datetime import datetime, timezone
+
 from fastapi import BackgroundTasks
 
 from llm_connect import logger
 from llm_connect.proto import scenario, scenario_template
 from llm_connect.services.analyzer.Analyzer import Analyzer
+from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
+from llm_connect.proto.session import session
 
 
 class Orchestrator:
@@ -13,11 +17,13 @@ class Orchestrator:
         actor: Actor,
         prompt_builder: PromptBuilder,
         analyzer: Analyzer,
+        aevaluator : AEvaluator
     ):
         self.evaluator = evaluator
         self.actor = actor
         self.prompt_builder = prompt_builder
         self.analyzer = analyzer
+        self.aevaluator = aevaluator
 
     async def start(
         self,
@@ -25,6 +31,36 @@ class Orchestrator:
         input: str,
         engine: BackgroundTasks,
     ):
+        # TODO: The orchestrator is run on each interaction between
+        # the learner and the system
+        
+        # TODO: Store the current interaction first
+        # 1. Create the interaction object
+        timestamp = datetime.now(timezone.utc).timestamp()
+        interaction = {
+            "id" : "0",
+            "type" : "MESSAGE",
+            "of" : "LEARNER",
+            "content" : input,
+            "timestamp" : timestamp
+        }
+        session["history"].append (interaction)
+        
+        # TODO: Run the evaluator to extract the performance
+        # on the expected atomic points
+        # Optionally extract the errors in-place
+        self.aevaluator.run(input, engine)
+        
+        # TODO: Activity, check whether the current checkpoint
+        # is good to move
+        
+        # [1] Get the current state
+        
+        
+        
+        
+        
+        
         # [1] The orchestrator receives the message from the learner
         # store that message into the scenario object
         scenario["messages"].append({"role": "learner", "content": input})

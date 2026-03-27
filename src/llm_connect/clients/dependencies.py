@@ -6,8 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
+from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
+from llm_connect.services.SessionService import SessionService
 
 
 # 🤷‍♂️ Outside clients, created in lifespan
@@ -59,14 +61,18 @@ def get_actor(
 def get_analyzer():
     return Analyzer()
 
+def get_aevaluator():
+    return AEvaluator()
+
 
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
     analyzer: Analyzer = Depends(get_analyzer),
+    aevaluator : AEvaluator = Depends(get_aevaluator)
 ):
-    return Orchestrator(evaluator, actor, prompt_builder, analyzer)
+    return Orchestrator(evaluator, actor, prompt_builder, analyzer, aevaluator,)
 
 
 def get_chat_service(
@@ -85,3 +91,7 @@ def get_learner_service(
     learner_repository: LearnerRepository = Depends(get_learner_repository),
 ):
     return LearnerService(learner_repository)
+
+
+def get_session_service():
+    return SessionService()
