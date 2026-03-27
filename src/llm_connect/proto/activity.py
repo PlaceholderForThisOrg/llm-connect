@@ -37,6 +37,7 @@ activity_v2 = {
     ),
     "goal": "Order your dinner successfully — from being seated to paying the bill.",
     "difficulty": "B1",
+    "checkpoint_num": 6,
     "checkpoints": {
         "0": {
             "name": "Greeting and seating",

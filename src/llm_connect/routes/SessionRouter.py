@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 
+from llm_connect import logger
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
 from llm_connect.schemas.session_schema import Interaction
@@ -13,20 +14,22 @@ router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
 
 @router.post("/{session_id}")
 async def interact(
-    request : Interaction,
+    request: Interaction,
     session_id: int,
-    engine : BackgroundTasks,
+    engine: BackgroundTasks,
     payload: Payload = Depends(verify_token),
+    chat_service: ChatService = Depends(get_chat_service),
     session_service: SessionService = Depends(get_session_service),
-    chat_service : ChatService = Depends(get_chat_service),
 ):
+    # logger.info("⚔️ Router")
     content = request.content
-    
+
     return StreamingResponse(
-        content=chat_service.scenario_immerse(
-            content,
-            1,
-            engine
-        ),
-        media_type="text/event-stream"
+        content=session_service.handle_interact(session_id, content),
+        media_type="text/event-stream",
+    )
+
+    return StreamingResponse(
+        content=chat_service.scenario_immerse(content, 1, engine),
+        media_type="text/event-stream",
     )

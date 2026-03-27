@@ -10,5 +10,5 @@ session = {
     "checkpoint": "0",
     "history": [],
     "time_start": now,
-    "status": "RUNNING",  # PAUSED
+    "status": "RUNNING",  # PAUSED # DONE
 }

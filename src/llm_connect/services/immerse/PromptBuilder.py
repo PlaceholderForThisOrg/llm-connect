@@ -1,8 +1,17 @@
 from pathlib import Path
+from typing import TypedDict
 
 from jinja2 import Environment, FileSystemLoader
 
 from llm_connect.proto.scenario import scenario, scenario_template
+
+
+class MoveCheckpointParams(TypedDict):
+    checkpoint_name: str
+    checkpoint_description: str
+    transition_condition: str
+    history: str
+    user_input: str
 
 
 class PromptBuilder:
@@ -12,8 +21,12 @@ class PromptBuilder:
 
         self.env = Environment(loader=loader)
 
+    def move_checkpoint(self, params: MoveCheckpointParams):
+        template = self.env.get_template(name="change_state.jinja")
+        return template.render(**params)
+
     def intention_prompt(self, scenario_id: int, input: str) -> str:
-        # FIXME load dynamically/synchronously
+        # FIXME: The prompt builder should load the template and inject
 
         # scenario_id is used as the reference to get the status to
         # create the prompt

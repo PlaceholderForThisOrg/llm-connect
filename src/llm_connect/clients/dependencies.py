@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
+from llm_connect.services.core.activity import RolePlaySessionManager
 from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
@@ -61,8 +62,16 @@ def get_actor(
 def get_analyzer():
     return Analyzer()
 
+
 def get_aevaluator():
     return AEvaluator()
+
+
+def get_roleplay_session_manager(
+    prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+    client: AsyncOpenAI = Depends(get_llm),
+):
+    return RolePlaySessionManager(prompt_builder, client)
 
 
 def get_orchestrator(
@@ -70,9 +79,17 @@ def get_orchestrator(
     actor: Actor = Depends(get_actor),
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
     analyzer: Analyzer = Depends(get_analyzer),
-    aevaluator : AEvaluator = Depends(get_aevaluator)
+    aevaluator: AEvaluator = Depends(get_aevaluator),
+    session_manager: RolePlaySessionManager = Depends(get_roleplay_session_manager),
 ):
-    return Orchestrator(evaluator, actor, prompt_builder, analyzer, aevaluator,)
+    return Orchestrator(
+        evaluator,
+        actor,
+        prompt_builder,
+        analyzer,
+        aevaluator,
+        session_manager,
+    )
 
 
 def get_chat_service(
@@ -93,5 +110,5 @@ def get_learner_service(
     return LearnerService(learner_repository)
 
 
-def get_session_service():
-    return SessionService()
+def get_session_service(orchestrator: Orchestrator = Depends(get_orchestrator)):
+    return SessionService(orchestrator)

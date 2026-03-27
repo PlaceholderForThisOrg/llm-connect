@@ -4,10 +4,12 @@ from fastapi import BackgroundTasks
 
 from llm_connect import logger
 from llm_connect.proto import scenario, scenario_template
+from llm_connect.proto.activity import activity_v2
+from llm_connect.proto.session import session
 from llm_connect.services.analyzer.Analyzer import Analyzer
+from llm_connect.services.core.activity import RolePlaySessionManager, SessionManager
 from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
-from llm_connect.proto.session import session
 
 
 class Orchestrator:
@@ -17,50 +19,60 @@ class Orchestrator:
         actor: Actor,
         prompt_builder: PromptBuilder,
         analyzer: Analyzer,
-        aevaluator : AEvaluator
+        aevaluator: AEvaluator,
+        session_manager: RolePlaySessionManager,
     ):
         self.evaluator = evaluator
         self.actor = actor
         self.prompt_builder = prompt_builder
         self.analyzer = analyzer
         self.aevaluator = aevaluator
+        self.session_manager = session_manager
 
+    # Orchestrate on the interaction
     async def start(
         self,
         scenario_id: int,
         input: str,
         engine: BackgroundTasks,
     ):
+
+        logger.info("1️⃣ Orchestration has been started!")
+        # FIXME: Prototype
         # TODO: The orchestrator is run on each interaction between
         # the learner and the system
-        
+
         # TODO: Store the current interaction first
         # 1. Create the interaction object
+        logger.info("2️⃣ Interaction object creating!")
         timestamp = datetime.now(timezone.utc).timestamp()
         interaction = {
-            "id" : "0",
-            "type" : "MESSAGE",
-            "of" : "LEARNER",
-            "content" : input,
-            "timestamp" : timestamp
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": input,
+            "timestamp": timestamp,
         }
-        session["history"].append (interaction)
-        
+        session["history"].append(interaction)
+
+        logger.info("3️⃣ Evaluation pipeline is run for extracting performace!")
         # TODO: Run the evaluator to extract the performance
         # on the expected atomic points
         # Optionally extract the errors in-place
         self.aevaluator.run(input, engine)
-        
-        # TODO: Activity, check whether the current checkpoint
+
+        # TODO: Session, check whether the current checkpoint
         # is good to move
-        
+        logger.info("4️⃣ Run the Session manager to check whether the learner can move")
+
         # [1] Get the current state
-        
-        
-        
-        
-        
-        
+        if session["status"] == "DONE":
+            yield "You have finished this activity"
+
+        else:
+            curr_checkpoint = session["checkpoint"]
+            logger.info(f"😐 Current checkpoint: {curr_checkpoint}")
+
         # [1] The orchestrator receives the message from the learner
         # store that message into the scenario object
         scenario["messages"].append({"role": "learner", "content": input})

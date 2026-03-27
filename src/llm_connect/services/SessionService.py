@@ -1,13 +1,11 @@
-from llm_connect.proto.session import session
-from llm_connect.proto.activity import activity_v2
+from llm_connect import logger
+from llm_connect.services.immerse.Orchestrator import Orchestrator
 
 
 class SessionService:
-    def __init__(self):
-        pass
+    def __init__(self, orchestrator: Orchestrator):
+        self.o = orchestrator
 
-    def get_session():
-        return session
-
-    async def handle_interaction():
-        return None
+    async def handle_interact(self, session_id: str, content: str):
+        logger.info("🤔 Service")
+        yield content
