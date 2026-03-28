@@ -47,6 +47,9 @@ class RolePlaySessionManager(SessionManager):
         logger.info(f"Should we change state: {state}")
         return state
 
+    async def interact(session_id: str, content):
+        None
+
 
 # TODO: Implement if the prototype for role-play is done
 class NewsReadingSessionManager(SessionManager):

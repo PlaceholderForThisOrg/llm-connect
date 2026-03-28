@@ -7,8 +7,8 @@ from llm_connect.proto import scenario, scenario_template
 from llm_connect.proto.activity import activity_v2
 from llm_connect.proto.session import session
 from llm_connect.services.analyzer.Analyzer import Analyzer
-from llm_connect.services.core.activity import RolePlaySessionManager, SessionManager
 from llm_connect.services.core.aevaluator import AEvaluator
+from llm_connect.services.core.session import RolePlaySessionManager, SessionManager
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
 
 
@@ -33,18 +33,17 @@ class Orchestrator:
     async def start(
         self,
         scenario_id: int,
-        input: str,
+        content: str,
         engine: BackgroundTasks,
     ):
 
-        logger.info("1️⃣ Orchestration has been started!")
         # FIXME: Prototype
+        logger.info("1️⃣  Orchestration started!")
         # TODO: The orchestrator is run on each interaction between
         # the learner and the system
 
         # TODO: Store the current interaction first
         # 1. Create the interaction object
-        logger.info("2️⃣ Interaction object creating!")
         timestamp = datetime.now(timezone.utc).timestamp()
         interaction = {
             "id": "0",
@@ -54,61 +53,64 @@ class Orchestrator:
             "timestamp": timestamp,
         }
         session["history"].append(interaction)
+        logger.info("2️⃣  Interaction object created!")
 
-        logger.info("3️⃣ Evaluation pipeline is run for extracting performace!")
         # TODO: Run the evaluator to extract the performance
         # on the expected atomic points
         # Optionally extract the errors in-place
+        logger.info("3️⃣  Evaluation started")
         self.aevaluator.run(input, engine)
 
         # TODO: Session, check whether the current checkpoint
         # is good to move
-        logger.info("4️⃣ Run the Session manager to check whether the learner can move")
+        # logger.info("4️⃣ Run the Session manager started")
 
-        # [1] Get the current state
-        if session["status"] == "DONE":
-            yield "You have finished this activity"
+        yield content
 
-        else:
-            curr_checkpoint = session["checkpoint"]
-            logger.info(f"😐 Current checkpoint: {curr_checkpoint}")
+        # # [1] Get the current state
+        # if session["status"] == "DONE":
+        #     yield "You have finished this activity"
 
-        # [1] The orchestrator receives the message from the learner
-        # store that message into the scenario object
-        scenario["messages"].append({"role": "learner", "content": input})
-        # [2] Use that message/history to ask for the current state from the evaluator
-        # get the result
+        # else:
+        #     curr_checkpoint = session["checkpoint"]
+        #     logger.info(f"😐 Current checkpoint: {curr_checkpoint}")
 
-        # FIXME yield to end the orchestrator
-        # and a loop of yield on the stream of the response of the LLM
-        state = scenario["state"]
-        if state == "END":
-            yield "You have successfully finished this scenario, good job."
-        else:
-            logger.info(f"Current state: {scenario["state"]}")
+        # # [1] The orchestrator receives the message from the learner
+        # # store that message into the scenario object
+        # scenario["messages"].append({"role": "learner", "content": input})
+        # # [2] Use that message/history to ask for the current state from the evaluator
+        # # get the result
 
-            state = await self.evaluator.next_state(input)
+        # # FIXME: yield to end the orchestrator
+        # # and a loop of yield on the stream of the response of the LLM
+        # state = scenario["state"]
+        # if state == "END":
+        #     yield "You have successfully finished this scenario, good job."
+        # else:
+        #     logger.info(f"Current state: {scenario["state"]}")
 
-            # [2.1] Use the state to update the current state
-            if state is True:
-                # Move the scenario to the next state
-                # check for the end state
-                if scenario["index"] == len(scenario_template["states"]):
-                    # conversation has done
-                    yield "nothing"
+        #     state = await self.evaluator.next_state(input)
 
-                scenario["index"] += 1
-                scenario["state"] = scenario_template["states"][scenario["index"]][
-                    "name"
-                ]
+        #     # [2.1] Use the state to update the current state
+        #     if state is True:
+        #         # Move the scenario to the next state
+        #         # check for the end state
+        #         if scenario["index"] == len(scenario_template["states"]):
+        #             # conversation has done
+        #             yield "nothing"
 
-            # [3] Use that result to build the second prompt for the actor
-            # send to the actor LLM
+        #         scenario["index"] += 1
+        #         scenario["state"] = scenario_template["states"][scenario["index"]][
+        #             "name"
+        #         ]
 
-            logger.info(f"Current scenario: {scenario}")
+        #     # [3] Use that result to build the second prompt for the actor
+        #     # send to the actor LLM
 
-            # [4] Stream the result back to the learner/store the message
-            async for token in self.actor.say(input):
-                yield token
+        #     logger.info(f"Current scenario: {scenario}")
 
-        self.analyzer.run(input, engine)
+        #     # [4] Stream the result back to the learner/store the message
+        #     async for token in self.actor.say(input):
+        #         yield token
+
+        # self.analyzer.run(input, engine)

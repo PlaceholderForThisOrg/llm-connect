@@ -1,7 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 
-from llm_connect import logger
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
 from llm_connect.schemas.session_schema import Interaction
@@ -25,7 +24,11 @@ async def interact(
     content = request.content
 
     return StreamingResponse(
-        content=session_service.handle_interact(session_id, content),
+        content=session_service.handle_interact(
+            session_id,
+            content,
+            engine,
+        ),
         media_type="text/event-stream",
     )
 
