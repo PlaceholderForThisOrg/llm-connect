@@ -29,6 +29,11 @@ activity_v1 = {
 activity_v2 = {
     "id": "activity_002",
     "type": "ROLE-PLAY",
+    "metadata": {
+        "npc_name": "Marco",
+        "npc_role": "Waiter",
+        "npc_personality": "A little bit busy, a little bit angry because of having working for 8 hours without a break",
+    },
     "description": "At the restaurant, the learner orders dinner from a waiter",
     "context": (
         "The waiter's name is Marco. The restaurant is La Piazza, a cozy Italian "

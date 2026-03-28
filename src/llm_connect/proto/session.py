@@ -19,7 +19,10 @@ session = {
 
 
 def sync_session():
-    logger.info("🥐 Session is updated")
+    logger.info("🥐 Session is synchronized")
     p = Path(__file__).resolve().parent / "runtime_db" / "session.json"
     with open(p, "w") as f:
         json.dump(session, f)
+
+
+sync_session()

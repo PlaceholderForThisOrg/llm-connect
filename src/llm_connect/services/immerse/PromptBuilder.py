@@ -14,6 +14,17 @@ class MoveCheckpointParams(TypedDict):
     user_input: str
 
 
+class ReInteractParams(TypedDict):
+    npc_name: str
+    npc_role: str
+    npc_personality: str
+    scenario_description: str
+    scene_location: str
+    scene_goal: str
+    conversation_history: str
+    learner_message: str
+
+
 class PromptBuilder:
     def __init__(self):
         PROMPT = Path(__file__).resolve().parent.parent.parent / "prompt"
@@ -25,6 +36,11 @@ class PromptBuilder:
         template = self.env.get_template(name="change_state.jinja")
         return template.render(**params)
 
+    def re_interact(self, params: ReInteractParams):
+        template = self.env.get_template(name="response.jinja")
+        return template.render(**params)
+
+    # FIXME: Delete this
     def intention_prompt(self, scenario_id: int, input: str) -> str:
         # FIXME: The prompt builder should load the template and inject
 

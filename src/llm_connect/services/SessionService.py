@@ -8,7 +8,7 @@ class SessionService:
     def __init__(self, orchestrator: Orchestrator):
         self.o = orchestrator
 
-    async def handle_interact(
+    async def handle_interaction(
         self,
         session_id: str,
         content: str,
@@ -23,5 +23,3 @@ class SessionService:
             engine,
         ):
             yield token
-
-        yield "🤏"

@@ -24,15 +24,10 @@ async def interact(
     content = request.content
 
     return StreamingResponse(
-        content=session_service.handle_interact(
+        content=session_service.handle_interaction(
             session_id,
             content,
             engine,
         ),
-        media_type="text/event-stream",
-    )
-
-    return StreamingResponse(
-        content=chat_service.scenario_immerse(content, 1, engine),
         media_type="text/event-stream",
     )

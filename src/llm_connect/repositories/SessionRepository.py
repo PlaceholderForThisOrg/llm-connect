@@ -10,3 +10,6 @@ class SessionRepository:
 
     def get_current_checkpoint(self, session_id: str):
         return session["checkpoint"]
+
+    def update_next_checkpoint(self, session_id, checkpoint_id: str):
+        session["checkpint"] = checkpoint_id

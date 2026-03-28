@@ -17,4 +17,5 @@ class AEvaluator:
         # on the atomic points
         # [2] Calculate the performance score
         # threshold for BKT
+        return
         logger.info("🥳 Activity evaluation started")

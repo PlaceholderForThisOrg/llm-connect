@@ -3,11 +3,13 @@ from openai import AsyncOpenAI
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
+from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.core.aevaluator import AEvaluator
-from llm_connect.services.core.session import RolePlaySessionManager
+from llm_connect.services.core.SessionManager import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
 from llm_connect.services.SessionService import SessionService
@@ -67,11 +69,24 @@ def get_aevaluator():
     return AEvaluator()
 
 
+def get_session_repo():
+    return SessionRepository()
+
+
 def get_roleplay_session_manager(
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
     client: AsyncOpenAI = Depends(get_llm),
+    session_repo: SessionRepository = Depends(get_session_repo),
 ):
-    return RolePlaySessionManager(prompt_builder, client)
+    return RolePlaySessionManager(
+        prompt_builder,
+        client,
+        session_repo,
+    )
+
+
+def get_activity_repo():
+    return ActivityRepository()
 
 
 def get_orchestrator(
@@ -81,6 +96,8 @@ def get_orchestrator(
     analyzer: Analyzer = Depends(get_analyzer),
     aevaluator: AEvaluator = Depends(get_aevaluator),
     session_manager: RolePlaySessionManager = Depends(get_roleplay_session_manager),
+    session_repo: SessionRepository = Depends(get_session_repo),
+    activity_repo: ActivityRepository = Depends(get_activity_repo),
 ):
     return Orchestrator(
         evaluator,
@@ -89,6 +106,8 @@ def get_orchestrator(
         analyzer,
         aevaluator,
         session_manager,
+        session_repo,
+        activity_repo,
     )
 
 
