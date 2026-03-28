@@ -1,0 +1,29 @@
+{
+    "activity_id": "activity_002",
+    "checkpoint": "0",
+    "history": [
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Haha",
+            "timestamp": 1774667712.86505
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "That is kind weird!",
+            "timestamp": 1774667757.438064
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Nice to meet you",
+            "timestamp": 1774667790.259847
+        }
+    ],
+    "time_start": 1774667710.982727,
+    "status": "RUNNING"
+}

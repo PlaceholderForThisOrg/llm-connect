@@ -3,12 +3,10 @@ from datetime import datetime, timezone
 from fastapi import BackgroundTasks
 
 from llm_connect import logger
-from llm_connect.proto import scenario, scenario_template
-from llm_connect.proto.activity import activity_v2
-from llm_connect.proto.session import session
+from llm_connect.proto.session import session, sync_session
 from llm_connect.services.analyzer.Analyzer import Analyzer
 from llm_connect.services.core.aevaluator import AEvaluator
-from llm_connect.services.core.session import RolePlaySessionManager, SessionManager
+from llm_connect.services.core.session import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
 
 
@@ -49,10 +47,11 @@ class Orchestrator:
             "id": "0",
             "type": "MESSAGE",
             "of": "LEARNER",
-            "content": input,
+            "content": content,
             "timestamp": timestamp,
         }
         session["history"].append(interaction)
+        sync_session()
         logger.info("2️⃣  Interaction object created!")
 
         # TODO: Run the evaluator to extract the performance
