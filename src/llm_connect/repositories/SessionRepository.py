@@ -12,4 +12,4 @@ class SessionRepository:
         return session["checkpoint"]
 
     def update_next_checkpoint(self, session_id, checkpoint_id: str):
-        session["checkpint"] = checkpoint_id
+        session["checkpoint"] = checkpoint_id
