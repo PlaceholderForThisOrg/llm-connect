@@ -75,7 +75,7 @@ activity_v2 = {
             ),
             "learner_goal": "Ask Marco for the menu using a polite request form",
             "npc_pressure": [
-                "Wait for the learner to ask — do not hand over the menu automatically",
+                "Wait for theH learner to ask — do not hand over the menu automatically",
                 "If the learner just points or says 'menu' with no request form, "
                 "respond naturally but look slightly expectant",
                 "Once asked correctly, hand it over warmly",
