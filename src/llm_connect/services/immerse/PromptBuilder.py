@@ -30,6 +30,12 @@ class GoalEvaluateParams(TypedDict):
     learner_input: str
 
 
+class NPCParams(TypedDict):
+    learner_interaction: str
+    finished_goal: str
+    next_goal: str
+
+
 class PromptBuilder:
     def __init__(self):
         PROMPT = Path(__file__).resolve().parent.parent.parent / "prompt"
@@ -39,8 +45,12 @@ class PromptBuilder:
 
         self.env = Environment(loader=loader)
 
+    def npc(self, params: NPCParams):
+        template = self.env.get_template(name="npc.jinja")
+        return template.render(**params)
+
     def goal_evaluate(self, params: GoalEvaluateParams):
-        template = self.env.get_template(name="goal_evaluator_v1.jinja")
+        template = self.env.get_template(name="goal_evaluate_v1.jinja")
         return template.render(**params)
 
     def move_checkpoint(self, params: MoveCheckpointParams):

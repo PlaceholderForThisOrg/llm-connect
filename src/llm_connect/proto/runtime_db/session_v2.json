@@ -1,0 +1,309 @@
+{
+    "activity_id": "activity_002",
+    "current_goal": "-1",
+    "history": [
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Hello, nice to meet you!",
+            "timestamp": 1775031120.328116
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Hello, nice to meet you too! May I please have the name for your reservation?",
+            "timestamp": 1775031124.272099
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Yeah, I have reserved for one-person table last week!",
+            "timestamp": 1775031165.440479
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Wonderful! May I have your name and the time of your reservation, please?",
+            "timestamp": 1775031170.237471
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Tabemono, at 6:00 p.m!",
+            "timestamp": 1775031193.023367
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031194.52887
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "It's Tabemono at 6:00 p.m!",
+            "timestamp": 1775031214.407429
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Thank you for confirming your reservation for Tabemono at 6:00 p.m.! Please follow me, and I'll show you to your table.",
+            "timestamp": 1775031217.869222
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Oh, thank you for seating me, oh, nice view!",
+            "timestamp": 1775031242.240378
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "I'm glad you like the view! Can I start you off with something to drink, or would you like to hear about our specials today?",
+            "timestamp": 1775031248.27899
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Oh, could I have one big-sized cheese pizza, one Lemon tea, and one small-sized pasta!",
+            "timestamp": 1775031283.923298
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Thank you for your order! Just to confirm, you'd like one big cheese pizza, a lemon tea, and a small pasta\u2014did you have a preference for the pasta sauce or would you like to try our seafood pasta special today?",
+            "timestamp": 1775031287.669885
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "That's all I want. Besides, I really love cheese, so could you add a little bit cheese on the Pizza for me?",
+            "timestamp": 1775031332.234727
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031333.872342
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "That's all I want for my dinner. Besides, I really love cheese, so could you add a little bit cheese on the Pizza for me?",
+            "timestamp": 1775031341.999432
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031343.902218
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "That's all I want. Besides, could I also have one coffee, please",
+            "timestamp": 1775031369.104993
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031370.831585
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "That is all for my order!",
+            "timestamp": 1775031416.439165
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031419.886236
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "That is all for my order! Besides, my cheese pizza should not include chili, I don't really want it",
+            "timestamp": 1775031447.443411
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Thank you for letting me know\u2014your cheese pizza will be made without chili. I'll bring your food out as soon as it's ready, and if you need anything else while you wait, just let me know!",
+            "timestamp": 1775031450.55554
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Oh, so delicious, thank you!",
+            "timestamp": 1775031480.840893
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "I'm so glad you're enjoying your meal! What do you think of the flavors?",
+            "timestamp": 1775031483.972335
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "So good, lucky to have dinner here!",
+            "timestamp": 1775031525.365844
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Thank you so much, I'm glad you enjoyed your meal! Whenever you're ready, just let me know if you'd like the bill or anything else.",
+            "timestamp": 1775031528.64342
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Emma, could you please pass me my bill!",
+            "timestamp": 1775031547.3898
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Of course, here's your bill. Whenever you're ready, would you like to pay by card or cash today?",
+            "timestamp": 1775031551.068474
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "This is a technology world, and I don't have any cash, so by card, please!",
+            "timestamp": 1775031574.590004
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Absolutely, paying by card is perfectly fine. If you could please hand me your card or tap it on the machine, I'll process your payment right away.",
+            "timestamp": 1775031578.408213
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "So convenient, I hope my balance is OK!",
+            "timestamp": 1775031604.726211
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031606.421299
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "So convenient, I hope my balance is enough for this delicious meal!",
+            "timestamp": 1775031622.980149
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031625.187117
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "So convenient, I hope my balance is enough for this delicious meal!",
+            "timestamp": 1775031633.278846
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031635.231758
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "I hope my card's balance is enough for this delicious meal!",
+            "timestamp": 1775031646.724543
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775031649.039933
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Here is my credit card. I hope my card's balance is enough for this delicious meal!",
+            "timestamp": 1775031663.004515
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "Thank you very much! I'll take care of this for you right away.",
+            "timestamp": 1775031666.708907
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Thank you very much!",
+            "timestamp": 1775031683.759984
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "You're very welcome! I hope you have a wonderful day\u2014thank you for dining with us.",
+            "timestamp": 1775031687.263569
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "Good bye, I'll definitely come here next weekend!",
+            "timestamp": 1775031714.453373
+        }
+    ],
+    "time_start": 1775031099.878299,
+    "status": "DONE"
+}

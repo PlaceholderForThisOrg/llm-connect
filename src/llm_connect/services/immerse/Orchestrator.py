@@ -1,7 +1,7 @@
 from fastapi import BackgroundTasks
 
 from llm_connect import logger
-from llm_connect.proto.session import sync_session
+from llm_connect.proto.session.session_v2 import sync_session
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.analyzer.Analyzer import Analyzer
@@ -49,24 +49,14 @@ class Orchestrator:
 
         logger.info("2️⃣  Interaction object created!")
 
-        self.session_manager.append_interaction(
-            session,
-            activity,
-            of="LEARNER",
-            content=content,
-        )
-
         logger.info("3️⃣  Evaluation started")
         self.aevaluator.run(input, engine)
 
-        async for token in self.session_manager.re_interact(
+        async for token in self.session_manager.accept(
             session,
             activity,
             content,
         ):
             yield token
-
-        logger.info("✋  Session manager's checkpoint checking")
-        await self.session_manager.update(session, activity, content)
 
         sync_session()

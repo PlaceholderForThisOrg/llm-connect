@@ -6,6 +6,10 @@ class SessionManager(ABC):
         pass
 
     @abstractmethod
+    async def accept(self, session, activity, interaction):
+        pass
+
+    @abstractmethod
     async def evaluate(self, interaction) -> bool:
         pass
 
