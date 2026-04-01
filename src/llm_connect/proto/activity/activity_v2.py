@@ -1,31 +1,3 @@
-activity_v1 = {
-    "id": "activity_001",
-    "type": "ROLE-PLAY",
-    "description": "At the restaurant, learner wants to order food with the waiter",
-    "context": "The waiter's name is ..., the restaurant name is ..., it is 7:00 p.m, and you're very hungry, ...",
-    "goal": "You have to order your dinner successfully",
-    "difficulty": "B1",
-}
-
-
-# ─────────────────────────────────────────────────────────────────
-# ACTIVITY
-# ─────────────────────────────────────────────────────────────────
-#
-# Atomic point assignment per checkpoint:
-#
-#   CP0  Greeting    → ap_v_003, ap_f_003
-#   CP1  Menu req.   → ap_g_001, ap_v_001, ap_f_002
-#   CP2  Menu Qs     → ap_g_002, ap_v_002, ap_v_004, ap_f_004
-#   CP3  Ordering    → ap_g_001, ap_g_002, ap_v_005, ap_v_007, ap_f_001
-#   CP4  Paying      → ap_g_001, ap_v_006, ap_f_002
-#   CP5  Farewell    → []
-#
-# ap_g_001 spans CP1→CP3→CP4: introduced, practiced, assessed
-# ap_f_002 spans CP1→CP4: same phrase frame, different vocab slot
-# ap_v_004 introduced CP2, produced CP3: introduce then produce
-# ─────────────────────────────────────────────────────────────────
-
 activity_v2 = {
     "id": "activity_002",
     "type": "ROLE-PLAY",
@@ -167,14 +139,4 @@ activity_v2 = {
             "next": None,
         },
     },
-}
-
-test_activity = {
-    "id": "activity_002",
-    "type": "READING_AND_FINDING_INFORMATION",
-    "description": "You received a advertisement from a dance club, where it offers a free class, but there are conditions to meet to join that class",
-    "context": "You live in a small city, you actually have a lot of freetime at night, and you received that advertisement by chance, then you have to understand that advertisement to actually join the free dance class",
-    "goal": "Understand the conditions and decide whether you can or can't join the club",
-    "difficulty": "B2",
-    "checkpoints": [],
 }

@@ -25,12 +25,23 @@ class ReInteractParams(TypedDict):
     learner_message: str
 
 
+class GoalEvaluateParams(TypedDict):
+    goal: str
+    learner_input: str
+
+
 class PromptBuilder:
     def __init__(self):
         PROMPT = Path(__file__).resolve().parent.parent.parent / "prompt"
-        loader = FileSystemLoader(searchpath=[PROMPT / "evaluator", PROMPT / "actor"])
+        loader = FileSystemLoader(
+            searchpath=[PROMPT / "evaluator", PROMPT / "actor", PROMPT]
+        )
 
         self.env = Environment(loader=loader)
+
+    def goal_evaluate(self, params: GoalEvaluateParams):
+        template = self.env.get_template(name="goal_evaluator_v1.jinja")
+        return template.render(**params)
 
     def move_checkpoint(self, params: MoveCheckpointParams):
         template = self.env.get_template(name="change_state.jinja")
