@@ -21,6 +21,13 @@ async def interact(
     # logger.info("⚔️ Router")
     content = request.content
 
+    content = ""
+
+    async for token in session_service.handle_interaction(session_id, content, engine):
+        content += token
+
+    return {"content": content}
+
     return StreamingResponse(
         content=session_service.handle_interaction(
             session_id,
