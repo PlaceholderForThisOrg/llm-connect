@@ -29,10 +29,11 @@ router = APIRouter(prefix="/api/v1/learners/me/decks", tags=["Decks"])
 @router.post("")
 async def create_deck(
     payload: CreateDeckRequest,
-    jwt_payload: Payload = Depends(verify_token),
+    # jwt_payload: Payload = Depends(verify_token),
     pool: Pool = Depends(get_postgre_pool),
 ) -> CreateDeckResponse:
-    user_id = jwt_payload["sub"]
+    # user_id = jwt_payload["sub"]
+    user_id = 1
     data = await create_new_deck(payload, user_id, pool)
 
     return CreateDeckResponse(

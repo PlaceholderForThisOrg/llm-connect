@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api/v1/private", tags=["private"])
 
 @router.get("/")
 async def get(
-    payload: Payload = Depends(verify_token), pool: Pool = Depends(get_postgre_pool)
+    # payload: Payload = Depends(verify_token), pool: Pool = Depends(get_postgre_pool)
 ):
     return {"message": "private"}
     # await sync_learner(payload["sub"], pool)

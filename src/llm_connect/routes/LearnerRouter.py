@@ -29,12 +29,13 @@ async def upload_avatar(
     file: UploadFile = File(),
     s3_session: aioboto3.Session = Depends(get_s3_session),
     pool: asyncpg.Pool = Depends(get_postgre_pool),
-    payload: Payload = Depends(verify_token),
+    # payload: Payload = Depends(verify_token),
 ) -> UploadAvatarResponse:
     if file.content_type not in {"image/png", "image/jpeg"}:
         raise HTTPException(400, "Unsupported image type")
 
-    user_id = payload["sub"]
+    # user_id = payload["sub"]
+    user_id = 1
     # await sync_learner(user_id, pool)
     avatar_url = await update_avatar(file, user_id, s3_session, pool)
     return UploadAvatarResponse(user_id=user_id, avatar_url=avatar_url)
@@ -43,11 +44,12 @@ async def upload_avatar(
 @router.patch("")
 async def update_infor(
     payload: LearnerUpdateRequest,
-    jwt_payload: Payload = Depends(verify_token),
+    # jwt_payload: Payload = Depends(verify_token),
     pool: asyncpg.Pool = Depends(get_postgre_pool),
 ) -> LearnerUpdateResponse:
 
-    user_id = jwt_payload["sub"]
+    # user_id = jwt_payload["sub"]
+    user_id = 1
     data = await update_learner(user_id, pool, payload)
 
     return LearnerUpdateResponse(
@@ -66,10 +68,11 @@ async def update_infor(
     response_model=GetLearnerResponse,
 )
 async def get_me(
-    jwt_payload: Payload = Depends(verify_token),
+    # jwt_payload: Payload = Depends(verify_token),
     learner_service: LearnerService = Depends(get_learner_service),
 ) -> GetLearnerResponse:
-    user_id = jwt_payload["sub"]
+    # user_id = jwt_payload["sub"]
+    user_id = 1
     learner = await learner_service.get_learner_information(user_id)
     return GetLearnerResponse(
         user_id=user_id,

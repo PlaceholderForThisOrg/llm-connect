@@ -10,6 +10,7 @@ interaction = {"timestamp": now, "of": "LEARNER", "type": "MESSAGE"}  # AcTIVITY
 
 
 session_v2 = {
+    "session_id": "session_002",
     "activity_id": "activity_002",
     "current_goal": "0",  # pointer to the current goal that requires
     # the learner to complete

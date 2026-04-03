@@ -6,6 +6,7 @@ from llm_connect.clients import lifespan
 from llm_connect.configs.app import ORIGINS
 from llm_connect.errors import global_exception_handler, http_exception_handler
 from llm_connect.routes import (
+    ActivityRouter,
     AtomicPointRouter,
     LearnerRouter,
     ScenarioRouter,
@@ -43,6 +44,7 @@ app.include_router(router=ScenarioRouter.router)
 app.include_router(router=scenario_template.router)
 app.include_router(router=AtomicPointRouter.router)
 app.include_router(router=SessionRouter.router)
+app.include_router(router=ActivityRouter.router)
 
 # ⁉️ Exception handler
 

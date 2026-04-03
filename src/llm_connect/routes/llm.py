@@ -16,9 +16,10 @@ router = APIRouter(prefix="/api/v1/companion", tags=["Companion"])
 @router.post("/chat-stream")
 async def generate_stream(
     request: chat_schema.ChatRequest,
-    payload: Payload = Depends(verify_token),
+    # payload: Payload = Depends(verify_token),
     chat_service: ChatService = Depends(get_chat_service),
 ):
+    payload = None
     asyncio.create_task(
         chat_service.push_message(request.message, payload["sub"], Role.LEARNER)
     )

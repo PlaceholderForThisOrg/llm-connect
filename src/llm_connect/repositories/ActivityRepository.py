@@ -15,3 +15,6 @@ class ActivityRepository:
     def get_checkpoint_by_id(self, activity_id, checkpoint_id):
         # FIXME: prototype only - in-memory
         return activity_v4["checkpoints"][checkpoint_id]
+
+    def get_goal_by_id(self, activity_id, goal_id):
+        return activity_v4["goals"][goal_id]

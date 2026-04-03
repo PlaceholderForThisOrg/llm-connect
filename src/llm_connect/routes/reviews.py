@@ -19,7 +19,7 @@ router = APIRouter(prefix="/api/v1/reviews", tags=["Spaced repetition System"])
 async def submit_review(
     learner_card_id: UUID,
     body: SubmitReviewRequest,
-    jwt_payload: Payload = Depends(verify_token),
+    # jwt_payload: Payload = Depends(verify_token),
     pool: Pool = Depends(get_postgre_pool),
 ):
 

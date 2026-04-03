@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.services.ActivityService import ActivityService
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.core.aevaluator import AEvaluator
@@ -129,5 +130,19 @@ def get_learner_service(
     return LearnerService(learner_repository)
 
 
-def get_session_service(orchestrator: Orchestrator = Depends(get_orchestrator)):
-    return SessionService(orchestrator)
+def get_session_service(
+    orchestrator: Orchestrator = Depends(get_orchestrator),
+    session_repo: SessionRepository = Depends(get_session_repo),
+    activity_repo: ActivityRepository = Depends(get_activity_repo),
+):
+    return SessionService(
+        orchestrator,
+        session_repo,
+        activity_repo,
+    )
+
+
+def get_activity_service(
+    activity_repo: ActivityRepository = Depends(get_activity_repo),
+):
+    return ActivityService(activity_repo)

@@ -7,5 +7,7 @@ router = APIRouter(prefix="/api/v1/atomic-points", tags=["Atomic points"])
 
 
 @router.post("/")
-async def create_point(payload: Payload = Depends(verify_token)):
+async def create_point(
+    # payload: Payload = Depends(verify_token),
+):
     return {"message": "OK"}

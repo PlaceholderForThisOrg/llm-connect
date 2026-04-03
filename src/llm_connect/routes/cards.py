@@ -18,11 +18,12 @@ router = APIRouter(
 async def create_card_in_deck(
     deck_id: UUID,
     payload: AddCardRequest,
-    jwt_payload: Payload = Depends(verify_token),
+    # jwt_payload: Payload = Depends(verify_token),
     pool: Pool = Depends(get_postgre_pool),
 ) -> AddCardResponse:
-    user_id = jwt_payload["sub"]
+    pass
+    # user_id = jwt_payload["sub"]
 
-    data = await add_card(deck_id, payload, user_id, pool)
+    # data = await add_card(deck_id, payload, user_id, pool)
 
-    return AddCardResponse(id=data["id"], front=data["front"], back=data["back"])
+    # return AddCardResponse(id=data["id"], front=data["front"], back=data["back"])

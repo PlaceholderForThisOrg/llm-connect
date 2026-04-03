@@ -7,3 +7,18 @@ class Interaction(BaseModel):
     of: str = None
     content: str
     timestamp: str = None
+
+
+class CreateSessionRequest(BaseModel):
+    dump: str = None
+
+
+class CreateSessionResponse(BaseModel):
+    sessionId: str
+
+
+class GetGoalResponse(BaseModel):
+    sessionId: str = None
+    activityId: str = None
+    goal: dict = None
+    status: str = None

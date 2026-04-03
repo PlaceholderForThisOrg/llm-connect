@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/v1/me/scenarios", tags=["Scenario"])
 async def immerse(
     request: ImmerseScenarioRequest,
     engine: BackgroundTasks,
-    payload: Payload = Depends(verify_token),
+    # payload: Payload = Depends(verify_token),
     chat_service: ChatService = Depends(get_chat_service),
 ):
     # user_id = payload["sub"]
