@@ -3,10 +3,16 @@ from openai import AsyncOpenAI
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
+from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
+from llm_connect.services.core.aevaluator import AEvaluator
+from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
+from llm_connect.services.SessionService import SessionService
 
 
 # 🤷‍♂️ Outside clients, created in lifespan
@@ -55,12 +61,54 @@ def get_actor(
     return Actor(client, prompt_builder)
 
 
+def get_analyzer():
+    return Analyzer()
+
+
+def get_aevaluator():
+    return AEvaluator()
+
+
+def get_session_repo():
+    return SessionRepository()
+
+
+def get_roleplay_session_manager(
+    prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+    client: AsyncOpenAI = Depends(get_llm),
+    session_repo: SessionRepository = Depends(get_session_repo),
+):
+    return RolePlaySessionManager(
+        prompt_builder,
+        client,
+        session_repo,
+    )
+
+
+def get_activity_repo():
+    return ActivityRepository()
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+    analyzer: Analyzer = Depends(get_analyzer),
+    aevaluator: AEvaluator = Depends(get_aevaluator),
+    session_manager: RolePlaySessionManager = Depends(get_roleplay_session_manager),
+    session_repo: SessionRepository = Depends(get_session_repo),
+    activity_repo: ActivityRepository = Depends(get_activity_repo),
 ):
-    return Orchestrator(evaluator, actor, prompt_builder)
+    return Orchestrator(
+        evaluator,
+        actor,
+        prompt_builder,
+        analyzer,
+        aevaluator,
+        session_manager,
+        session_repo,
+        activity_repo,
+    )
 
 
 def get_chat_service(
@@ -79,3 +127,7 @@ def get_learner_service(
     learner_repository: LearnerRepository = Depends(get_learner_repository),
 ):
     return LearnerService(learner_repository)
+
+
+def get_session_service(orchestrator: Orchestrator = Depends(get_orchestrator)):
+    return SessionService(orchestrator)

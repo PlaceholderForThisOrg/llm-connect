@@ -1,0 +1,36 @@
+{
+    "activity_id": "activity_002",
+    "current_goal": "0",
+    "history": [
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "",
+            "timestamp": 1775201401.441191
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775201403.792789
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "LEARNER",
+            "content": "",
+            "timestamp": 1775201423.304387
+        },
+        {
+            "id": "0",
+            "type": "MESSAGE",
+            "of": "NPC",
+            "content": "What is hell is going on?",
+            "timestamp": 1775201424.860553
+        }
+    ],
+    "time_start": 1775201389.913408,
+    "status": "RUNNING"
+}

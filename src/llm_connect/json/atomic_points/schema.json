@@ -1,0 +1,19 @@
+{
+    "id": "string",
+    "type": "grammar | vocabulary | fluency",
+    "name": "string",
+    "description": "string",
+    "examples": [
+        "string"
+    ],
+    "level": "A1-C2",
+    "popularity": "number",
+    "tags": [
+        "string"
+    ],
+    "related": [
+        "id"
+    ],
+    "created_at": "timestamp",
+    "updated_at": "timestamp"
+}

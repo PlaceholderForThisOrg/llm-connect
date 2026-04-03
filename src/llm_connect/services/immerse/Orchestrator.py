@@ -1,51 +1,62 @@
+from fastapi import BackgroundTasks
+
 from llm_connect import logger
-from llm_connect.proto import scenario, scenario_template
+from llm_connect.proto.session.session_v2 import sync_session
+from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.services.analyzer.Analyzer import Analyzer
+from llm_connect.services.core.aevaluator import AEvaluator
+from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
 
 
 class Orchestrator:
     def __init__(
-        self, evaluator: Evaluator, actor: Actor, prompt_builder: PromptBuilder
+        self,
+        evaluator: Evaluator,
+        actor: Actor,
+        prompt_builder: PromptBuilder,
+        analyzer: Analyzer,
+        aevaluator: AEvaluator,
+        session_manager: RolePlaySessionManager,
+        session_repo: SessionRepository,
+        activity_repo: ActivityRepository,
     ):
         self.evaluator = evaluator
         self.actor = actor
         self.prompt_builder = prompt_builder
+        self.analyzer = analyzer
+        self.aevaluator = aevaluator
+        self.session_manager = session_manager
+        self.session_repo = session_repo
+        self.activity_repo = activity_repo
 
-    async def start(self, scenario_id: int, input: str):
-        # [1] The orchestrator receives the message from the learner
-        # store that message into the scenario object
-        scenario["messages"].append({"role": "learner", "content": input})
-        # [2] Use that message/history to ask for the current state from the evaluator
-        # get the result
+    # Orchestrate on the interaction
+    async def start(
+        self,
+        scenario_id: int,
+        content: str,
+        engine: BackgroundTasks,
+    ):
 
-        # FIXME yield to end the orchestrator
-        # and a loop of yield on the stream of the response of the LLM
-        state = scenario["state"]
-        if state == "END":
-            yield "You have successfully finished this scenario, good job."
-        else:
-            logger.info(f"Current state: {scenario["state"]}")
+        # FIXME: Prototype
 
-            state = await self.evaluator.next_state(input)
+        logger.info("1️⃣  Orchestration started!")
 
-            # [2.1] Use the state to update the current state
-            if state is True:
-                # Move the scenario to the next state
-                # check for the end state
-                if scenario["index"] == len(scenario_template["states"]):
-                    # conversation has done
-                    yield "nothing"
+        logger.info("📊  Load the session and the activity")
+        session = self.session_repo.get_session_by_id("1")
+        activity = self.activity_repo.get_activity_by_id("activity_001")
 
-                scenario["index"] += 1
-                scenario["state"] = scenario_template["states"][scenario["index"]][
-                    "name"
-                ]
+        logger.info("2️⃣  Interaction object created!")
 
-            # [3] Use that result to build the second prompt for the actor
-            # send to the actor LLM
+        logger.info("3️⃣  Evaluation started")
+        self.aevaluator.run(input, engine)
 
-            logger.info(f"Current scenario: {scenario}")
+        async for token in self.session_manager.accept(
+            session,
+            activity,
+            content,
+        ):
+            yield token
 
-            # [4] Stream the result back to the learner/store the message
-            async for token in self.actor.say(input):
-                yield token
+        sync_session()

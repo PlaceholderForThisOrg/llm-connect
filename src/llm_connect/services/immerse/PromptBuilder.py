@@ -1,19 +1,69 @@
 from pathlib import Path
+from typing import TypedDict
 
 from jinja2 import Environment, FileSystemLoader
 
 from llm_connect.proto.scenario import scenario, scenario_template
 
 
+class MoveCheckpointParams(TypedDict):
+    checkpoint_name: str
+    checkpoint_description: str
+    transition_condition: str
+    history: str
+    user_input: str
+
+
+class ReInteractParams(TypedDict):
+    npc_name: str
+    npc_role: str
+    npc_personality: str
+    scenario_description: str
+    scene_location: str
+    scene_goal: str
+    conversation_history: str
+    learner_message: str
+
+
+class GoalEvaluateParams(TypedDict):
+    goal: str
+    learner_input: str
+
+
+class NPCParams(TypedDict):
+    learner_interaction: str
+    finished_goal: str
+    next_goal: str
+
+
 class PromptBuilder:
     def __init__(self):
         PROMPT = Path(__file__).resolve().parent.parent.parent / "prompt"
-        loader = FileSystemLoader(searchpath=[PROMPT / "evaluator", PROMPT / "actor"])
+        loader = FileSystemLoader(
+            searchpath=[PROMPT / "evaluator", PROMPT / "actor", PROMPT]
+        )
 
         self.env = Environment(loader=loader)
 
+    def npc(self, params: NPCParams):
+        template = self.env.get_template(name="npc.jinja")
+        return template.render(**params)
+
+    def goal_evaluate(self, params: GoalEvaluateParams):
+        template = self.env.get_template(name="goal_evaluate_v1.jinja")
+        return template.render(**params)
+
+    def move_checkpoint(self, params: MoveCheckpointParams):
+        template = self.env.get_template(name="change_state.jinja")
+        return template.render(**params)
+
+    def re_interact(self, params: ReInteractParams):
+        template = self.env.get_template(name="response.jinja")
+        return template.render(**params)
+
+    # FIXME: Delete this
     def intention_prompt(self, scenario_id: int, input: str) -> str:
-        # FIXME load dynamically/synchronously
+        # FIXME: The prompt builder should load the template and inject
 
         # scenario_id is used as the reference to get the status to
         # create the prompt

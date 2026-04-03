@@ -1,5 +1,6 @@
 import time
 
+from fastapi import BackgroundTasks
 from openai import AsyncOpenAI
 from redis.asyncio import Redis
 
@@ -10,12 +11,7 @@ from llm_connect.services.immerse import Orchestrator
 
 
 class ChatService:
-    def __init__(
-        self,
-        llm: AsyncOpenAI,
-        redis: Redis,
-        orchestrator: Orchestrator,
-    ):
+    def __init__(self, llm: AsyncOpenAI, redis: Redis, orchestrator: Orchestrator):
         self.llm = llm
         self.redis = redis
         self.orchestrator = orchestrator
@@ -41,6 +37,15 @@ class ChatService:
 
         await self.redis.xadd(MESSAGE_STREAM, fields=message.model_dump())
 
-    async def scenario_immerse(self, input: str, scenario_id: int):
-        async for token in self.orchestrator.start(scenario_id, input):
+    async def scenario_immerse(
+        self,
+        input: str,
+        scenario_id: int,
+        engine: BackgroundTasks,
+    ):
+        async for token in self.orchestrator.start(
+            scenario_id,
+            input,
+            engine,
+        ):
             yield token

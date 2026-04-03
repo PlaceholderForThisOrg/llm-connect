@@ -1,0 +1,21 @@
+{
+    "id": "ap_f_003",
+    "type": "fluency",
+    "name": "Collocation: 'make a reservation'",
+    "description": "A common phrase used when booking a table at a restaurant.",
+    "examples": [
+        "I'd like to make a reservation for two.",
+        "We made a reservation in advance."
+    ],
+    "level": "B1",
+    "popularity": 0.88,
+    "tags": [
+        "restaurant",
+        "planning"
+    ],
+    "related": [
+        "ap_v_001"
+    ],
+    "created_at": "2026-03-21",
+    "updated_at": "2026-03-21"
+}
