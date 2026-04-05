@@ -42,6 +42,16 @@ class CompanionParams(TypedDict):
     input: str
 
 
+class CompanionHelpParams(TypedDict):
+    activity: str
+    goal: str
+    latest_attempt: str
+    result: str
+    history: Dict
+    knowledge: str
+    type: str
+
+
 class PromptBuilder:
     def __init__(self):
         PROMPT = Path(__file__).resolve().parent.parent.parent / "prompt"
@@ -50,6 +60,13 @@ class PromptBuilder:
         )
 
         self.env = Environment(loader=loader)
+
+    def companion_help_prompt(
+        self,
+        params: CompanionHelpParams,
+    ):
+        template = self.env.get_template(name="companion_help.jinja")
+        return template.render(**params)
 
     def companion_prompt(
         self,

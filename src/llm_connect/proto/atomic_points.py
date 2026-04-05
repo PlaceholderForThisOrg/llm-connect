@@ -382,3 +382,47 @@ atomic_points_v1 = [
 
 # ── Runtime lookup ─────────────────────────────────────────────
 ATOMIC_REGISTRY = {ap["id"]: ap for ap in atomic_points_v1}
+
+
+# __ For prompt
+def ap2str(d):
+    return (
+        f"""
+[Knowledge]
+
+Name: {d['name']}
+Level: {d['level']}
+Type: {d['type']}
+Domain: {', '.join(d['tags'])}
+
+Description:
+{d['description']}
+
+Examples:
+- """
+        + "\n- ".join(d["examples"])
+        + f"""
+
+Hints:
+- """
+        + "\n- ".join(d["hints"])
+        + f"""
+
+Evidence of Understanding:
+- """
+        + "\n- ".join(d["evidence_of_grasp"])
+        + f"""
+
+Common Mistakes:
+- """
+        + "\n- ".join(d["evidence_of_confusion"])
+        + f"""
+
+Metadata:
+- ID: {d['id']}
+- Related: {', '.join(d['related'])}
+- Popularity: {d['popularity']}
+- Created At: {d['created_at']}
+- Updated At: {d['updated_at']}
+""".strip()
+    )

@@ -6,6 +6,7 @@ from llm_connect.clients.dependencies import (
 )
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.schemas.conversation_schema import (
+    GetHelpResponse,
     PostConRequest,
     PostConResponse,
     PostMessageRequest,
@@ -42,3 +43,22 @@ async def chat(
     response = PostMessageResponse(content=re_message["content"])
 
     return response
+
+
+@router.get("/{con_id}/help/")
+async def get_help(
+    con_id: str,
+    sesId: str,
+    con_ser: ConversationService = Depends(get_conversation_service),
+):
+
+    ses_id = sesId
+
+    content = await con_ser.sos(
+        ses_id,
+        con_id,
+    )
+
+    return GetHelpResponse(
+        content=content,
+    )

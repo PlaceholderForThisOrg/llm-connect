@@ -14,7 +14,13 @@ from llm_connect.services.AtomicPointService import AtomicPointService
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.ConversationService import ConversationService
 from llm_connect.services.core.aevaluator import AEvaluator
-from llm_connect.services.core.Companion import Brain, Companion, Memory
+from llm_connect.services.core.Companion import (
+    Brain,
+    Companion,
+    Knowledge,
+    Memory,
+    Persionality,
+)
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
@@ -154,16 +160,37 @@ def get_activity_service(
     return ActivityService(activity_repo)
 
 
+def get_ap_repo():
+    return AtomicPointRepository()
+
+
 def get_companion(
     llm=Depends(get_llm),
     learner_repo=Depends(get_learner_repository),
     con_repo=Depends(get_conversation_repo),
     pb=Depends(get_prompt_builder),
+    ses_repo=Depends(get_session_repo),
+    ac_repo=Depends(get_activity_repo),
+    ap_repo=Depends(get_ap_repo),
 ):
     brain = Brain(llm)
-    memory = Memory(learner_repo, con_repo)
+    memory = Memory(
+        learner_repo,
+        con_repo,
+        ses_repo,
+        ac_repo,
+    )
+    k = Knowledge(ap_repo)
+    # FIXME: Not needed in prototype
+    p = Persionality()
 
-    return Companion(brain, memory, pb)
+    return Companion(
+        brain,
+        memory,
+        k,
+        p,
+        pb,
+    )
 
 
 def get_conversation_service(
@@ -171,10 +198,6 @@ def get_conversation_service(
     com=Depends(get_companion),
 ):
     return ConversationService(con_repo, com)
-
-
-def get_ap_repo():
-    return AtomicPointRepository()
 
 
 def get_ap_s(

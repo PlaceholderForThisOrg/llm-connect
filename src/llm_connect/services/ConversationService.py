@@ -20,6 +20,18 @@ class ConversationService:
     def new_con(self, learner_id: str, type: str):
         return self.con_repo.create_new_conversation(type)
 
+    async def sos(self, session_id: str, con_id: str):
+        re_content = await self.com.intervene(session_id)
+
+        re_message = {"role": "COMPANION", "content": re_content}
+
+        self.con_repo.add_new_message(
+            con_id,
+            re_message,
+        )
+
+        return re_content
+
     async def chat(
         self,
         learner_id: str,
@@ -29,13 +41,19 @@ class ConversationService:
         # TODO: Make it stream later
 
         # [1] Store the message
-        message = {"role": "LEARNER", "content": message}
+        message = {
+            "role": "LEARNER",
+            "content": message,
+        }
 
         self.con_repo.add_new_message(con_id, message)
 
         re_content = await self.com.response(learner_id, con_id, message)
 
-        re_message = {"role": "COMPANION", "content": re_content}
+        re_message = {
+            "role": "COMPANION",
+            "content": re_content,
+        }
 
         self.con_repo.add_new_message(con_id, re_message)
 

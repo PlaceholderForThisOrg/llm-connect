@@ -295,5 +295,610 @@
         "time_start": 1775384315.969857,
         "status": "RUNNING",
         "retries": {}
+    },
+    "480428b6-86e3-42d0-a620-e61892fac1e8": {
+        "session_id": "480428b6-86e3-42d0-a620-e61892fac1e8",
+        "activity_id": "ac_001",
+        "con_id": "a01e7b9b-b475-4535-a6cc-6b10c0f6d6f1",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775384973.166237,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "3b33ee6e-ff78-4cdf-93d9-895e8fa957b7": {
+        "session_id": "3b33ee6e-ff78-4cdf-93d9-895e8fa957b7",
+        "activity_id": "ac_001",
+        "con_id": "01b90051-a8df-4d7a-b53c-900908566543",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775385310.361819,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "0f4b7443-edf8-4016-b993-830d254543f1": {
+        "session_id": "0f4b7443-edf8-4016-b993-830d254543f1",
+        "activity_id": "ac_001",
+        "con_id": "571a486c-de84-4f88-b9b6-988ef2d19322",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775385464.773314,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "f4544cc4-9281-4083-9831-5f8ac94ba043": {
+        "session_id": "f4544cc4-9281-4083-9831-5f8ac94ba043",
+        "activity_id": "ac_001",
+        "con_id": "abe17b74-44c2-41f1-99a9-2c0729a3429d",
+        "current_goal": "6",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775385661.204404
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello there! Welcome to our restaurant. Are you joining us with a reservation tonight?",
+                "timestamp": 1775385665.235741
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "We made a reservation",
+                "timestamp": 1775385878.155496
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Welcome! Thank you for letting me know. May I have the name and time for your reservation, please?",
+                "timestamp": 1775385882.159719
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "My name is Bubulala and the reservation is at 6:00p.m",
+                "timestamp": 1775385915.10571
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you, Bubulala! Welcome. Please follow me—your table is ready. Can I help you with your coat or bag before you take a seat?",
+                "timestamp": 1775385918.959492
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Thank you very much",
+                "timestamp": 1775385944.424579
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "You're very welcome! May I start you off with something to drink, or would you like to hear about our specials today before you order?",
+                "timestamp": 1775385948.423806
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I'd like a large-sized burger and one lemon tea please!",
+                "timestamp": 1775386004.159806
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Of course! Just to let you know, we don't have burgers on our menu—our specialties are pasta, pizza, salads, and seafood. Would you like to try our seafood pasta special today along with your lemon tea?",
+                "timestamp": 1775386008.77056
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Bye",
+                "timestamp": 1775386024.458583
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775386026.793168
+            }
+        ],
+        "time_start": 1775385532.909775,
+        "status": "RUNNING",
+        "retries": {
+            "6": 1
+        }
+    },
+    "e3ff7d74-c8ef-45e4-aac2-60b0c131485e": {
+        "session_id": "e3ff7d74-c8ef-45e4-aac2-60b0c131485e",
+        "activity_id": "ac_001",
+        "con_id": "282614cf-4d76-4f07-b9c3-2c1344dda3f0",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775409349.157524,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "cc128a60-9467-4e0e-a4f9-6528b549e751": {
+        "session_id": "cc128a60-9467-4e0e-a4f9-6528b549e751",
+        "activity_id": "ac_001",
+        "con_id": "3bcf6d20-7c47-4164-a3e7-e80017a45183",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775417032.579745,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "8744ff56-4968-46be-af2d-3eb17e665e2a": {
+        "session_id": "8744ff56-4968-46be-af2d-3eb17e665e2a",
+        "activity_id": "ac_001",
+        "con_id": "cbee3487-ad3e-49e2-b57c-3542f460c157",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775417110.007942,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "2742864a-54e7-4b0b-8467-4947b55c46bf": {
+        "session_id": "2742864a-54e7-4b0b-8467-4947b55c46bf",
+        "activity_id": "ac_001",
+        "con_id": "4b3d5b17-67e7-45d8-8704-7b821f0e1cbc",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775417152.004209,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "f034acea-cf2a-41d8-93eb-4cd942f3bcd1": {
+        "session_id": "f034acea-cf2a-41d8-93eb-4cd942f3bcd1",
+        "activity_id": "ac_001",
+        "con_id": "f84f2bfd-4d00-4ae5-ad8e-b4fe49305765",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775417502.308323
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Are you joining us with a reservation this evening?",
+                "timestamp": 1775417507.791454
+            }
+        ],
+        "time_start": 1775417413.82479,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "39909088-c86f-4aed-ba5e-0b5a06a3b53d": {
+        "session_id": "39909088-c86f-4aed-ba5e-0b5a06a3b53d",
+        "activity_id": "ac_001",
+        "con_id": "b93e030a-1b3f-4b09-a6fc-53d53cfbd166",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775417542.473371
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Do you have a reservation with us today?",
+                "timestamp": 1775417545.737799
+            }
+        ],
+        "time_start": 1775417538.523409,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "183b1a17-920b-453b-bf46-013be0523818": {
+        "session_id": "183b1a17-920b-453b-bf46-013be0523818",
+        "activity_id": "ac_001",
+        "con_id": "0e22e4ff-4edd-4d72-b386-e7465fc9096d",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775417589.817058
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Are you joining us with a reservation today?",
+                "timestamp": 1775417593.237989
+            }
+        ],
+        "time_start": 1775417576.577317,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "489822f5-d0cb-4925-84af-02d7b643fa9f": {
+        "session_id": "489822f5-d0cb-4925-84af-02d7b643fa9f",
+        "activity_id": "ac_001",
+        "con_id": "ae315001-3f10-4bd8-beb4-715e1048b7f2",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775417641.887063
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. May I ask if you have a reservation with us today?",
+                "timestamp": 1775417646.086861
+            }
+        ],
+        "time_start": 1775417615.187614,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "ae177707-8795-45fc-aa8c-c73d7839d8df": {
+        "session_id": "ae177707-8795-45fc-aa8c-c73d7839d8df",
+        "activity_id": "ac_001",
+        "con_id": "4f6d024c-5a18-4e19-97cf-bfd624bbd1fb",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775417950.219786
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Good evening! Welcome to our restaurant. May I ask if you have a reservation with us tonight?",
+                "timestamp": 1775417953.997586
+            }
+        ],
+        "time_start": 1775417944.988464,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "fffbb160-3ae5-40c2-8d6e-c3b6a1605313": {
+        "session_id": "fffbb160-3ae5-40c2-8d6e-c3b6a1605313",
+        "activity_id": "ac_001",
+        "con_id": "261ba741-642f-440c-9e3c-88206a1b4267",
+        "current_goal": "2",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775417969.214025
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Good evening! Welcome to our restaurant. Are you joining us with a reservation tonight?",
+                "timestamp": 1775417972.545998
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I have a reservation, actually",
+                "timestamp": 1775418024.008681
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Wonderful! May I please have the name and time of your reservation?",
+                "timestamp": 1775418027.640019
+            }
+        ],
+        "time_start": 1775417964.402181,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "46a73024-d380-41bf-ba80-df62424adbe6": {
+        "session_id": "46a73024-d380-41bf-ba80-df62424adbe6",
+        "activity_id": "ac_001",
+        "con_id": "2a2b613a-62b1-4746-a8da-03a9256c27ee",
+        "current_goal": "3",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775418125.349664
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Are you dining with us tonight with a reservation or would you like to check for a table?",
+                "timestamp": 1775418128.747855
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I have a reservation!",
+                "timestamp": 1775418150.114183
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Wonderful! May I ask under what name and what time your reservation is for?",
+                "timestamp": 1775418153.341762
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "My name is Vikor and it is 9:00 p.m",
+                "timestamp": 1775418200.7985
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you, Vikor. Your table is ready—please follow me and I'll show you to your seat.",
+                "timestamp": 1775418204.304808
+            }
+        ],
+        "time_start": 1775418119.94597,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "b0a69ca6-9b71-4b9c-a7af-80e835cd7354": {
+        "session_id": "b0a69ca6-9b71-4b9c-a7af-80e835cd7354",
+        "activity_id": "ac_001",
+        "con_id": "7d9eaf66-28a2-426b-a454-7748d381f151",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775418709.7484
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello and welcome! Are you joining us with a reservation this evening?",
+                "timestamp": 1775418713.471614
+            }
+        ],
+        "time_start": 1775418692.316223,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "bf4d7512-436b-4956-9f9c-3a8c2c35b9db": {
+        "session_id": "bf4d7512-436b-4956-9f9c-3a8c2c35b9db",
+        "activity_id": "ac_001",
+        "con_id": "5762da67-54b1-400a-bd00-70cd44003290",
+        "current_goal": "6",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775418761.015605
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello, welcome! It's lovely to see you. May I check if you have a reservation with us today?",
+                "timestamp": 1775418765.041082
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I have a reservation!",
+                "timestamp": 1775418913.84915
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Welcome! Thank you for letting me know. May I ask under what name and at what time your reservation is for?",
+                "timestamp": 1775418917.296506
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "My name is Tom and reversation's time is 8:00",
+                "timestamp": 1775419130.180256
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you, Tom! Your reservation at 8:00 is all set. Please follow me—I'll show you to your table.",
+                "timestamp": 1775419133.265909
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Thank you very much!",
+                "timestamp": 1775419390.816725
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "You're very welcome! Would you like a few minutes to look over the menu, or may I recommend our seafood pasta special and help you choose some drinks to start?",
+                "timestamp": 1775419394.627867
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I would like to have one pizza and one lemon juice!",
+                "timestamp": 1775419557.507009
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you for your order! May I ask which type of pizza you would like, and is there anything else you’d like to add, such as a salad or our dessert menu?",
+                "timestamp": 1775419561.364893
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "No, it is enough for me",
+                "timestamp": 1775419758.816996
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775419760.825899
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "It is OK for me!",
+                "timestamp": 1775419965.675876
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775419967.952554
+            }
+        ],
+        "time_start": 1775418756.037206,
+        "status": "RUNNING",
+        "retries": {
+            "6": 2
+        }
+    },
+    "b469dcd1-e6c6-4f33-b118-ec04f692d084": {
+        "session_id": "b469dcd1-e6c6-4f33-b118-ec04f692d084",
+        "activity_id": "ac_001",
+        "con_id": "e3f35292-a9fe-4674-96c1-ac43adbe14a8",
+        "current_goal": "3",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775420109.715667
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. May I ask if you have a reservation with us today?",
+                "timestamp": 1775420113.293468
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I have a reservaton",
+                "timestamp": 1775420160.840204
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Wonderful! May I please have the name and time for your reservation?",
+                "timestamp": 1775420164.075485
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "My name is Bobo and it is 7:00 p.m actually",
+                "timestamp": 1775420355.92104
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you, Bobo. Your table is ready—please follow me, and I'll show you to your seat.",
+                "timestamp": 1775420359.422128
+            }
+        ],
+        "time_start": 1775420105.534693,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "7caa59cc-5283-4560-9125-d0b9e0d19945": {
+        "session_id": "7caa59cc-5283-4560-9125-d0b9e0d19945",
+        "activity_id": "ac_001",
+        "con_id": "06281ef5-38b0-4f1b-9df7-0e2ad40650b9",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775420402.532118
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Do you have a reservation with us this evening?",
+                "timestamp": 1775420406.811206
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I had a reservation actually",
+                "timestamp": 1775420553.095524
+            }
+        ],
+        "time_start": 1775420398.720467,
+        "status": "RUNNING",
+        "retries": {}
     }
 }

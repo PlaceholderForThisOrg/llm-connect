@@ -58,5 +58,134 @@
     "id": "d98f2863-85d6-4d4d-9daa-9f642d8829b9",
     "type": "EMBEDDED",
     "messages": []
+  },
+  "a01e7b9b-b475-4535-a6cc-6b10c0f6d6f1": {
+    "id": "a01e7b9b-b475-4535-a6cc-6b10c0f6d6f1",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "01b90051-a8df-4d7a-b53c-900908566543": {
+    "id": "01b90051-a8df-4d7a-b53c-900908566543",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "571a486c-de84-4f88-b9b6-988ef2d19322": {
+    "id": "571a486c-de84-4f88-b9b6-988ef2d19322",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "abe17b74-44c2-41f1-99a9-2c0729a3429d": {
+    "id": "abe17b74-44c2-41f1-99a9-2c0729a3429d",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "282614cf-4d76-4f07-b9c3-2c1344dda3f0": {
+    "id": "282614cf-4d76-4f07-b9c3-2c1344dda3f0",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "3bcf6d20-7c47-4164-a3e7-e80017a45183": {
+    "id": "3bcf6d20-7c47-4164-a3e7-e80017a45183",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "cbee3487-ad3e-49e2-b57c-3542f460c157": {
+    "id": "cbee3487-ad3e-49e2-b57c-3542f460c157",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "4b3d5b17-67e7-45d8-8704-7b821f0e1cbc": {
+    "id": "4b3d5b17-67e7-45d8-8704-7b821f0e1cbc",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "f84f2bfd-4d00-4ae5-ad8e-b4fe49305765": {
+    "id": "f84f2bfd-4d00-4ae5-ad8e-b4fe49305765",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "b93e030a-1b3f-4b09-a6fc-53d53cfbd166": {
+    "id": "b93e030a-1b3f-4b09-a6fc-53d53cfbd166",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "0e22e4ff-4edd-4d72-b386-e7465fc9096d": {
+    "id": "0e22e4ff-4edd-4d72-b386-e7465fc9096d",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "ae315001-3f10-4bd8-beb4-715e1048b7f2": {
+    "id": "ae315001-3f10-4bd8-beb4-715e1048b7f2",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "4f6d024c-5a18-4e19-97cf-bfd624bbd1fb": {
+    "id": "4f6d024c-5a18-4e19-97cf-bfd624bbd1fb",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "261ba741-642f-440c-9e3c-88206a1b4267": {
+    "id": "261ba741-642f-440c-9e3c-88206a1b4267",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "2a2b613a-62b1-4746-a8da-03a9256c27ee": {
+    "id": "2a2b613a-62b1-4746-a8da-03a9256c27ee",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "7d9eaf66-28a2-426b-a454-7748d381f151": {
+    "id": "7d9eaf66-28a2-426b-a454-7748d381f151",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "5762da67-54b1-400a-bd00-70cd44003290": {
+    "id": "5762da67-54b1-400a-bd00-70cd44003290",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job, Tom! That was a very polite response. When being shown to your table, you can also say something simple like, \"Thank you,\" or \"Thanks, I'm looking forward to my meal.\" Would you like to try saying something as you follow the host to your table? If you’re not sure, I can give you a hint!"
+      },
+      {
+        "role": "COMPANION",
+        "content": ""
+      },
+      {
+        "role": "COMPANION",
+        "content": ""
+      },
+      {
+        "role": "COMPANION",
+        "content": ""
+      },
+      {
+        "role": "COMPANION",
+        "content": ""
+      }
+    ]
+  },
+  "e3f35292-a9fe-4674-96c1-ac43adbe14a8": {
+    "id": "e3f35292-a9fe-4674-96c1-ac43adbe14a8",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job! You used the word \"reservation\" perfectly. In restaurants, mentioning your reservation helps things go smoothly.\n\nSometimes, people also say, “I booked a table,” or “I have a booking.” Both are fine, but “I have a reservation” is the most common.\n\nKeep practicing! If you want, you can try saying it in another way or ask about making a reservation for a future date. Let me know if you want to try!"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job! You asked for the name and time very politely and clearly. Most restaurant staff ask these details to check the reservation quickly, so your sentence works perfectly.\n\nIf you want, you could also say, \"Could you please tell me the name and time of your reservation?\" Both are correct—yours sounded friendly and professional.\n\nNice work! Keep going—you’re doing wonderfully."
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job, Bobo! That was a very polite and natural response.\n\nWhen being seated, a simple \"Thank you\" or \"Thank you, I'll follow you\" is perfect. In restaurants, expressing gratitude like this makes the interaction pleasant for everyone. Later on, you can use phrases like \"Could I see the menu, please?\" or \"Would you mind bringing some water?\"—these are also polite and friendly.\n\nKeep going—you’re doing well! If you’d like, I can share how people sometimes add a small smile or say, \"Thanks a lot,\" to sound even friendlier. Let me know if you want more tips!"
+      }
+    ]
+  },
+  "06281ef5-38b0-4f1b-9df7-0e2ad40650b9": {
+    "id": "06281ef5-38b0-4f1b-9df7-0e2ad40650b9",
+    "type": "EMBEDDED",
+    "messages": []
   }
 }

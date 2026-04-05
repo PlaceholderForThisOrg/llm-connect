@@ -15,3 +15,11 @@ class PostConRequest(BaseModel):
 
 class PostConResponse(BaseModel):
     conId: str
+
+
+class GetHelpResponse(BaseModel):
+    content: str
+
+
+# class GetHelpRequest(BaseModel):
+#     ses_id: str
