@@ -10,7 +10,7 @@ class Interaction(BaseModel):
 
 
 class CreateSessionRequest(BaseModel):
-    dump: str = None
+    activityId: str
 
 
 class CreateSessionResponse(BaseModel):

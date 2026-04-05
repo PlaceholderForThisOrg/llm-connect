@@ -1,0 +1,95 @@
+{
+    "random": {
+        "session_id": "random",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775361523.001735,
+        "status": "RUNNING"
+    },
+    "0664b0ee-3836-4ea1-a6f7-db22695e5c99": {
+        "session_id": "0664b0ee-3836-4ea1-a6f7-db22695e5c99",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775361715.882821,
+        "status": "RUNNING"
+    },
+    "fd72d5b6-b573-4333-b10a-40b0dbc0c56f": {
+        "session_id": "fd72d5b6-b573-4333-b10a-40b0dbc0c56f",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775362012.971701,
+        "status": "RUNNING"
+    },
+    "58ba5f37-e3f4-4b2a-9798-feeb9666c7c8": {
+        "session_id": "58ba5f37-e3f4-4b2a-9798-feeb9666c7c8",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775362020.610976,
+        "status": "RUNNING"
+    },
+    "50e14635-d8ea-4b00-9c4d-8f9812e6a11a": {
+        "session_id": "50e14635-d8ea-4b00-9c4d-8f9812e6a11a",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775362701.947084,
+        "status": "RUNNING"
+    },
+    "2c3bc150-f7d4-497c-9f58-65acbab54ced": {
+        "session_id": "2c3bc150-f7d4-497c-9f58-65acbab54ced",
+        "activity_id": "activity_002",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775362723.812815
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Good evening! Welcome to our restaurant. May I ask if you have a reservation with us today?",
+                "timestamp": 1775362727.103679
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "No, I don't have a reservation",
+                "timestamp": 1775362744.91122
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "What is hell is going on?",
+                "timestamp": 1775362747.052816
+            }
+        ],
+        "time_start": 1775362709.218288,
+        "status": "RUNNING"
+    },
+    "918391a1-9f8a-49c3-ba2e-29feb41ad9ea": {
+        "session_id": "918391a1-9f8a-49c3-ba2e-29feb41ad9ea",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775362800.283981,
+        "status": "RUNNING"
+    },
+    "1affb150-397a-4f12-8d75-d9057c0c89b5": {
+        "session_id": "1affb150-397a-4f12-8d75-d9057c0c89b5",
+        "activity_id": "activity_002",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775362807.419973,
+        "status": "RUNNING"
+    }
+}

@@ -33,7 +33,7 @@ class Orchestrator:
     # Orchestrate on the interaction
     async def start(
         self,
-        scenario_id: int,
+        session_id: int,
         content: str,
         engine: BackgroundTasks,
     ):
@@ -43,8 +43,9 @@ class Orchestrator:
         logger.info("1️⃣  Orchestration started!")
 
         logger.info("📊  Load the session and the activity")
-        session = self.session_repo.get_session_by_id("1")
-        activity = self.activity_repo.get_activity_by_id("activity_001")
+        session = self.session_repo.get_session_by_id(session_id)
+        activity_id = session["activity_id"]
+        activity = self.activity_repo.get_activity_by_id(activity_id)
 
         logger.info("2️⃣  Interaction object created!")
 

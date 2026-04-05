@@ -251,7 +251,7 @@ class RolePlaySessionManager(SessionManager):
     def append_interaction(self, session, activity, of: str, content):
         timestamp = datetime.now(timezone.utc).timestamp()
 
-        session_id = "session_002"
+        session_id = session["session_id"]
 
         interaction = {
             "id": "0",

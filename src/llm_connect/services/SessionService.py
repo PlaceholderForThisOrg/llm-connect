@@ -34,10 +34,12 @@ class SessionService:
             yield token
 
     async def get_current_goal(self, session_id):
-        session = self.session_repo.get_session_by_id("")
+        session = self.session_repo.get_session_by_id(session_id)
         goal_id = session["current_goal"]
         goal = self.activity_repo.get_goal_by_id(activity_id="", goal_id=goal_id)
         return goal, session["status"]
 
     def new_session(self, learner_id: str, activity_id: str):
-        pass
+
+        session_id = self.session_repo.create_session(activity_id)
+        return session_id

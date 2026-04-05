@@ -2,6 +2,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends
 
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
 from llm_connect.schemas.session_schema import (
+    CreateSessionRequest,
     CreateSessionResponse,
     GetGoalResponse,
     Interaction,
@@ -42,15 +43,21 @@ async def interact(
     # )
 
 
-@router.post("/{activity_id}", response_model=CreateSessionResponse)
+@router.post(
+    "",
+)
 async def create(
-    # request: CreateSessionRequest,
+    # activity_id: str,
+    request: CreateSessionRequest,
     session_service: SessionService = Depends(get_session_service),
 ):
     # TODO: Initialize the sessionID
     # in the database, manage the cache
     # layer
-    response = CreateSessionResponse(sessionId="session_002")
+    activity_id = request.activityId
+    session_id = session_service.new_session("", activity_id)
+
+    response = CreateSessionResponse(sessionId=session_id)
     return response
 
 
@@ -61,7 +68,7 @@ async def get_goal(
 ):
     # TODO: Get the current goal for the
     # learner to try
-    goal, status = await session_service.get_current_goal("")
+    goal, status = await session_service.get_current_goal(session_id)
 
     response = GetGoalResponse(
         sessionId=session_id,
