@@ -7,7 +7,10 @@ from llm_connect.proto.session.session_v2 import session_v2
 class SessionRepository:
     def __init__(self):
         self.file_path = (
-            Path(__file__).resolve().parent.parent / "runtime_db" / "session_v2.json"
+            Path(__file__).resolve().parent.parent
+            / "proto"
+            / "runtime_db"
+            / "session_v2.json"
         )
 
         # Ensure directory exists

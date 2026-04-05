@@ -1,11 +1,11 @@
 conversations_v1 = {
-    "0": {
-        "id": "0",
+    "con_0": {
+        "id": "con_0",
         "type": "NORMAL",
         "messages": [],
     },
-    "1": {
-        "id": 1,
+    "con_1": {
+        "id": "con_1",
         "type": "EMBEDDED",
         "messages": [],
     },

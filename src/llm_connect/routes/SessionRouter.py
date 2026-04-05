@@ -2,7 +2,6 @@ from fastapi import APIRouter, BackgroundTasks, Depends
 
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
 from llm_connect.schemas.session_schema import (
-    CreateSessionRequest,
     CreateSessionResponse,
     GetGoalResponse,
     Interaction,
@@ -43,15 +42,15 @@ async def interact(
     # )
 
 
-@router.post("", response_model=CreateSessionResponse)
+@router.post("/{activity_id}", response_model=CreateSessionResponse)
 async def create(
-    request: CreateSessionRequest,
+    # request: CreateSessionRequest,
     session_service: SessionService = Depends(get_session_service),
 ):
     # TODO: Initialize the sessionID
     # in the database, manage the cache
     # layer
-    response = CreateSessionResponse()
+    response = CreateSessionResponse(sessionId="session_002")
     return response
 
 

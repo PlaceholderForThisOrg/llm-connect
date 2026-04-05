@@ -38,3 +38,6 @@ class SessionService:
         goal_id = session["current_goal"]
         goal = self.activity_repo.get_goal_by_id(activity_id="", goal_id=goal_id)
         return goal, session["status"]
+
+    def new_session(self, learner_id: str, activity_id: str):
+        pass

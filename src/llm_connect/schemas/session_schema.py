@@ -14,7 +14,7 @@ class CreateSessionRequest(BaseModel):
 
 
 class CreateSessionResponse(BaseModel):
-    activityId: str
+    sessionId: str
 
 
 class GetGoalResponse(BaseModel):

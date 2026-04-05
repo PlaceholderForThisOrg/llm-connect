@@ -1,33 +1,18 @@
 {
+  "con_0": {
+    "id": "con_0",
+    "type": "NORMAL",
+    "messages": []
+  },
+  "con_1": {
+    "id": "con_1",
+    "type": "EMBEDDED",
+    "messages": []
+  },
   "0": {
     "id": "0",
     "type": "NORMAL",
-    "messages": [
-      {
-        "role": "LEARNER",
-        "content": "Hello, could you tell me what does deliberately mean?"
-      },
-      {
-        "role": "COMPANION",
-        "content": "Hi! Of course, I can explain.\n\nDeliberately means \"on purpose,\" or \"with intention.\"  \nIf you do something deliberately, you do it because you want to, not by accident.\n\nFor example:  \nShe spoke slowly, deliberately, so everyone could understand.\n\nThink of it like planning or thinking before doing something.\n\nIf you want, I can give more examples from Japanese culture or songs!"
-      },
-      {
-        "role": "LEARNER",
-        "content": "But in cases, where I want to make somebody else to feel confused, then 'I deliberately do that, so accept it!' is like a bad action right?"
-      },
-      {
-        "role": "COMPANION",
-        "content": "Yes, you are right!\n\nIf you deliberately make someone feel confused, it means you did it on purpose. Usually, making someone confused on purpose is not kind—it’s considered a bad action.\n\nSo, when you use \"deliberately\" for something that hurts or bothers others, it often means you are doing something negative.\n\nBut \"deliberately\" just means you choose to do it—it can be good, bad, or neutral, depending on the situation.\n\nIf you want examples from Japanese stories or music where someone deliberately does something, let me know!"
-      },
-      {
-        "role": "LEARNER",
-        "content": "Then could you give me an example about that?"
-      },
-      {
-        "role": "COMPANION",
-        "content": "Sure! Here’s an example from a famous Japanese anime, \"Death Note\":\n\nIn \"Death Note,\" Light Yagami deliberately writes names in his notebook to cause bad things to happen. He does it on purpose, knowing what will happen.  \nSo, Light deliberately causes trouble for others.\n\nThis is an example of someone deliberately doing something negative.\n\nIf you want, I can give another example from a Japanese song or book!"
-      }
-    ]
+    "messages": []
   },
   "1": {
     "id": 1,
