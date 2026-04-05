@@ -250,6 +250,9 @@ class RolePlaySessionManager(SessionManager):
 
     def append_interaction(self, session, activity, of: str, content):
         timestamp = datetime.now(timezone.utc).timestamp()
+
+        session_id = "session_002"
+
         interaction = {
             "id": "0",
             "type": "MESSAGE",
@@ -257,7 +260,8 @@ class RolePlaySessionManager(SessionManager):
             "content": content,
             "timestamp": timestamp,
         }
-        session["history"].append(interaction)
+
+        self.session_repo.add_interaction(session_id, interaction)
 
     async def _use_brain(self, prompt: str) -> bool:
         response = await self.client.chat.completions.create(

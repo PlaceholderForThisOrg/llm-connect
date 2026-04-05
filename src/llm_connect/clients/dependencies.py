@@ -4,12 +4,15 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.ChatService import ChatService
+from llm_connect.services.ConversationService import ConversationService
 from llm_connect.services.core.aevaluator import AEvaluator
+from llm_connect.services.core.Companion import Brain, Companion, Memory
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
@@ -17,7 +20,7 @@ from llm_connect.services.SessionService import SessionService
 
 
 # 🤷‍♂️ Outside clients, created in lifespan
-def get_llm(request: Request):
+def get_llm(request: Request) -> AsyncOpenAI:
     return request.app.state.llm
 
 
@@ -146,3 +149,26 @@ def get_activity_service(
     activity_repo: ActivityRepository = Depends(get_activity_repo),
 ):
     return ActivityService(activity_repo)
+
+
+def get_conversation_repo():
+    return ConversationRepository()
+
+
+def get_companion(
+    llm=Depends(get_llm),
+    learner_repo=Depends(get_learner_repository),
+    con_repo=Depends(get_conversation_repo),
+    pb=Depends(get_prompt_builder),
+):
+    brain = Brain(llm)
+    memory = Memory(learner_repo, con_repo)
+
+    return Companion(brain, memory, pb)
+
+
+def get_conversation_service(
+    con_repo=Depends(get_conversation_repo),
+    com=Depends(get_companion),
+):
+    return ConversationService(con_repo, com)

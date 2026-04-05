@@ -8,6 +8,7 @@ from llm_connect.errors import global_exception_handler, http_exception_handler
 from llm_connect.routes import (
     ActivityRouter,
     AtomicPointRouter,
+    ConversationRouter,
     LearnerRouter,
     ScenarioRouter,
     SessionRouter,
@@ -23,11 +24,14 @@ from llm_connect.routes import (
 
 # 🧠 The main FastAPI app
 app = FastAPI(
-    title="My adaptive companion",
-    description="Simple connector to the LLM service",
-    version="1.0.0",
+    title="my-companion",
+    description="Core service for my-companion",
+    version="1.0.1",
     docs_url="/docs",
-    contact={"name": "Le Bui Trung Dung", "email": "trungdunglebui17112004@gmail.com"},
+    contact={
+        "name": "Le Bui Trung Dung",
+        "email": "trungdunglebui17112004@gmail.com",
+    },
     lifespan=lifespan.lifespan,
 )
 
@@ -45,6 +49,7 @@ app.include_router(router=scenario_template.router)
 app.include_router(router=AtomicPointRouter.router)
 app.include_router(router=SessionRouter.router)
 app.include_router(router=ActivityRouter.router)
+app.include_router(router=ConversationRouter.router)
 
 # ⁉️ Exception handler
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TypedDict
+from typing import Dict, TypedDict
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -36,6 +36,12 @@ class NPCParams(TypedDict):
     next_goal: str
 
 
+class CompanionParams(TypedDict):
+    user_memory: str = None
+    history: Dict
+    input: str
+
+
 class PromptBuilder:
     def __init__(self):
         PROMPT = Path(__file__).resolve().parent.parent.parent / "prompt"
@@ -45,24 +51,47 @@ class PromptBuilder:
 
         self.env = Environment(loader=loader)
 
-    def npc(self, params: NPCParams):
+    def companion_prompt(
+        self,
+        params: CompanionParams,
+    ):
+        template = self.env.get_template(name="companion.jinja")
+        return template.render(**params)
+
+    def npc(
+        self,
+        params: NPCParams,
+    ):
         template = self.env.get_template(name="npc.jinja")
         return template.render(**params)
 
-    def goal_evaluate(self, params: GoalEvaluateParams):
+    def goal_evaluate(
+        self,
+        params: GoalEvaluateParams,
+    ):
         template = self.env.get_template(name="goal_evaluate_v1.jinja")
         return template.render(**params)
 
-    def move_checkpoint(self, params: MoveCheckpointParams):
+    def move_checkpoint(
+        self,
+        params: MoveCheckpointParams,
+    ):
         template = self.env.get_template(name="change_state.jinja")
         return template.render(**params)
 
-    def re_interact(self, params: ReInteractParams):
+    def re_interact(
+        self,
+        params: ReInteractParams,
+    ):
         template = self.env.get_template(name="response.jinja")
         return template.render(**params)
 
     # FIXME: Delete this
-    def intention_prompt(self, scenario_id: int, input: str) -> str:
+    def intention_prompt(
+        self,
+        scenario_id: int,
+        input: str,
+    ) -> str:
         # FIXME: The prompt builder should load the template and inject
 
         # scenario_id is used as the reference to get the status to

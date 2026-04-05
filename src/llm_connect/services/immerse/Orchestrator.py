@@ -1,7 +1,6 @@
 from fastapi import BackgroundTasks
 
 from llm_connect import logger
-from llm_connect.proto.session.session_v2 import sync_session
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.analyzer.Analyzer import Analyzer
@@ -58,5 +57,3 @@ class Orchestrator:
             content,
         ):
             yield token
-
-        sync_session()

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
-from fastapi.responses import StreamingResponse
 
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
 from llm_connect.schemas.session_schema import (
@@ -14,6 +13,7 @@ from llm_connect.services.SessionService import SessionService
 router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
 
 
+# FIXME: Restful API's standard
 @router.post("/{session_id}/loop")
 async def interact(
     request: Interaction,
@@ -33,26 +33,25 @@ async def interact(
 
     return {"content": output}
 
-    return StreamingResponse(
-        content=session_service.handle_interaction(
-            session_id,
-            content,
-            engine,
-        ),
-        media_type="text/event-stream",
-    )
+    # return StreamingResponse(
+    #     content=session_service.handle_interaction(
+    #         session_id,
+    #         content,
+    #         engine,
+    #     ),
+    #     media_type="text/event-stream",
+    # )
 
 
-@router.post("/{activity_id}", response_model=CreateSessionResponse)
+@router.post("", response_model=CreateSessionResponse)
 async def create(
-    activity_id: str,
-    # request: CreateSessionRequest,
+    request: CreateSessionRequest,
     session_service: SessionService = Depends(get_session_service),
 ):
     # TODO: Initialize the sessionID
     # in the database, manage the cache
     # layer
-    response = CreateSessionResponse(sessionId="session_002")
+    response = CreateSessionResponse()
     return response
 
 
