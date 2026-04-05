@@ -4,92 +4,296 @@
         "activity_id": "activity_002",
         "current_goal": "0",
         "history": [],
-        "time_start": 1775361523.001735,
+        "time_start": 1775374732.36104,
         "status": "RUNNING"
     },
-    "0664b0ee-3836-4ea1-a6f7-db22695e5c99": {
-        "session_id": "0664b0ee-3836-4ea1-a6f7-db22695e5c99",
+    "6ce1ad89-a476-4911-98da-15c0c88a5a71": {
+        "session_id": "6ce1ad89-a476-4911-98da-15c0c88a5a71",
         "activity_id": "activity_002",
         "current_goal": "0",
-        "history": [],
-        "time_start": 1775361715.882821,
-        "status": "RUNNING"
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "What the fuck?",
+                "timestamp": 1775374757.781928
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775374759.50463
+            }
+        ],
+        "time_start": 1775374745.323784,
+        "status": "RUNNING",
+        "retries": {}
     },
-    "fd72d5b6-b573-4333-b10a-40b0dbc0c56f": {
-        "session_id": "fd72d5b6-b573-4333-b10a-40b0dbc0c56f",
+    "b8c6c1a8-a55d-415f-8c28-c19f4774cfd7": {
+        "session_id": "b8c6c1a8-a55d-415f-8c28-c19f4774cfd7",
         "activity_id": "activity_002",
+        "current_goal": "5",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "What wrong with you?",
+                "timestamp": 1775374871.519158
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775374872.964585
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "What?",
+                "timestamp": 1775374891.262918
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775374893.090982
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello?",
+                "timestamp": 1775374895.5961
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello, welcome to our restaurant! May I ask if you have a reservation with us today?",
+                "timestamp": 1775374898.330422
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "No, I don't have any",
+                "timestamp": 1775374913.144056
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775374914.782711
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Oh hell no",
+                "timestamp": 1775374930.184505
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775374931.460552
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Please, I have a reservation!",
+                "timestamp": 1775374948.762586
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you for letting me know! May I have the name on the reservation and your booking time, please?",
+                "timestamp": 1775374952.769125
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "My name is Bubulala, and I suppose it is at 8 p.m",
+                "timestamp": 1775374992.551957
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Thank you, Bubulala, your reservation is set for 8 p.m. Please follow me, and I'll show you to your table—right this way!",
+                "timestamp": 1775374995.947602
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Thank you for seating me. I am quite hungry",
+                "timestamp": 1775375030.641697
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "You're very welcome! Since you're quite hungry, may I recommend our seafood pasta special today? Would you like to start with something to drink while you look over the menu?",
+                "timestamp": 1775375034.191044
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "What?",
+                "timestamp": 1775375065.300689
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775375066.755913
+            }
+        ],
+        "time_start": 1775374862.422551,
+        "status": "RUNNING",
+        "retries": {
+            "0": 2,
+            "1": 2,
+            "5": 1
+        }
+    },
+    "07842e62-8bfb-4b74-9ac8-459f3407c2ea": {
+        "session_id": "07842e62-8bfb-4b74-9ac8-459f3407c2ea",
+        "activity_id": "activity_002",
+        "con_id": "b29729df-d817-41fa-a345-43e5411cd55e",
         "current_goal": "0",
         "history": [],
-        "time_start": 1775362012.971701,
-        "status": "RUNNING"
+        "time_start": 1775375879.293792,
+        "status": "RUNNING",
+        "retries": {}
     },
-    "58ba5f37-e3f4-4b2a-9798-feeb9666c7c8": {
-        "session_id": "58ba5f37-e3f4-4b2a-9798-feeb9666c7c8",
+    "23da7bd3-22c2-405a-9ce4-6ee41f730a44": {
+        "session_id": "23da7bd3-22c2-405a-9ce4-6ee41f730a44",
         "activity_id": "activity_002",
+        "con_id": "2fcfe8cf-5950-4673-83b8-bc31dcc8ffb1",
         "current_goal": "0",
         "history": [],
-        "time_start": 1775362020.610976,
-        "status": "RUNNING"
+        "time_start": 1775377068.908516,
+        "status": "RUNNING",
+        "retries": {}
     },
-    "50e14635-d8ea-4b00-9c4d-8f9812e6a11a": {
-        "session_id": "50e14635-d8ea-4b00-9c4d-8f9812e6a11a",
+    "b7944b5f-2933-4078-9824-4c4123d21e47": {
+        "session_id": "b7944b5f-2933-4078-9824-4c4123d21e47",
         "activity_id": "activity_002",
+        "con_id": "f18283a4-c509-4fc5-86aa-9a1bee46059c",
         "current_goal": "0",
         "history": [],
-        "time_start": 1775362701.947084,
-        "status": "RUNNING"
+        "time_start": 1775382368.592006,
+        "status": "RUNNING",
+        "retries": {}
     },
-    "2c3bc150-f7d4-497c-9f58-65acbab54ced": {
-        "session_id": "2c3bc150-f7d4-497c-9f58-65acbab54ced",
+    "3a1a27d2-2f2f-499a-bd74-87141beb30f0": {
+        "session_id": "3a1a27d2-2f2f-499a-bd74-87141beb30f0",
         "activity_id": "activity_002",
+        "con_id": "d2ce2537-ee0c-4fc0-a845-c47fee603c84",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775382553.219821,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "db1d2b24-f1fa-45fe-ae8f-0180e5eba9f5": {
+        "session_id": "db1d2b24-f1fa-45fe-ae8f-0180e5eba9f5",
+        "activity_id": "ac_001",
+        "con_id": "92478c93-94d2-4c35-ab70-ee63c2881c22",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775382844.617586,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "01580dda-ada9-40d6-bcbd-e49f87f30ea0": {
+        "session_id": "01580dda-ada9-40d6-bcbd-e49f87f30ea0",
+        "activity_id": "ac_001",
+        "con_id": "38004920-d61f-40fc-91d5-19c3a06257e7",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775383034.917085,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "0e701e87-595c-4769-b4a9-f70819a3b942": {
+        "session_id": "0e701e87-595c-4769-b4a9-f70819a3b942",
+        "activity_id": "ac_001",
+        "con_id": "a6ec3b84-8835-4dca-aeeb-e718c0d95138",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775383305.701054,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "3dbb5046-305e-45a2-a23d-b7264c629674": {
+        "session_id": "3dbb5046-305e-45a2-a23d-b7264c629674",
+        "activity_id": "ac_001",
+        "con_id": "515c9da6-375c-4b74-821d-9e3e71c5e3ed",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775383313.901565,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "41b6fad3-a56f-4ad3-b89c-5453e71beaa7": {
+        "session_id": "41b6fad3-a56f-4ad3-b89c-5453e71beaa7",
+        "activity_id": "ac_001",
+        "con_id": "682e87f6-1f7c-4f49-aa48-13f776034bc4",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775383330.022985,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "e0219385-a145-4856-9d3f-45f7a80a6f26": {
+        "session_id": "e0219385-a145-4856-9d3f-45f7a80a6f26",
+        "activity_id": "ac_001",
+        "con_id": "fa1435ee-00ba-4826-be46-e8f1091d9036",
         "current_goal": "1",
         "history": [
             {
                 "id": "0",
                 "type": "MESSAGE",
                 "of": "LEARNER",
-                "content": "Hello!",
-                "timestamp": 1775362723.812815
+                "content": "Hi!",
+                "timestamp": 1775383363.939008
             },
             {
                 "id": "0",
                 "type": "MESSAGE",
                 "of": "NPC",
-                "content": "Good evening! Welcome to our restaurant. May I ask if you have a reservation with us today?",
-                "timestamp": 1775362727.103679
-            },
-            {
-                "id": "0",
-                "type": "MESSAGE",
-                "of": "LEARNER",
-                "content": "No, I don't have a reservation",
-                "timestamp": 1775362744.91122
-            },
-            {
-                "id": "0",
-                "type": "MESSAGE",
-                "of": "NPC",
-                "content": "What is hell is going on?",
-                "timestamp": 1775362747.052816
+                "content": "Hello and welcome! It's lovely to see you—do you have a reservation with us today?",
+                "timestamp": 1775383368.177084
             }
         ],
-        "time_start": 1775362709.218288,
-        "status": "RUNNING"
+        "time_start": 1775383354.485006,
+        "status": "RUNNING",
+        "retries": {}
     },
-    "918391a1-9f8a-49c3-ba2e-29feb41ad9ea": {
-        "session_id": "918391a1-9f8a-49c3-ba2e-29feb41ad9ea",
-        "activity_id": "activity_002",
+    "01bd268b-d3ca-41af-8c31-ed5969edd12e": {
+        "session_id": "01bd268b-d3ca-41af-8c31-ed5969edd12e",
+        "activity_id": "ac_001",
+        "con_id": "d98f2863-85d6-4d4d-9daa-9f642d8829b9",
         "current_goal": "0",
         "history": [],
-        "time_start": 1775362800.283981,
-        "status": "RUNNING"
-    },
-    "1affb150-397a-4f12-8d75-d9057c0c89b5": {
-        "session_id": "1affb150-397a-4f12-8d75-d9057c0c89b5",
-        "activity_id": "activity_002",
-        "current_goal": "0",
-        "history": [],
-        "time_start": 1775362807.419973,
-        "status": "RUNNING"
+        "time_start": 1775384315.969857,
+        "status": "RUNNING",
+        "retries": {}
     }
 }

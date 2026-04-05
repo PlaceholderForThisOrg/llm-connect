@@ -19,6 +19,7 @@ async def get_activity(
         type=activity["type"],
         title=activity["title"],
         metadata=activity["metadata"],
+        goals=activity["goals"],
     )
 
     return response

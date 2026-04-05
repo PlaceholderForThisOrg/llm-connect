@@ -34,6 +34,7 @@ class RolePlaySessionManager(SessionManager):
 
     async def accept(self, session, activity, interaction):
 
+        session_id = session["session_id"]
         # store the interaction first
         self.append_interaction(
             session,
@@ -115,13 +116,17 @@ class RolePlaySessionManager(SessionManager):
             # don't move the pointer
             # the learner is still there
             # companion comes in
-            response = "What is hell is going on?"
+            response = "I don't understand what you are talking?"
+
             self.append_interaction(
                 session,
                 activity,
                 of="NPC",
                 content=response,
             )
+
+            self.session_repo.increase_retries(session_id, goal_id)
+
             yield response
 
     async def evaluate(self, interaction) -> bool:

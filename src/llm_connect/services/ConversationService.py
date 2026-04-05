@@ -17,6 +17,9 @@ class ConversationService:
     def get_by_id(self, con_id):
         self.con_repo.get_conversation_by_id(con_id)
 
+    def new_con(self, learner_id: str, type: str):
+        return self.con_repo.create_new_conversation(type)
+
     async def chat(
         self,
         learner_id: str,

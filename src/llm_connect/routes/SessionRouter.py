@@ -55,9 +55,12 @@ async def create(
     # in the database, manage the cache
     # layer
     activity_id = request.activityId
-    session_id = session_service.new_session("", activity_id)
+    session = session_service.new_session("", activity_id)
 
-    response = CreateSessionResponse(sessionId=session_id)
+    response = CreateSessionResponse(
+        sessionId=session["session_id"],
+        conId=session["con_id"],
+    )
     return response
 
 
@@ -68,11 +71,12 @@ async def get_goal(
 ):
     # TODO: Get the current goal for the
     # learner to try
+    activity = session_service.get_session(session_id)
     goal, status = await session_service.get_current_goal(session_id)
 
     response = GetGoalResponse(
         sessionId=session_id,
-        activityId="activity_002",
+        activityId=activity["activity_id"],
         goal=goal,
         status=status,
     )

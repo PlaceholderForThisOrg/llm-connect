@@ -18,6 +18,35 @@ class Brain:
                 if event.type == "content.delta":
                     yield event.delta
 
+    def make_decision(self, signals):
+        # FIXME: Basic decision
+        # later, more complex
+        # based on different kinds of signals, ...
+        # time, ...
+        p = signals["pass"]
+
+        if p:
+            # TODO:
+            # Learner has pass
+            # Still suggest help
+            # But good cultural immerse, ...
+            # Improve learning skill
+            pass
+        else:
+            # Learner failed
+            # Based on retries
+            retries = signals["retries"]
+
+            if retries == 1:
+                # nudge
+                pass
+            elif retries == 2:
+                # scafford
+                pass
+            elif retries >= 3:
+                # explaination
+                pass
+
 
 # NOTE: Memory and context together
 class Memory:
@@ -87,3 +116,7 @@ class Companion:
             response += token
 
         return response
+
+    async def intervene(self, session_id, signals):
+        # TODO: to intervene, the companion
+        pass

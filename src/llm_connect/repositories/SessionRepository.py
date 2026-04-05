@@ -61,7 +61,18 @@ class SessionRepository:
         session["history"].append(interaction)
         self.sync()
 
-    def create_session(self, activity_id):
+    def increase_retries(self, session_id: str, goal_id: str):
+        session = sessions_v3[session_id]
+        retries = session["retries"]
+
+        if goal_id not in retries:
+            retries[goal_id] = 0
+
+        retries[goal_id] += 1
+
+        self.sync()
+
+    def create_session(self, activity_id, con_id):
         # Generate unique session ID
         session_id = str(uuid.uuid4())
 
@@ -69,10 +80,12 @@ class SessionRepository:
         new_session = {
             "session_id": session_id,
             "activity_id": activity_id,
+            "con_id": con_id,
             "current_goal": "0",
             "history": [],
             "time_start": datetime.now(timezone.utc).timestamp(),
             "status": "RUNNING",
+            "retries": {},
         }
 
         # Store in global dict
@@ -81,4 +94,4 @@ class SessionRepository:
         # Persist to disk
         self.sync()
 
-        return session_id
+        return new_session

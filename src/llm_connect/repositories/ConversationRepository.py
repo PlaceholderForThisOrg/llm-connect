@@ -41,7 +41,11 @@ class ConversationRepository:
         """Create a new conversation and persist it"""
         con_id = str(uuid.uuid4())
 
-        conversations_v1[con_id] = {"id": con_id, "type": type, "messages": []}
+        conversations_v1[con_id] = {
+            "id": con_id,
+            "type": type,
+            "messages": [],
+        }
 
         self.sync()
         return con_id

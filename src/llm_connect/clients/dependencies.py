@@ -4,11 +4,13 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.services.analyzer import Analyzer
+from llm_connect.services.AtomicPointService import AtomicPointService
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.ConversationService import ConversationService
 from llm_connect.services.core.aevaluator import AEvaluator
@@ -133,26 +135,23 @@ def get_learner_service(
     return LearnerService(learner_repository)
 
 
+def get_conversation_repo():
+    return ConversationRepository()
+
+
 def get_session_service(
     orchestrator: Orchestrator = Depends(get_orchestrator),
     session_repo: SessionRepository = Depends(get_session_repo),
     activity_repo: ActivityRepository = Depends(get_activity_repo),
+    con_repo: ConversationRepository = Depends(get_conversation_repo),
 ):
-    return SessionService(
-        orchestrator,
-        session_repo,
-        activity_repo,
-    )
+    return SessionService(orchestrator, session_repo, activity_repo, con_repo)
 
 
 def get_activity_service(
     activity_repo: ActivityRepository = Depends(get_activity_repo),
 ):
     return ActivityService(activity_repo)
-
-
-def get_conversation_repo():
-    return ConversationRepository()
 
 
 def get_companion(
@@ -172,3 +171,13 @@ def get_conversation_service(
     com=Depends(get_companion),
 ):
     return ConversationService(con_repo, com)
+
+
+def get_ap_repo():
+    return AtomicPointRepository()
+
+
+def get_ap_s(
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
+):
+    return AtomicPointService(ap_repo)
