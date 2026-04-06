@@ -8,6 +8,7 @@ from openai import AsyncOpenAI
 from llm_connect import logger
 from llm_connect.configs.llm import GPT4OMINI, GPT41
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.services.core.Evaluator import Evaluator
 from llm_connect.services.core.SessionManager import SessionManager
 from llm_connect.services.immerse import PromptBuilder
 from llm_connect.services.immerse.PromptBuilder import (
@@ -26,11 +27,13 @@ class RolePlaySessionManager(SessionManager):
         prompt_builder: PromptBuilder,
         client: AsyncOpenAI,
         session_repo: SessionRepository,
+        e: Evaluator,
     ):
         super().__init__()
         self.prompt_builder = prompt_builder
         self.client = client
         self.session_repo = session_repo
+        self.e = e
 
     async def accept(self, session, activity, interaction):
 
@@ -58,6 +61,31 @@ class RolePlaySessionManager(SessionManager):
         prompt = self.prompt_builder.goal_evaluate(params=goal_evaluate_params)
 
         result = await self._use_brain(prompt)
+
+        # result on the goal
+        # true -> update
+        # false -> update
+        ####################################################################
+        # Temporary evaluation
+
+        atomic_points = activity["goals"][goal_id]["atomic_points"]
+        i = {
+            "session_id": session_id,
+            "type": "MESSAGE",
+            "content": interaction,
+            "goal": "",
+            "pass": result,
+            # time to solve
+            # ...
+            "points": atomic_points,
+        }
+
+        # FIXME: Run the evaluator right now
+        self.e.run(i)
+
+        ####################################################################
+        # Temporary evaluation
+
         if result:
             # OK -> move the pointer to the next goal
             # Generate the reponse
