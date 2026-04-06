@@ -900,5 +900,74 @@
         "time_start": 1775420398.720467,
         "status": "RUNNING",
         "retries": {}
+    },
+    "8b06f0a1-6f3b-4190-8d5e-2834983ef0d1": {
+        "session_id": "8b06f0a1-6f3b-4190-8d5e-2834983ef0d1",
+        "activity_id": "ac_001",
+        "con_id": "50847cff-5370-4e53-9075-0afc2f9c1c2b",
+        "current_goal": "2",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775440637.353015
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello there! Welcome to our restaurant. May I ask if you have a reservation with us today?",
+                "timestamp": 1775440640.764969
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "What?",
+                "timestamp": 1775440694.449135
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775440696.142757
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "What?",
+                "timestamp": 1775440741.997745
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775440744.582629
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I have a reservation",
+                "timestamp": 1775440773.739796
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Wonderful! May I please have the name and time for your reservation?",
+                "timestamp": 1775440777.751408
+            }
+        ],
+        "time_start": 1775440632.740473,
+        "status": "RUNNING",
+        "retries": {
+            "1": 2
+        }
     }
 }
