@@ -10,6 +10,7 @@ from llm_connect.routes import (
     AtomicPointRouter,
     ConversationRouter,
     LearnerRouter,
+    MasteryRouter,
     ScenarioRouter,
     SessionRouter,
     cards,
@@ -50,6 +51,7 @@ app.include_router(router=AtomicPointRouter.router)
 app.include_router(router=SessionRouter.router)
 app.include_router(router=ActivityRouter.router)
 app.include_router(router=ConversationRouter.router)
+app.include_router(router=MasteryRouter.router)
 
 # ⁉️ Exception handler
 

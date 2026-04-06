@@ -33,6 +33,7 @@ class SessionService:
 
         # Manually yield the result
         async for token in self.o.start(
+            "learner_001",
             session_id,
             content,
             engine,

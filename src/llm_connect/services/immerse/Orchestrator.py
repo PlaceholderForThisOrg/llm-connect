@@ -2,6 +2,7 @@ from fastapi import BackgroundTasks
 
 from llm_connect import logger
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.analyzer.Analyzer import Analyzer
 from llm_connect.services.core.aevaluator import AEvaluator
@@ -20,6 +21,7 @@ class Orchestrator:
         session_manager: RolePlaySessionManager,
         session_repo: SessionRepository,
         activity_repo: ActivityRepository,
+        l_repo: LearnerRepository,
     ):
         self.evaluator = evaluator
         self.actor = actor
@@ -29,11 +31,13 @@ class Orchestrator:
         self.session_manager = session_manager
         self.session_repo = session_repo
         self.activity_repo = activity_repo
+        self.l_repo = l_repo
 
     # Orchestrate on the interaction
     async def start(
         self,
-        session_id: int,
+        learner_id: str,
+        session_id: str,
         content: str,
         engine: BackgroundTasks,
     ):
@@ -47,12 +51,15 @@ class Orchestrator:
         activity_id = session["activity_id"]
         activity = self.activity_repo.get_activity_by_id(activity_id)
 
+        learner = self.l_repo.get_by_id(learner_id)
+
         logger.info("2️⃣  Interaction object created!")
 
         logger.info("3️⃣  Evaluation started")
         self.aevaluator.run(input, engine)
 
         async for token in self.session_manager.accept(
+            learner,
             session,
             activity,
             content,

@@ -23,10 +23,12 @@ from llm_connect.services.core.Companion import (
     Memory,
     Persionality,
 )
+from llm_connect.services.core.Evaluator import Evaluator
 from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
-from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
+from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
+from llm_connect.services.MasteryService import MasteryService
 from llm_connect.services.SessionService import SessionService
 
 
@@ -62,11 +64,11 @@ def get_prompt_builder():
     return PromptBuilder()
 
 
-def get_evaluator(
-    client: AsyncOpenAI = Depends(get_llm),
-    prompt_builder: PromptBuilder = Depends(get_prompt_builder),
-):
-    return Evaluator(client, prompt_builder)
+# def get_evaluator(
+#     client: AsyncOpenAI = Depends(get_llm),
+#     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
+# ):
+#     return Evaluator(client, prompt_builder)
 
 
 def get_actor(
@@ -88,20 +90,54 @@ def get_session_repo():
     return SessionRepository()
 
 
+def get_BKTEngine():
+    return BKTEngine()
+
+
+def get_mastery_repo():
+    return MasteryRepository()
+
+
+def get_mastery_engine(
+    engine: BKTEngine = Depends(get_BKTEngine),
+    mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+):
+    return MasteryEngine(
+        engine,
+        mastery_repo,
+    )
+
+
+def get_evaluator(
+    ses_repo: SessionRepository = Depends(get_session_repo),
+    m_e: MasteryEngine = Depends(get_mastery_engine),
+):
+    return Evaluator(
+        ses_repo,
+        m_e,
+    )
+
+
 def get_roleplay_session_manager(
     prompt_builder: PromptBuilder = Depends(get_prompt_builder),
     client: AsyncOpenAI = Depends(get_llm),
     session_repo: SessionRepository = Depends(get_session_repo),
+    e: Evaluator = Depends(get_evaluator),
 ):
     return RolePlaySessionManager(
         prompt_builder,
         client,
         session_repo,
+        e,
     )
 
 
 def get_activity_repo():
     return ActivityRepository()
+
+
+def get_learner_repository(session: AsyncSession = Depends(get_db_session)):
+    return LearnerRepository(session)
 
 
 def get_orchestrator(
@@ -113,6 +149,7 @@ def get_orchestrator(
     session_manager: RolePlaySessionManager = Depends(get_roleplay_session_manager),
     session_repo: SessionRepository = Depends(get_session_repo),
     activity_repo: ActivityRepository = Depends(get_activity_repo),
+    l_repo: LearnerRepository = Depends(get_learner_repository),
 ):
     return Orchestrator(
         evaluator,
@@ -123,6 +160,7 @@ def get_orchestrator(
         session_manager,
         session_repo,
         activity_repo,
+        l_repo,
     )
 
 
@@ -132,10 +170,6 @@ def get_chat_service(
     orchestrator: Orchestrator = Depends(get_orchestrator),
 ):
     return ChatService(llm, redis, orchestrator)
-
-
-def get_learner_repository(session: AsyncSession = Depends(get_db_session)):
-    return LearnerRepository(session)
 
 
 def get_learner_service(
@@ -209,19 +243,7 @@ def get_ap_s(
     return AtomicPointService(ap_repo)
 
 
-def get_BKTEngine():
-    return BKTEngine()
-
-
-def get_mastery_repo():
-    return MasteryRepository()
-
-
-def get_master_engine(
-    engine: BKTEngine = Depends(get_BKTEngine),
-    mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+def get_mastery_service(
+    m_repo: MasteryRepository = Depends(get_mastery_repo),
 ):
-    return MasteryEngine(
-        engine,
-        mastery_repo,
-    )
+    return MasteryService(m_repo)

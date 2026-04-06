@@ -35,7 +35,7 @@ class RolePlaySessionManager(SessionManager):
         self.session_repo = session_repo
         self.e = e
 
-    async def accept(self, session, activity, interaction):
+    async def accept(self, learner, session, activity, interaction):
 
         session_id = session["session_id"]
         # store the interaction first
@@ -70,6 +70,7 @@ class RolePlaySessionManager(SessionManager):
 
         atomic_points = activity["goals"][goal_id]["atomic_points"]
         i = {
+            "learner_id": learner["learner_id"],
             "session_id": session_id,
             "type": "MESSAGE",
             "content": interaction,

@@ -209,5 +209,72 @@
         "content": "Great job! You asked very politely for both the name and the time of the reservation. In restaurants, this is exactly what staff usually check. If you want, you can also confirm the number of people for the reservation, but your question is already perfect. Keep it up!"
       }
     ]
+  },
+  "9f1aabd9-e6a8-483b-a427-40f361ea46b6": {
+    "id": "9f1aabd9-e6a8-483b-a427-40f361ea46b6",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "497e291d-3c86-438f-9424-cf9454ca33f1": {
+    "id": "497e291d-3c86-438f-9424-cf9454ca33f1",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job! You mentioned your reservation perfectly. In English, \"I have a reservation\" is the most natural way to say it in a restaurant. You can also say, \"I booked a table,\" if you want. Both are correct!\n\nIf you ever want to make a reservation for another day, you can say, \"I'd like to make a reservation for tomorrow night,\" for example.\n\nYou're doing really well—keep going! Would you like to try telling them the name your reservation is under?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job! Your question was clear and polite. In restaurants, staff often ask for the name and reservation time, just like you did. If you’d like to sound even more natural, you could say, “May I have your name and reservation time, please?” But your sentence was perfectly correct! Keep it up—your English is coming along wonderfully. Would you like to try what you’d say next if the guest gives you their details?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Maybe the staff wants to check your reservation. What information do you think they need to find your booking?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "You're doing great so far! The restaurant staff asked for your name and the time of your reservation. Let's try answering step by step!\n\nFirst, you can start with:  \n\"My name is ____.\"  \n\nThen add:  \n\"My reservation is at ____.\" (What time did you book?)\n\nYou can try filling in those blanks. Give it a go!"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No worries, you’re doing your best! The staff at the restaurant is asking for your reservation details. This means they want to know your name and the time you booked the table.\n\nFor example, you can say: “My name is [your name], and my reservation is at 7 PM.”\n\nThis helps them find your booking. Want to try saying your name and time?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No problem! I see you wrote, \"I don't understand what you are talking?\" This sentence is not quite correct in English. \n\nIf you’re not sure what the restaurant staff is asking, you can say:  \n“I’m sorry, could you please repeat that?” or  \n“I don’t understand. Can you explain again?”\n\nThe staff asked for your name and the time of your reservation. This means they want to know:\n- What name the reservation is under (your name)\n- What time your reservation is (when you booked your table)\n\nTry answering with:\n“My name is [your name], and my reservation is at [the time].”\n\nWant to give it a try? What name and time would you like to use?"
+      }
+    ]
+  },
+  "b70e1356-d836-487d-b24c-7d2680c9af2a": {
+    "id": "b70e1356-d836-487d-b24c-7d2680c9af2a",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "8430743c-e16b-4eb9-87e3-be236c5a4267": {
+    "id": "8430743c-e16b-4eb9-87e3-be236c5a4267",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "4dc84fa6-8b43-4b8c-b9f9-552d8f974e80": {
+    "id": "4dc84fa6-8b43-4b8c-b9f9-552d8f974e80",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job! You mentioned your reservation clearly and politely—that’s exactly how it’s done in real life. In many restaurants, saying “I have a reservation” helps the staff quickly find your booking. If you ever want to add more information, you can also mention your name or the time of your reservation. Keep going, you’re doing really well!"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job! Your sentence is clear and polite—perfect for this situation. In restaurants, asking for the reservation name and time is common, just like you did. Sometimes, staff might also ask for a phone number or the number of guests.\n\nKeep going! If you’d like, you can practice responding when they ask you for those details. Let me know if you want to try that."
+      },
+      {
+        "role": "COMPANION",
+        "content": "Wonderful! That was a very polite and natural response. In a dining situation, a smile and a simple \"Thank you\" is always appreciated. If you want, you could also say something like, \"Thank you, that’s great,\" or, \"Thanks very much.\" This little bit of politeness helps create a friendly atmosphere. Well done! Would you like to practice what you might say when you look at the menu next?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job! That was a really polite response—perfect for a restaurant situation. \n\nIf you’d like to practice your next step, you could try ordering a drink now. When you order, you can use “I’d like…” or “Could I have…”—these sound very natural. For example: “I’d like some water, please,” or “Could I have an orange juice?” \n\nAre you ready to order your drink? Give it a try!"
+      }
+    ]
   }
 }
