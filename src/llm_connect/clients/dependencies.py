@@ -7,6 +7,7 @@ from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
+from llm_connect.repositories.MasteryRepository import MasteryRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.services.analyzer import Analyzer
@@ -14,6 +15,7 @@ from llm_connect.services.AtomicPointService import AtomicPointService
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.ConversationService import ConversationService
 from llm_connect.services.core.aevaluator import AEvaluator
+from llm_connect.services.core.BKTEngine import BKTEngine
 from llm_connect.services.core.Companion import (
     Brain,
     Companion,
@@ -21,6 +23,7 @@ from llm_connect.services.core.Companion import (
     Memory,
     Persionality,
 )
+from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.immerse import Actor, Evaluator, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
@@ -204,3 +207,21 @@ def get_ap_s(
     ap_repo: AtomicPointRepository = Depends(get_ap_repo),
 ):
     return AtomicPointService(ap_repo)
+
+
+def get_BKTEngine():
+    return BKTEngine()
+
+
+def get_mastery_repo():
+    return MasteryRepository()
+
+
+def get_master_engine(
+    engine: BKTEngine = Depends(get_BKTEngine),
+    mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+):
+    return MasteryEngine(
+        engine,
+        mastery_repo,
+    )

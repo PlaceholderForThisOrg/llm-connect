@@ -187,5 +187,27 @@
     "id": "06281ef5-38b0-4f1b-9df7-0e2ad40650b9",
     "type": "EMBEDDED",
     "messages": []
+  },
+  "50847cff-5370-4e53-9075-0afc2f9c1c2b": {
+    "id": "50847cff-5370-4e53-9075-0afc2f9c1c2b",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job! You used the word \"reservation\" perfectly. This is exactly how you mention you've booked a table.\n\nIn many restaurants, saying “I have a reservation” or “We booked a table” is polite and clear. Sometimes, you may also add your name, like “I have a reservation under the name Anna.”\n\nIf you ever arrive without booking, you can say, “Do you have a table available?” or “I’d like to make a reservation for tomorrow.”\n\nLet me know if you want to try more restaurant scenarios, or practice responding to other questions!"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Hmm, the staff asked about a reservation. Do you remember a word we use when we've booked a table ahead of time?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No worries! Let’s try step by step. The restaurant staff wants to know if you have saved a table before coming.\n\nYou can start your reply with:  \n“I have a…”\n\nCan you complete this sentence? Think about the word for saving a table at a restaurant."
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job! You asked very politely for both the name and the time of the reservation. In restaurants, this is exactly what staff usually check. If you want, you can also confirm the number of people for the reservation, but your question is already perfect. Keep it up!"
+      }
+    ]
   }
 }
