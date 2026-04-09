@@ -1130,7 +1130,7 @@
         "session_id": "5b36e158-41ce-48db-aa45-e5063e2e2fe4",
         "activity_id": "ac_001",
         "con_id": "4dc84fa6-8b43-4b8c-b9f9-552d8f974e80",
-        "current_goal": "5",
+        "current_goal": "6",
         "history": [
             {
                 "id": "0",
@@ -1187,10 +1187,167 @@
                 "of": "NPC",
                 "content": "You're very welcome! Would you like to start with something to drink, or shall I tell you about today's specials and menu options?",
                 "timestamp": 1775495166.453212
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I would like to have one family-sized pizza, 2 orange juices please!",
+                "timestamp": 1775495313.985909
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Of course! So, that's one family-sized pizza and two orange juices. Is there a particular type of pizza you'd like, or would you like some recommendations?",
+                "timestamp": 1775495317.48191
             }
         ],
         "time_start": 1775495049.182588,
         "status": "RUNNING",
         "retries": {}
+    },
+    "5928878b-bb79-421d-a62c-79e67039f202": {
+        "session_id": "5928878b-bb79-421d-a62c-79e67039f202",
+        "activity_id": "ac_001",
+        "con_id": "582e0d13-ca8f-4f39-b05a-d27072d31c08",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775762156.09291,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "a68757e0-6b0d-4679-bb3a-2709e9feac6a": {
+        "session_id": "a68757e0-6b0d-4679-bb3a-2709e9feac6a",
+        "activity_id": "ac_001",
+        "con_id": "e27827a3-14b4-4987-a0e1-8a2ff23dd3f0",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775762386.861176
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Good evening! Welcome to our restaurant. Do you have a reservation with us tonight?",
+                "timestamp": 1775762397.302084
+            }
+        ],
+        "time_start": 1775762381.379911,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "3be0238d-61fa-4606-8b0c-a2783807b323": {
+        "session_id": "3be0238d-61fa-4606-8b0c-a2783807b323",
+        "activity_id": "ac_001",
+        "con_id": "bb83edd6-d616-4451-9075-cbe49585be09",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775764040.849445
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Do you have a reservation with us today?",
+                "timestamp": 1775764045.452853
+            }
+        ],
+        "time_start": 1775764036.327119,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "61f60beb-fcb4-4ba4-baf1-df6f202a6342": {
+        "session_id": "61f60beb-fcb4-4ba4-baf1-df6f202a6342",
+        "activity_id": "ac_001",
+        "con_id": "dbc39406-d413-4105-8e07-28b285a01659",
+        "current_goal": "2",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775764342.992102
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello there! Welcome to our restaurant. Do you have a reservation with us this evening?",
+                "timestamp": 1775764353.102457
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775764366.996316
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775764369.071842
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775764382.477025
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775764384.584488
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775764400.384204
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775764402.127288
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I booked a table",
+                "timestamp": 1775764413.469974
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Wonderful, thank you for letting me know! May I please have the name and time of your reservation?",
+                "timestamp": 1775764420.114353
+            }
+        ],
+        "time_start": 1775764337.802604,
+        "status": "RUNNING",
+        "retries": {
+            "1": 3
+        }
     }
 }

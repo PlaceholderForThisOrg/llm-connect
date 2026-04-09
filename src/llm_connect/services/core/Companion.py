@@ -176,41 +176,45 @@ class Companion:
 
         signals = {"pass": p, "retries": retries.get(curr_goal_id, 0)}
 
-        # Get the decision
-        decision = self.b.make_decision(signals)
+        if p:
+            return "Good job"
+        else:
 
-        activity = self.m.ac_repo.get_activity_by_id(session["activity_id"])
-        goal = activity["goals"][curr_goal_id]
+            # Get the decision
+            decision = self.b.make_decision(signals)
 
-        # latest attempts
-        content = session["history"][-1]["content"]
+            activity = self.m.ac_repo.get_activity_by_id(session["activity_id"])
+            goal = activity["goals"][curr_goal_id]
 
-        # get the context from current activity and session
+            # latest attempts
+            content = session["history"][-1]["content"]
 
-        # get the knowledge from the current goal
-        knowledge = self.k.get_aps(activity["goals"][curr_goal_id]["atomic_points"])
+            # get the context from current activity and session
 
-        # prepare the prompt for the brain
+            # get the knowledge from the current goal
+            knowledge = self.k.get_aps(activity["goals"][curr_goal_id]["atomic_points"])
 
-        params = CompanionHelpParams(
-            activity=activity["title"],
-            goal=goal["goal"],
-            latest_attempt=content,
-            result="Correct" if p else "Incorrect",
-            history=session["history"],
-            knowledge=knowledge,
-            type=decision,
-        )
+            # prepare the prompt for the brain
 
-        # NOTE: Remember to build the prompt
-        # from the params
-        prompt = self.pb.companion_help_prompt(params)
+            params = CompanionHelpParams(
+                activity=activity["title"],
+                goal=goal["goal"],
+                latest_attempt=content,
+                result="Correct" if p else "Incorrect",
+                history=session["history"],
+                knowledge=knowledge,
+                type=decision,
+            )
 
-        # print(rompt)
+            # NOTE: Remember to build the prompt
+            # from the params
+            prompt = self.pb.companion_help_prompt(params)
 
-        response = ""
+            # print(rompt)
 
-        async for token in self.b.think(prompt):
-            response += token
+            response = ""
 
-        return response
+            async for token in self.b.think(prompt):
+                response += token
+
+            return response

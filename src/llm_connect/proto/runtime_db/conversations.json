@@ -274,6 +274,61 @@
       {
         "role": "COMPANION",
         "content": "Great job! That was a really polite response—perfect for a restaurant situation. \n\nIf you’d like to practice your next step, you could try ordering a drink now. When you order, you can use “I’d like…” or “Could I have…”—these sound very natural. For example: “I’d like some water, please,” or “Could I have an orange juice?” \n\nAre you ready to order your drink? Give it a try!"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Great job! You confirmed the order clearly and politely. It’s common in restaurants to ask if the guest has a preference or needs recommendations—just like you did. \n\nA little tip: in many English-speaking countries, staff will often offer popular choices or ask about dietary preferences after you confirm the basics. You're doing exactly what they would! Keep practicing these polite phrases—they make conversations feel comfortable for everyone. \n\nIf you’d like, we can try asking about pizza types together. Would you like to practice?"
+      }
+    ]
+  },
+  "582e0d13-ca8f-4f39-b05a-d27072d31c08": {
+    "id": "582e0d13-ca8f-4f39-b05a-d27072d31c08",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "e27827a3-14b4-4987-a0e1-8a2ff23dd3f0": {
+    "id": "e27827a3-14b4-4987-a0e1-8a2ff23dd3f0",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job! You answered perfectly. Saying, “I have a reservation,” is exactly how native speakers confirm their booking at a restaurant.\n\nIf you ever want to add more detail, you can also mention your name or the time:  \n“I have a reservation under the name Lee.”  \nOr  \n“I have a reservation for 7:00 PM.”\n\nYou’re doing really well! Would you like to practice responding if you didn’t have a reservation, or would you like to continue?"
+      }
+    ]
+  },
+  "bb83edd6-d616-4451-9075-cbe49585be09": {
+    "id": "bb83edd6-d616-4451-9075-cbe49585be09",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Great job! You used the word \"reservation\" perfectly. That's exactly how people mention their booking when they arrive at a restaurant. \n\nIn some places, you might also hear, \"I booked a table.\" Both are common and understood. If you ever need to book in advance, you can say, \"I'd like to make a reservation.\" \n\nKeep practicing—you're doing really well! Would you like to try talking about the name on your reservation next?"
+      }
+    ]
+  },
+  "dbc39406-d413-4105-8e07-28b285a01659": {
+    "id": "dbc39406-d413-4105-8e07-28b285a01659",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      },
+      {
+        "role": "COMPANION",
+        "content": "You didn’t mention if you booked a table. Can you try saying that you have a reservation?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No worries, you're doing great! The question is asking if you have a reservation—a table booked ahead of time.\n\nLet’s try together. You can start your answer with: “I have…”\n\nFor example:  \n“I have ________.”\n\nCan you finish the sentence?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No problem! When someone asks, \"Do you have a reservation?\" they are asking if you booked a table in advance. \n\nYour answer, \"I don't understand what you are talking?\" shows you didn't understand the question.\n\nA good response is: \"I have a reservation.\"  \nThis lets the restaurant know you prepared ahead and want your table.\n\nYou can also say: \"I booked a table.\"\n\nWould you like to practice saying that?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Good job"
       }
     ]
   }
