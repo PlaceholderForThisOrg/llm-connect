@@ -5,6 +5,11 @@ class ActivityRepository:
     def __init__(self):
         pass
 
+    def get_activities(
+        self,
+    ):
+        return [v for k, v in activities_v5.items()]
+
     def get_activity_by_id(self, activity_id: str):
         # FIXME: prototype only
         return activities_v5[activity_id]

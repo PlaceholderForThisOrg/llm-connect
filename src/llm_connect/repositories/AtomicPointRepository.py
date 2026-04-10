@@ -1,4 +1,6 @@
-from llm_connect.proto.atomic_points import ATOMIC_REGISTRY
+# from llm_connect.proto.atomic_points import ATOMIC_REGISTRY
+
+from llm_connect.proto.atomic_points_v2 import ATOMIC_REGISTRY
 
 
 class AtomicPointRepository:

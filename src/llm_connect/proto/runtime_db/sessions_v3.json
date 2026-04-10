@@ -1349,5 +1349,197 @@
         "retries": {
             "1": 3
         }
+    },
+    "93ea6962-ee45-4274-8aa1-3c9f56ed2816": {
+        "session_id": "93ea6962-ee45-4274-8aa1-3c9f56ed2816",
+        "activity_id": "ac_001",
+        "con_id": "40c596c2-3b60-4bfa-a03e-3dcc52c43557",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775771601.948457
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant—it's lovely to see you. Do you happen to have a reservation with us today?",
+                "timestamp": 1775771608.462676
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775771620.026177
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775771622.110668
+            }
+        ],
+        "time_start": 1775771584.538601,
+        "status": "RUNNING",
+        "retries": {
+            "1": 1
+        }
+    },
+    "87f01024-c33d-4f38-a2ed-687321396c5d": {
+        "session_id": "87f01024-c33d-4f38-a2ed-687321396c5d",
+        "activity_id": "ac_001",
+        "con_id": "7ebf37ae-4498-4e4a-bc10-e4f3271383d5",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775771924.431341,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "87dff660-057c-4415-ab38-52cc270f7bf0": {
+        "session_id": "87dff660-057c-4415-ab38-52cc270f7bf0",
+        "activity_id": "ac_001",
+        "con_id": "ed555a56-2e83-48a7-8841-9e89355d8667",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775772072.118922
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Do you have a reservation with us this evening?",
+                "timestamp": 1775772076.42563
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775772154.821702
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775772157.113194
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775772175.704631
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775772177.865022
+            }
+        ],
+        "time_start": 1775772034.689529,
+        "status": "RUNNING",
+        "retries": {
+            "1": 2
+        }
+    },
+    "518e8dd2-7bee-49f3-995d-188991951a9f": {
+        "session_id": "518e8dd2-7bee-49f3-995d-188991951a9f",
+        "activity_id": "ac_001",
+        "con_id": "145bd258-447d-4f02-80be-8677fe4a3f1a",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775773653.780706,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "6ceb8436-4747-4fcc-9443-7a128913459c": {
+        "session_id": "6ceb8436-4747-4fcc-9443-7a128913459c",
+        "activity_id": "ac_002",
+        "con_id": "f085117d-3ede-451e-bdac-23293169e36c",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775775438.494144
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Are you here to dine with us today, or would you like to have a look at our menu?",
+                "timestamp": 1775775447.343043
+            }
+        ],
+        "time_start": 1775775424.764814,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "a6ab1bc1-6a39-4694-aee6-b807e676a124": {
+        "session_id": "a6ab1bc1-6a39-4694-aee6-b807e676a124",
+        "activity_id": "ac_001",
+        "con_id": "84aa64e1-cb93-4adb-a367-34362f6f8885",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775775540.179591,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "f74604fd-bbbd-4bfe-98a9-5d0f2aa7f2c1": {
+        "session_id": "f74604fd-bbbd-4bfe-98a9-5d0f2aa7f2c1",
+        "activity_id": "ac_001",
+        "con_id": "94d0014e-0e7e-4e5f-8a1e-b9c5c818b686",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775776148.166386
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Hello! Welcome to our restaurant. Do you have a reservation with us this evening?",
+                "timestamp": 1775776152.382745
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "I don't understand",
+                "timestamp": 1775776172.044914
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "I don't understand what you are talking?",
+                "timestamp": 1775776173.876523
+            }
+        ],
+        "time_start": 1775775997.160804,
+        "status": "RUNNING",
+        "retries": {
+            "1": 1
+        }
     }
 }

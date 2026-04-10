@@ -331,5 +331,76 @@
         "content": "Good job"
       }
     ]
+  },
+  "40c596c2-3b60-4bfa-a03e-3dcc52c43557": {
+    "id": "40c596c2-3b60-4bfa-a03e-3dcc52c43557",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Are you trying to tell them you have a booking? Try to use the word \"reservation\" in your answer."
+      }
+    ]
+  },
+  "7ebf37ae-4498-4e4a-bc10-e4f3271383d5": {
+    "id": "7ebf37ae-4498-4e4a-bc10-e4f3271383d5",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "ed555a56-2e83-48a7-8841-9e89355d8667": {
+    "id": "ed555a56-2e83-48a7-8841-9e89355d8667",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Hmm, the restaurant staff is asking if you booked a table. Can you think of a simple way to say that you did? Maybe use the word \"reservation.\""
+      },
+      {
+        "role": "COMPANION",
+        "content": "No worries! Let’s focus on the question the restaurant staff asked you: “Do you have a reservation with us this evening?”\n\nA reservation is when you’ve booked a table ahead of time.\n\nHere’s a helpful way to start:  \n“I have a reservation…”\n\nOr you can say:  \n“I booked a table…”\n\nTry to finish the sentence! Can you complete it and let the staff know you reserved a table?"
+      }
+    ]
+  },
+  "145bd258-447d-4f02-80be-8677fe4a3f1a": {
+    "id": "145bd258-447d-4f02-80be-8677fe4a3f1a",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "f085117d-3ede-451e-bdac-23293169e36c": {
+    "id": "f085117d-3ede-451e-bdac-23293169e36c",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      }
+    ]
+  },
+  "84aa64e1-cb93-4adb-a367-34362f6f8885": {
+    "id": "84aa64e1-cb93-4adb-a367-34362f6f8885",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "94d0014e-0e7e-4e5f-8a1e-b9c5c818b686": {
+    "id": "94d0014e-0e7e-4e5f-8a1e-b9c5c818b686",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No problem! The restaurant staff asked if you have a reservation. Can you think of a way to say you booked a table?"
+      }
+    ]
   }
 }
