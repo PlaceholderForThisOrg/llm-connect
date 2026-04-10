@@ -138,7 +138,7 @@ class RolePlaySessionManager(SessionManager):
                                 of="NPC",
                                 content=response,
                             )
-                            yield "_🙆‍♂️_"
+                            yield ""
         else:
             # Not OK
             # Then based on the current goal

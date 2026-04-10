@@ -1541,5 +1541,50 @@
         "retries": {
             "1": 1
         }
+    },
+    "c6c2a8ec-63ea-42a8-826b-29772a963c43": {
+        "session_id": "c6c2a8ec-63ea-42a8-826b-29772a963c43",
+        "activity_id": "ac_001",
+        "con_id": "8b06e33c-4fde-420d-976a-3b2fb8ca46d8",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775779814.757078,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "b41eaeb5-6753-44cc-b10f-7d376c63fb28": {
+        "session_id": "b41eaeb5-6753-44cc-b10f-7d376c63fb28",
+        "activity_id": "ac_001",
+        "con_id": "0753456d-df8c-4cf8-8a22-d4916cb209b4",
+        "current_goal": "1",
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hello!",
+                "timestamp": 1775780711.941151
+            },
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "NPC",
+                "content": "Good evening! Welcome to our restaurant. May I please have your name for the reservation?",
+                "timestamp": 1775780716.049118
+            }
+        ],
+        "time_start": 1775780687.855392,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "1d89b883-1261-46db-b6a4-5613eccc9560": {
+        "session_id": "1d89b883-1261-46db-b6a4-5613eccc9560",
+        "activity_id": "ac_001",
+        "con_id": "214fbd31-a604-4050-b019-82359bbeaedd",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1775780839.650363,
+        "status": "RUNNING",
+        "retries": {}
     }
 }
