@@ -2,7 +2,7 @@ import aioboto3
 import asyncpg
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
-from llm_connect.auth.auth import verify_token
+# from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import (
     get_learner_service,
     get_postgre_pool,
@@ -19,9 +19,22 @@ from llm_connect.services.LearnerService import (
     update_avatar,
     update_learner,
 )
-from llm_connect.types.auth import Payload
+
+# from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/learners/me", tags=["Learner"])
+
+
+@router.get("/recommendations")
+def get(
+    type: str,
+    l_s: LearnerService = Depends(get_learner_service),
+):
+    learner_id = "learner_001"
+    return l_s.get_recommendations(
+        learner_id,
+        type,
+    )
 
 
 @router.post("/avatar")

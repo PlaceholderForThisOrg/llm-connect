@@ -1582,7 +1582,15 @@
         "activity_id": "ac_001",
         "con_id": "214fbd31-a604-4050-b019-82359bbeaedd",
         "current_goal": "0",
-        "history": [],
+        "history": [
+            {
+                "id": "0",
+                "type": "MESSAGE",
+                "of": "LEARNER",
+                "content": "Hi!",
+                "timestamp": 1775783771.003809
+            }
+        ],
         "time_start": 1775780839.650363,
         "status": "RUNNING",
         "retries": {}

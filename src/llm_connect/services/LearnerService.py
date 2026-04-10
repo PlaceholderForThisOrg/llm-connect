@@ -7,11 +7,27 @@ from llm_connect import logger
 from llm_connect.configs.s3 import ENDPOINT_URL, SERVICE_NAME
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.schemas.learner_schema import LearnerUpdateRequest
+from llm_connect.services.core.Adapter import Adapter
 
 
 class LearnerService:
-    def __init__(self, learner_repository: LearnerRepository):
+    def __init__(
+        self,
+        learner_repository: LearnerRepository,
+        a: Adapter,
+    ):
+        self.a = a
         self.learner_repository = learner_repository
+
+    def get_recommendations(
+        self,
+        learner_id,
+        typ: str,
+    ):
+        return self.a.next(
+            learner_id,
+            t=typ,
+        )
 
     async def get_learner_information(self, user_id: str):
         return await self.learner_repository.get_by_id(user_id)
