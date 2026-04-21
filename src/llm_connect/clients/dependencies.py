@@ -14,6 +14,7 @@ from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.AtomicPointService import AtomicPointService
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.ConversationService import ConversationService
+from llm_connect.services.core.Adapter import Adapter
 from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.core.BKTEngine import BKTEngine
 from llm_connect.services.core.Companion import (
@@ -140,6 +141,16 @@ def get_learner_repository(session: AsyncSession = Depends(get_db_session)):
     return LearnerRepository(session)
 
 
+def get_adapter(
+    l_r=Depends(get_learner_repository),
+    a_r=Depends(get_activity_repo),
+):
+    return Adapter(
+        l_r=l_r,
+        a_r=a_r,
+    )
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
@@ -174,8 +185,12 @@ def get_chat_service(
 
 def get_learner_service(
     learner_repository: LearnerRepository = Depends(get_learner_repository),
+    a: Adapter = Depends(get_adapter),
 ):
-    return LearnerService(learner_repository)
+    return LearnerService(
+        learner_repository,
+        a,
+    )
 
 
 def get_conversation_repo():

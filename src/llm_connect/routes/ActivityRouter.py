@@ -23,3 +23,12 @@ async def get_activity(
     )
 
     return response
+
+
+@router.get("/")
+def get_activities(
+    a_s: ActivityService = Depends(get_activity_service),
+):
+    activities = a_s.get_activities()
+
+    return activities
