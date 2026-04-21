@@ -422,5 +422,51 @@
     "id": "214fbd31-a604-4050-b019-82359bbeaedd",
     "type": "EMBEDDED",
     "messages": []
+  },
+  "24c56e76-0927-4350-84a6-320809ac806c": {
+    "id": "24c56e76-0927-4350-84a6-320809ac806c",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "f8a96ead-498f-41e6-8dba-815383818919": {
+    "id": "f8a96ead-498f-41e6-8dba-815383818919",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      }
+    ]
+  },
+  "ded09171-4ac1-4806-b6b8-2dc876a8d309": {
+    "id": "ded09171-4ac1-4806-b6b8-2dc876a8d309",
+    "type": "EMBEDDED",
+    "messages": []
+  },
+  "0064bd86-8c5e-492a-ac6d-0860d4466062": {
+    "id": "0064bd86-8c5e-492a-ac6d-0860d4466062",
+    "type": "EMBEDDED",
+    "messages": [
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Think about how you can tell someone at the restaurant that you already booked a table. Is there a word you remember seeing that means \"booking\"?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No problem—let's try together! When you arrive at a restaurant and they ask about a reservation, you can start your sentence with “I have...” if you booked a table before.\n\nTry starting your answer like this: “I have a…”\n\nCan you finish the sentence?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "No worries! Let me help you.\n\nWhen the server asks if you have a reservation, they want to know if you saved a table before arriving.\n\nYour answer should say if you booked a table, for example:\n\n- \"I have a reservation.\"\n- \"We made a reservation online.\"\n\nThis is more clear than \"I don't understand what you are talking?\" If you didn't book a table, you could say, \"No, I don't have a reservation.\"\n\nWould you like to try saying it?"
+      },
+      {
+        "role": "COMPANION",
+        "content": "Good job"
+      }
+    ]
   }
 }
