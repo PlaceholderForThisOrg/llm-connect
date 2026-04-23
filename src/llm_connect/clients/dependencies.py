@@ -9,7 +9,9 @@ from llm_connect.repositories.ConversationRepository import ConversationReposito
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.repositories.TagRepository import TagRepository
 from llm_connect.services.ActivityService import ActivityService
+from llm_connect.services.TagService import TagService
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.AtomicPointService import AtomicPointService
 from llm_connect.services.ChatService import ChatService
@@ -262,3 +264,19 @@ def get_mastery_service(
     m_repo: MasteryRepository = Depends(get_mastery_repo),
 ):
     return MasteryService(m_repo)
+
+def get_tag_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return TagRepository(
+        ses=session
+    )
+    
+def get_tag_ser(
+    repo : TagRepository = Depends(get_tag_repo),
+    session: AsyncSession = Depends(get_db_session),
+):
+    return TagService(
+        session=session,
+        repo=repo
+    )

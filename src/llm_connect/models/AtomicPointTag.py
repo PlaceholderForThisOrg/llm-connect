@@ -1,9 +1,11 @@
-from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from llm_connect.models.AtomicPoint import AtomicPoint
+from sqlalchemy import ForeignKey
+from typing import TYPE_CHECKING
 from llm_connect.models.Base import Base
-from llm_connect.models.Tag import Tag
+
+if TYPE_CHECKING:
+    from llm_connect.models.AtomicPoint import AtomicPoint
+    from llm_connect.models.Tag import Tag
 
 
 class AtomicPointTag(Base):
@@ -11,19 +13,20 @@ class AtomicPointTag(Base):
 
     ap_id: Mapped[str] = mapped_column(
         ForeignKey("atomic_point.id"),
-        primary_key=True,
+        primary_key=True
     )
 
     tag_id: Mapped[str] = mapped_column(
         ForeignKey("tag.id"),
-        primary_key=True,
+        primary_key=True
     )
 
-    # 🔥 relationships (THIS is where linking happens)
     atomic_point: Mapped["AtomicPoint"] = relationship(
-        back_populates="atomic_point_tags",
+        "AtomicPoint",
+        back_populates="atomic_point_tags"
     )
 
     tag: Mapped["Tag"] = relationship(
-        back_populates="atomic_point_tags",
+        "Tag",
+        back_populates="atomic_point_tags"
     )
