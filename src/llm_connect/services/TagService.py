@@ -26,3 +26,16 @@ class TagService:
             "page": page,
             "page_size": page_size
         }
+        
+    async def search_tags(self, query: str, page: int, page_size: int):
+        offset = (page - 1) * page_size
+        
+        items = await self.repo.search(query, page_size, offset)
+        total = await self.repo.count_search(query)
+
+        return {
+            "items": items,
+            "total": total,
+            "page": page,
+            "page_size": page_size
+        }

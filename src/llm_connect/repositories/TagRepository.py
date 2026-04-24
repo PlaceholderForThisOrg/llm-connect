@@ -34,3 +34,24 @@ class TagRepository:
         stmt = select(func.count(Tag.id))
         result = await self.ses.execute(stmt)
         return result.scalar_one()
+    
+    async def search(self, query: str, limit: int = 10, offset: int = 0):
+        stmt = (
+            select(Tag)
+            .where(func.lower(Tag.name).like(f"%{query.lower()}%"))
+            .order_by(Tag.name)
+            .limit(limit)
+            .offset(offset)
+        )
+
+        result = await self.ses.execute(stmt)
+        return result.scalars().all()
+    
+    async def count_search(self, query: str) -> int:
+        stmt = (
+            select(func.count(Tag.id))
+            .where(func.lower(Tag.name).like(f"%{query.lower()}%"))
+        )
+
+        result = await self.ses.execute(stmt)
+        return result.scalar_one()

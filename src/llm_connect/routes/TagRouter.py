@@ -24,20 +24,66 @@ async def create_tag(
     
     return response
 
-@router.get("/", response_model=GetAllTagResponse,)
-async def get_all_tags(
-    page : int,
-    pageSize : int,
-    service : TagService = Depends(get_tag_ser),
+# @router.get("/", response_model=GetAllTagResponse,)
+# async def get_all_tags(
+#     page : int,
+#     pageSize : int,
+#     service : TagService = Depends(get_tag_ser),
+#     payload: Payload = Depends(verify_token),
+# ):
+#     res = await service.get_paginated(page, page_size=pageSize)
+    
+#     response = GetAllTagResponse(
+#         items=res["items"],
+#         total=res["total"],
+#         page=res["page"],
+#         pageSize=res["page_size"]
+#     )
+    
+#     return response
+
+# @router.get("/", response_model=GetAllTagResponse,)
+# async def get_all_tags(
+#     query : str,
+#     page : int,
+#     pageSize : int,
+#     service : TagService = Depends(get_tag_ser),
+#     payload: Payload = Depends(verify_token),
+# ):
+#     res = await service.search_tags(query=query, page=page, page_size=pageSize)
+    
+#     response = GetAllTagResponse(
+#         items=res["items"],
+#         total=res["total"],
+#         page=res["page"],
+#         pageSize=res["page_size"]
+#     )
+    
+#     return response
+
+@router.get("/", response_model=GetAllTagResponse)
+async def get_tags(
+    query: str | None = None,
+    page: int = 1,
+    pageSize: int = 10,
+    service: TagService = Depends(get_tag_ser),
     payload: Payload = Depends(verify_token),
 ):
-    res = await service.get_paginated(page, page_size=pageSize)
-    
-    response = GetAllTagResponse(
+    if query:
+        res = await service.search_tags(
+            query=query,
+            page=page,
+            page_size=pageSize
+        )
+    else:
+        res = await service.get_paginated(
+            page=page,
+            page_size=pageSize
+        )
+
+    return GetAllTagResponse(
         items=res["items"],
         total=res["total"],
         page=res["page"],
         pageSize=res["page_size"]
     )
-    
-    return response
