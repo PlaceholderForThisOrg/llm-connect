@@ -5,13 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
+from llm_connect.repositories.AtomicPointTagRepository import AtomicPointTagRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.repositories.TagRepository import TagRepository
 from llm_connect.services.ActivityService import ActivityService
-from llm_connect.services.TagService import TagService
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.AtomicPointService import AtomicPointService
 from llm_connect.services.ChatService import ChatService
@@ -33,6 +33,7 @@ from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
 from llm_connect.services.MasteryService import MasteryService
 from llm_connect.services.SessionService import SessionService
+from llm_connect.services.TagService import TagService
 
 
 # 🤷‍♂️ Outside clients, created in lifespan
@@ -214,8 +215,12 @@ def get_activity_service(
     return ActivityService(activity_repo)
 
 
-def get_ap_repo():
-    return AtomicPointRepository()
+def get_ap_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointRepository(
+        session=session,
+    )
 
 
 def get_companion(
@@ -254,10 +259,32 @@ def get_conversation_service(
     return ConversationService(con_repo, com)
 
 
+def get_tag_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return TagRepository(ses=session)
+
+
+def get_apt_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointTagRepository(
+        session=session,
+    )
+
+
 def get_ap_s(
     ap_repo: AtomicPointRepository = Depends(get_ap_repo),
+    tag_repo: TagRepository = Depends(get_tag_repo),
+    ap_tag_repo: AtomicPointTagRepository = Depends(get_apt_repo),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    return AtomicPointService(ap_repo)
+    return AtomicPointService(
+        ap_repo=ap_repo,
+        tag_repo=tag_repo,
+        ap_tag_repo=ap_tag_repo,
+        session=session,
+    )
 
 
 def get_mastery_service(
@@ -265,18 +292,9 @@ def get_mastery_service(
 ):
     return MasteryService(m_repo)
 
-def get_tag_repo(
-    session: AsyncSession = Depends(get_db_session),
-):
-    return TagRepository(
-        ses=session
-    )
-    
+
 def get_tag_ser(
-    repo : TagRepository = Depends(get_tag_repo),
+    repo: TagRepository = Depends(get_tag_repo),
     session: AsyncSession = Depends(get_db_session),
 ):
-    return TagService(
-        session=session,
-        repo=repo
-    )
+    return TagService(session=session, repo=repo)
