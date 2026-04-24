@@ -1,4 +1,5 @@
 import uuid
+from typing import List, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,6 +24,7 @@ class AtomicPointService:
         self.ap_tag_repo = ap_tag_repo
         self.session = session
         self.db = session
+        self.repo = ap_repo
 
     def get_ap(self, id):
         return self.ap_repo.get_atomic_point_by_id(id)
@@ -58,3 +60,30 @@ class AtomicPointService:
         await self.db.commit()
 
         return atomic_point
+
+    async def search_atomic_points(
+        self,
+        search: Optional[str],
+        type: Optional[str],
+        level: Optional[str],
+        tags: Optional[List[str]],
+        min_popularity: Optional[float],
+        page: int,
+        page_size: int,
+    ):
+        items, total = await self.repo.search(
+            search=search,
+            type=type,
+            level=level,
+            tags=tags,
+            min_popularity=min_popularity,
+            page=page,
+            page_size=page_size,
+        )
+
+        return {
+            "items": items,
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+        }

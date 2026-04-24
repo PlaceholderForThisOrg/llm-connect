@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Depends
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, Query
 
 from llm_connect.clients.dependencies import get_ap_s
-from llm_connect.schemas.ap_schema import CreateAPRequest
+from llm_connect.schemas.ap_schema import CreateAPRequest, GetAtomicPointResponse
+from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.services.AtomicPointService import AtomicPointService
 
 router = APIRouter(prefix="/api/v1/atomic-points", tags=["Atomic points"])
@@ -30,5 +33,36 @@ async def create_atomic_point(
 ):
     ap = await service.create_atomic_point(request)
 
-    # FIXME: filter import field
+    # FIXME: hide important model's field
     return ap
+
+
+@router.get("/", response_model=PaginatedResponse[GetAtomicPointResponse])
+async def search_atomic_points(
+    search: Optional[str] = None,
+    type: Optional[str] = None,
+    level: Optional[str] = None,
+    tags: Optional[List[str]] = Query(default=None),
+    min_popularity: Optional[float] = None,
+    page: int = 1,
+    page_size: int = 20,
+    service: AtomicPointService = Depends(get_ap_s),
+):
+    res = await service.search_atomic_points(
+        search=search,
+        type=type,
+        level=level,
+        tags=tags,
+        min_popularity=min_popularity,
+        page=page,
+        page_size=page_size,
+    )
+
+    response = PaginatedResponse(
+        items=[GetAtomicPointResponse.from_model(ap) for ap in res["items"]],
+        total=res["total"],
+        page=res["page"],
+        pageSize=res["page_size"],
+    )
+
+    return response
