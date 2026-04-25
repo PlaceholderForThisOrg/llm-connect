@@ -32,6 +32,7 @@ class Metadata(BaseModel):
     description: str
     general_difficulty: str
     estimated_time: int
+    tags: List[str] = Field(default_factory=list)
 
 
 class Activity(Document):

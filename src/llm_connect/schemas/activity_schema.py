@@ -1,5 +1,6 @@
 from typing import Annotated, Dict, List, Literal, Union
 
+from beanie import PydanticObjectId
 from pydantic import BaseModel, Field
 
 
@@ -35,17 +36,18 @@ class SelectTask(BaseTask):
 Task = Annotated[Union[GenerateTask, SelectTask], Field(discriminator="type")]
 
 
-class MetaData(BaseModel):
+class Metadata(BaseModel):
     type: str
     title: str
     description: str
     general_difficulty: str
     estimated_time: int
+    tags: List[str] = Field(default_factory=list)
 
 
 class CreateActivityRequest(BaseModel):
 
-    metadata: MetaData
+    metadata: Metadata
 
     start_tasks: List[str]
 
@@ -54,3 +56,11 @@ class CreateActivityRequest(BaseModel):
 
 class CreateActivityResponse(BaseModel):
     None
+
+
+class GetAllActivityResponse(BaseModel):
+    id: PydanticObjectId = Field(alias="_id")
+    metadata: Metadata
+
+    class Config:
+        populate_by_name = True

@@ -1,8 +1,11 @@
-import uuid
+from typing import List, Optional
 
 from llm_connect.models.Activity import Activity
 from llm_connect.proto.activity.activities_v5 import activities_v5
-from llm_connect.schemas.activity_schema import CreateActivityRequest
+from llm_connect.schemas.activity_schema import (
+    CreateActivityRequest,
+    GetAllActivityResponse,
+)
 
 
 class ActivityRepository:
@@ -15,6 +18,38 @@ class ActivityRepository:
         # activity.id = id
         await activity.insert()
         return activity
+
+    async def get_activities_v2(
+        self,
+        page: int,
+        page_size: int,
+        title: Optional[str] = None,
+        tags: Optional[List[str]] = None,
+        difficulty: Optional[str] = None,
+        type_: Optional[str] = None,
+    ):
+        query = {}
+
+        if title:
+            query["metadata.title"] = {"$regex": title, "$options": "i"}
+
+        if tags:
+            query["metadata.tags"] = {"$in": tags}
+
+        if difficulty:
+            query["metadata.general_difficulty"] = difficulty
+
+        if type_:
+            query["metadata.type"] = type_
+
+        skip = (page - 1) * page_size
+
+        cursor = Activity.find(query).skip(skip).limit(page_size)
+
+        activities = await cursor.project(GetAllActivityResponse).to_list()
+        total = await Activity.find(query).count()
+
+        return activities, total
 
     def get_activities(
         self,
