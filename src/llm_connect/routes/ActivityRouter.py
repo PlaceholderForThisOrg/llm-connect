@@ -1,8 +1,13 @@
 from fastapi import APIRouter, Depends
 
+from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_activity_service
-from llm_connect.schemas.activity_schema import GetActivityResponse
+from llm_connect.schemas.activity_schema import (
+    CreateActivityRequest,
+    GetActivityResponse,
+)
 from llm_connect.services.ActivityService import ActivityService
+from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/activities", tags=["Tasks", "Activities"])
 
@@ -32,3 +37,15 @@ def get_activities(
     activities = a_s.get_activities()
 
     return activities
+
+
+@router.post("/")
+async def create_activity(
+    request: CreateActivityRequest,
+    service: ActivityService = Depends(get_activity_service),
+    payload: Payload = Depends(verify_token),
+):
+    res = await service.create_activity(request)
+
+    response = res
+    return response

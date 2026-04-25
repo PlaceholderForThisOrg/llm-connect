@@ -1,17 +1,29 @@
-from typing import Dict, List
+from typing import Annotated, Dict, List, Literal, Union
 
 from beanie import Document
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
-class Task(BaseModel):
+class BaseTask(BaseModel):
     id: str
+    type: str
     atomic_points: List[str]
     next_possibles: List[str]
 
 
-class GenerateTask(Task):
+class GenerateTask(BaseTask):
+    type: Literal["generate"]
     prompt: str
+
+
+class SelectTask(BaseTask):
+    type: Literal["select"]
+    question: str
+    answers: List[str]
+    correct: List[str]
+
+
+Task = Annotated[Union[GenerateTask, SelectTask], Field(discriminator="type")]
 
 
 class Metadata(BaseModel):
@@ -19,19 +31,17 @@ class Metadata(BaseModel):
     title: str
     description: str
     general_difficulty: str
-    estimated_time: str
-
-
-class RolePlayMetadata(Metadata):
-    location: str
-    npc_name: str
-    npc_role: str
-    npc_personality: str
-    general_goal: str
+    estimated_time: int
 
 
 class Activity(Document):
-    id: str
+    # id: str
+
     metadata: Metadata
-    start_goals: List[str]
+
+    start_tasks: List[str]
+
     tasks: Dict[str, Task]
+
+    class Settings:
+        name = "activity"
