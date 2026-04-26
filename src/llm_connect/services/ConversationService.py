@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.models import Conversation
@@ -16,6 +18,41 @@ class ConversationService:
         self.com = com
         self.session = session
         self.repo = con_repo
+
+    async def get_conversations(
+        self,
+        # db: Session,
+        learner_id: str,
+        search: str | None,
+        page: int,
+        page_size: int,
+    ) -> Dict[str, Any]:
+
+        offset = (page - 1) * page_size
+
+        conversations, total = await self.repo.get_conversations(
+            # db=db,
+            learner_id=learner_id,
+            search=search,
+            limit=page_size,
+            offset=offset,
+        )
+
+        return {
+            "items": [
+                {
+                    "id": str(conv.id),
+                    "title": conv.title,
+                    "type": conv.type,
+                    "updated_at": conv.updated_ad,
+                    "created_ad": conv.created_at,
+                }
+                for conv in conversations
+            ],
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+        }
 
     async def create_conversation(
         self,

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends
 
 from llm_connect.auth.auth import verify_token
@@ -10,10 +12,37 @@ from llm_connect.schemas.conversation_schema import (
     PostMessageRequest,
     PostMessageResponse,
 )
+from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.services.ConversationService import ConversationService
 from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/me/conversations", tags=["Conversations"])
+
+
+@router.get(path="/")
+async def search_conversations(
+    search: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 10,
+    service: ConversationService = Depends(get_conversation_service),
+    payload: Payload = Depends(verify_token),
+):
+    learner_id = payload["sub"]
+    res = await service.get_conversations(
+        learner_id=learner_id,
+        search=search,
+        page=page,
+        page_size=page_size,
+    )
+
+    response = PaginatedResponse(
+        items=res["items"],
+        page=res["page"],
+        pageSize=res["page_size"],
+        total=res["total"],
+    )
+
+    return response
 
 
 @router.post(path="/")
