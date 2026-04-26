@@ -1,12 +1,15 @@
 import uuid
 from datetime import datetime
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from llm_connect.models.Base import Base
+
+if TYPE_CHECKING:
+    from llm_connect.models import Learner, Message
 
 
 class Conversation(Base):

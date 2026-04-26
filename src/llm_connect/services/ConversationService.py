@@ -17,7 +17,7 @@ class ConversationService:
         self.session = session
         self.repo = con_repo
 
-    def create_conversation(
+    async def create_conversation(
         self,
         learner_id: str,
         title: str | None,
@@ -27,14 +27,14 @@ class ConversationService:
         if not learner_id:
             raise ValueError("learner_id is required")
 
-        conversation = self.repo.create(
+        conversation = await self.repo.create(
             learner_id=learner_id,
             title=title,
             type=type,
         )
 
-        self.session.commit()
-        self.session.refresh(conversation)
+        await self.session.commit()
+        await self.session.refresh(conversation)
 
         return conversation
 

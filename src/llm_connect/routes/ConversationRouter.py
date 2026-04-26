@@ -17,13 +17,13 @@ router = APIRouter(prefix="/api/v1/me/conversations", tags=["Conversations"])
 
 
 @router.post(path="/")
-def create_conversation(
+async def create_conversation(
     request: CreateConversationRequest,
     service: ConversationService = Depends(get_conversation_service),
     payload: Payload = Depends(verify_token),
 ):
     learner_id = payload["sub"]
-    res = service.create_conversation(
+    res = await service.create_conversation(
         learner_id=learner_id,
         title=request.title,
         type=request.type,

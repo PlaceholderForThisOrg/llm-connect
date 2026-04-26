@@ -35,7 +35,7 @@ class ConversationRepository:
         # Initial sync to ensure file exists
         self.sync()
 
-    def create(
+    async def create(
         self,
         learner_id: str,
         title: str | None,
@@ -49,7 +49,7 @@ class ConversationRepository:
         )
 
         self.session.add(conversation)
-        self.session.flush()
+        await self.session.flush()
         return conversation
 
     def sync(self):
