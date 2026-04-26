@@ -1,9 +1,10 @@
 import datetime
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from sqlalchemy import JSON, Date, DateTime, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from llm_connect.models import Conversation
 from llm_connect.models.Base import Base
 
 
@@ -29,4 +30,8 @@ class Learner(Base):
 
     updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )
+
+    conversations: Mapped[List["Conversation"]] = relationship(
+        back_populates="learner", cascade="all, delete-orphan"
     )

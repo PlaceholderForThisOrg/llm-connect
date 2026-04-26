@@ -2,11 +2,16 @@ import json
 import os
 import uuid
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from llm_connect.proto.conversations_v1 import conversations_v1
 
 
 class ConversationRepository:
-    def __init__(self):
+    def __init__(self, session: AsyncSession):
+
+        self.session = session
+
         self.file_path = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__), "../proto/runtime_db/conversations.json"
