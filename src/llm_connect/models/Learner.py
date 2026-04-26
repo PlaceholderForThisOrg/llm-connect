@@ -4,7 +4,6 @@ from typing import Any, Dict, List
 from sqlalchemy import JSON, Date, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from llm_connect.models import Conversation
 from llm_connect.models.Base import Base
 
 

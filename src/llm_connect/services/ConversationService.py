@@ -1,3 +1,6 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from llm_connect.models import Conversation
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.services.core.Companion import Companion
 
@@ -7,9 +10,33 @@ class ConversationService:
         self,
         con_repo: ConversationRepository,
         com: Companion,
+        session: AsyncSession,
     ):
         self.con_repo = con_repo
         self.com = com
+        self.session = session
+        self.repo = con_repo
+
+    def create_conversation(
+        self,
+        learner_id: str,
+        title: str | None,
+        type: str | None,
+    ) -> Conversation:
+
+        if not learner_id:
+            raise ValueError("learner_id is required")
+
+        conversation = self.repo.create(
+            learner_id=learner_id,
+            title=title,
+            type=type,
+        )
+
+        self.session.commit()
+        self.session.refresh(conversation)
+
+        return conversation
 
     def create(self):
         pass

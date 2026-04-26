@@ -196,8 +196,10 @@ def get_learner_service(
     )
 
 
-def get_conversation_repo():
-    return ConversationRepository()
+def get_conversation_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return ConversationRepository(session=session)
 
 
 def get_session_service(
@@ -255,8 +257,13 @@ def get_companion(
 def get_conversation_service(
     con_repo=Depends(get_conversation_repo),
     com=Depends(get_companion),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    return ConversationService(con_repo, com)
+    return ConversationService(
+        con_repo,
+        com,
+        session=session,
+    )
 
 
 def get_tag_repo(

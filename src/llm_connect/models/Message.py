@@ -6,7 +6,6 @@ from sqlalchemy import DateTime, ForeignKey, func
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from llm_connect.models import Conversation
 from llm_connect.models.Base import Base
 
 

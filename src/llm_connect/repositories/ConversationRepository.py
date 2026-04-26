@@ -4,6 +4,7 @@ import uuid
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect.models.Conversation import Conversation
 from llm_connect.proto.conversations_v1 import conversations_v1
 
 
@@ -33,6 +34,23 @@ class ConversationRepository:
 
         # Initial sync to ensure file exists
         self.sync()
+
+    def create(
+        self,
+        learner_id: str,
+        title: str | None,
+        type: str | None,
+    ) -> Conversation:
+
+        conversation = Conversation(
+            learner_id=learner_id,
+            title=title,
+            type=type,
+        )
+
+        self.session.add(conversation)
+        self.session.flush()
+        return conversation
 
     def sync(self):
         """Write current conversations to file"""
