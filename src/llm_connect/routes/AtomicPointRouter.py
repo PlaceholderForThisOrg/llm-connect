@@ -18,12 +18,18 @@ router = APIRouter(prefix="/api/v1/atomic-points", tags=["Atomic points"])
 
 
 @router.get("/{id}")
-def get_point(
+async def get_point(
     id: str,
     ap_s: AtomicPointService = Depends(get_ap_s),
+    service: AtomicPointService = Depends(get_ap_s),
 ):
     # return {"field": "value"}
-    return ap_s.get_ap(id)
+    # return ap_s.get_ap(id)
+
+    res = await service.get_atmomic_point(id)
+
+    response = res
+    return response
 
 
 @router.post("/")

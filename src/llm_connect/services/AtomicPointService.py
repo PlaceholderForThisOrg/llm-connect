@@ -26,6 +26,14 @@ class AtomicPointService:
         self.db = session
         self.repo = ap_repo
 
+    async def get_atmomic_point(self, id: str):
+        model = await self.repo.get_by_id(id)
+
+        if model is None:
+            raise KeyError(f"No atomic point with id: {id}")
+
+        return model
+
     def get_ap(self, id):
         return self.ap_repo.get_atomic_point_by_id(id)
 

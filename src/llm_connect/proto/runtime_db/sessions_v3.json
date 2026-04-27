@@ -1722,5 +1722,35 @@
         "retries": {
             "1": 3
         }
+    },
+    "60745a27-f7c4-44d3-b261-2200a169ed3a": {
+        "session_id": "60745a27-f7c4-44d3-b261-2200a169ed3a",
+        "activity_id": "ac_001",
+        "con_id": "1df6326e-b89b-4b73-b822-5d3fbc2922f4",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1777287272.065452,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "dc11eefa-6506-4437-807b-e20783b181fb": {
+        "session_id": "dc11eefa-6506-4437-807b-e20783b181fb",
+        "activity_id": "ac_001",
+        "con_id": "6829f582-d0d3-4245-8382-3339cee47ba9",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1777287355.841259,
+        "status": "RUNNING",
+        "retries": {}
+    },
+    "e7dccf82-2059-4891-ad76-8b7f22b5bcb1": {
+        "session_id": "e7dccf82-2059-4891-ad76-8b7f22b5bcb1",
+        "activity_id": "ac_001",
+        "con_id": "561ab14b-87e5-46ce-966e-1e5bc8238778",
+        "current_goal": "0",
+        "history": [],
+        "time_start": 1777287459.545203,
+        "status": "RUNNING",
+        "retries": {}
     }
 }

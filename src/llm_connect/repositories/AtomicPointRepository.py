@@ -1,5 +1,6 @@
 # from llm_connect.proto.atomic_points import ATOMIC_REGISTRY
 
+
 from typing import List, Optional, Tuple
 
 from sqlalchemy import func, select
@@ -18,6 +19,13 @@ class AtomicPointRepository:
         session: AsyncSession,
     ):
         self.session = session
+
+    async def get_by_id(self, id: str):
+        stmt = select(AtomicPoint).where(AtomicPoint.id == id)
+
+        result = await self.session.execute(stmt)
+
+        return result.scalar()
 
     def get_atomic_point_by_id(self, ap_id: str):
         return ATOMIC_REGISTRY[ap_id]

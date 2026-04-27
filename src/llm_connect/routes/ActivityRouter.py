@@ -8,7 +8,6 @@ from llm_connect.schemas.activity_schema import (
     CreateActivityRequest,
     GetActivityResponse,
 )
-from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.types.auth import Payload
 
@@ -42,7 +41,7 @@ async def get_activity(
 
 #     return activities
 @router.get("/")
-async def get_activities(
+async def search_activities(
     page: int = Query(1, ge=1),
     page_size: int = Query(10, le=50),
     title: Optional[str] = None,
@@ -72,11 +71,14 @@ async def create_activity(
 ):
     res = await service.create_activity(request)
 
-    response = PaginatedResponse(
-        items=res["items"],
-        page=res["page"],
-        pageSize=res["page_size"],
-        total=res["total"],
-    )
+    # Why Paginated happens here?
+    # response = PaginatedResponse(
+    #     items=res["items"],
+    #     page=res["page"],
+    #     pageSize=res["page_size"],
+    #     total=res["total"],
+    # )
+
+    response = res
 
     return response
