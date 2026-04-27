@@ -1,6 +1,8 @@
+from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,17 +10,40 @@ from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import (
     get_conversation_service,
     get_db_session,
+    get_message_service,
 )
 from llm_connect.schemas.conversation_schema import (
     CreateConversationRequest,
     GetHelpResponse,
     PostMessageRequest,
 )
-from llm_connect.schemas.pagination import PaginatedResponse
+from llm_connect.schemas.pagination import CursorPaginatedResponse, PaginatedResponse
 from llm_connect.services.ConversationService import ConversationService
+from llm_connect.services.MessageService import MessageService
 from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/me/conversations", tags=["Conversations"])
+
+
+@router.get(path="/{conversationId}/messages/")
+async def get_messages(
+    conversationId: UUID,
+    cursor: Optional[datetime] = Query(None),
+    limit: int = Query(20, le=100),
+    service: MessageService = Depends(get_message_service),
+):
+    res = await service.get_conversation_messages(
+        conversation_id=conversationId,
+        cursor=cursor,
+        limit=limit,
+    )
+
+    response = CursorPaginatedResponse(
+        items=res["items"],
+        nextCursor=res["next_cursor"],
+    )
+
+    return response
 
 
 @router.get(path="/")

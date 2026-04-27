@@ -37,6 +37,8 @@ class ConversationService:
             content=user_input,
         )
 
+        await self.session.commit()
+
         # Load history - companion will handle
         # messages = await self.message_repo.get_conversation_messages(conversation_id)
 

@@ -33,6 +33,7 @@ from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionMana
 from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
 from llm_connect.services.MasteryService import MasteryService
+from llm_connect.services.MessageService import MessageService
 from llm_connect.services.SessionService import SessionService
 from llm_connect.services.TagService import TagService
 
@@ -321,3 +322,13 @@ def get_tag_ser(
     session: AsyncSession = Depends(get_db_session),
 ):
     return TagService(session=session, repo=repo)
+
+
+def get_message_service(
+    repo: MessageRepository = Depends(get_message_repo),
+    session: AsyncSession = Depends(get_db_session),
+):
+    return MessageService(
+        repo=repo,
+        session=session,
+    )
