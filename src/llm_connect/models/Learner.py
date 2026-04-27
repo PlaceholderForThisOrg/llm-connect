@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
-    from llm_connect.models import Conversation
+    from llm_connect.models import Conversation, Session
 
 
 class Learner(Base):
@@ -35,5 +35,9 @@ class Learner(Base):
     )
 
     conversations: Mapped[List["Conversation"]] = relationship(
+        back_populates="learner", cascade="all, delete-orphan"
+    )
+
+    sessions: Mapped[List["Session"]] = relationship(
         back_populates="learner", cascade="all, delete-orphan"
     )
