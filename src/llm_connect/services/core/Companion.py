@@ -1,13 +1,16 @@
 from typing import List
+from uuid import UUID
 
 from openai import AsyncOpenAI
 
+from llm_connect import logger
 from llm_connect.configs.llm import GPT41
 from llm_connect.proto.atomic_points import ap2str
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
+from llm_connect.repositories.MessageRepository import MessageRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.immerse.PromptBuilder import (
     CompanionHelpParams,
@@ -84,15 +87,31 @@ class Memory:
         con_repo: ConversationRepository,
         ses_repo: SessionRepository,
         ac_repo: ActivityRepository,
+        message_repo: MessageRepository,
     ):
         self.long_term = learner_repo
         self.short_term = con_repo
         self.ses_repo = ses_repo
         self.ac_repo = ac_repo
+        self.message_repo = message_repo
 
     def longterm(self, learner_id: str):
         profile = self.long_term.get_by_id(learner_id)
         return profile["proto"]
+
+    async def longterm_v2(self, learner_id: str):
+        learner = await self.long_term.get_by_id(learner_id)
+        return learner
+
+    async def shortterm_v2(self, conversation_id: UUID):
+        """Return the short-term memory for the companion
+
+        Args:
+            con_id (str): The conversation id
+        """
+        messages = await self.message_repo.get_conversation_messages(conversation_id)
+
+        return messages
 
     def shortterm(self, con_id):
         con = self.short_term.get_conversation_by_id(con_id=con_id)
@@ -123,9 +142,43 @@ class Companion:
         self.k = k
         self.p = p
         self.pb = pb
+        self.memory = self.m
+        self.brain = self.b
 
     # TODO: Emulate the companion role
     # need learner_id, the current con_id, the current message
+    async def response_v2(
+        self,
+        learner_id: str,
+        conversation_id: str,
+        message: str,
+    ):
+        logger.info("[Companion] - [Get the long-term memory]")
+        # learner = await self.memory.longterm_v2(learner_id)
+
+        logger.info("[Companion] - [Get the short-term memory]")
+        messages = await self.memory.shortterm_v2(conversation_id)
+        logger.info(f"[Companion] - [Short-term memory's length {len(messages)}]")
+
+        # The companion's response
+
+        # Build the companion prompt
+        logger.info("[Companion] - [Build the prompt]")
+        params = CompanionParams(
+            # longterm
+            user_memory="Currently not specified",
+            # shortterm
+            history=messages,
+            input=message,
+        )
+
+        prompt = self.pb.companion_prompt(params)
+
+        logger.info("[Companion] - [Yield the token from LLM]")
+        async for token in self.brain.think(prompt):
+            yield token
+            # response += token
+
     async def response(self, learner_id: str, con_id: str, message: str):
         # TODO:
         # - Receive the learner

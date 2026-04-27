@@ -1,16 +1,18 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import (
     get_conversation_service,
+    get_db_session,
 )
 from llm_connect.schemas.conversation_schema import (
     CreateConversationRequest,
     GetHelpResponse,
     PostMessageRequest,
-    PostMessageResponse,
 )
 from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.services.ConversationService import ConversationService
@@ -74,22 +76,36 @@ async def create_conversation(
 #     return PostConResponse(conId=id)
 
 
-@router.post(path="/{con_id}/messages/")
+@router.post(path="/{conversationId}/messages/")
 async def chat(
-    con_id: str,
+    conversationId: str,
     request: PostMessageRequest,
-    con_ser: ConversationService = Depends(get_conversation_service),
+    service: ConversationService = Depends(get_conversation_service),
+    payload: Payload = Depends(verify_token),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    learner_id = "learner_001"
-    re_message = await con_ser.chat(
-        learner_id,
-        con_id,
-        request.content,
+    learner_id = payload["sub"]
+    # message = request.content
+
+    async def token_stream():
+        try:
+
+            async for chunk in service.stream_chat(
+                conversation_id=conversationId,
+                user_input=request.content,
+                learner_id=learner_id,
+            ):
+                yield chunk
+
+            await session.commit()
+
+        except Exception:
+            await session.rollback()
+
+    return StreamingResponse(
+        token_stream(),
+        media_type="text/plain",
     )
-
-    response = PostMessageResponse(content=re_message["content"])
-
-    return response
 
 
 @router.get("/{con_id}/help/")

@@ -1,9 +1,11 @@
 from typing import Any, Dict
+from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.models import Conversation
 from llm_connect.repositories.ConversationRepository import ConversationRepository
+from llm_connect.repositories.MessageRepository import MessageRepository
 from llm_connect.services.core.Companion import Companion
 
 
@@ -13,11 +15,65 @@ class ConversationService:
         con_repo: ConversationRepository,
         com: Companion,
         session: AsyncSession,
+        message_repo: MessageRepository,
     ):
         self.con_repo = con_repo
         self.com = com
         self.session = session
         self.repo = con_repo
+        self.companion = self.com
+        self.message_repo = message_repo
+
+    async def stream_chat(
+        self,
+        conversation_id: UUID,
+        user_input: str,
+        learner_id: str,
+    ):
+        # Save user message
+        await self.message_repo.create_message(
+            conversation_id=conversation_id,
+            role="user",
+            content=user_input,
+        )
+
+        # Load history - companion will handle
+        # messages = await self.message_repo.get_conversation_messages(conversation_id)
+
+        # companion will also handle
+        # openai_messages = [{"role": m.role, "content": m.content} for m in messages]
+
+        # companion
+        # 3. Call OpenAI streaming
+        # stream = await self.client.chat.completions.create(
+        #     model="gpt-4o-mini",
+        #     messages=openai_messages,
+        #     stream=True,
+        # )
+
+        response = ""
+
+        # companion
+        # async for chunk in stream:
+        #     delta = chunk.choices[0].delta.content or ""
+        #     if delta:
+        #         full_response += delta
+        #         yield delta  # 🔥 streaming happens here
+
+        async for token in self.companion.response_v2(
+            learner_id=learner_id,
+            conversation_id=conversation_id,
+            message=user_input,
+        ):
+            response += token
+            yield token
+
+        # Save companion response
+        await self.message_repo.create_message(
+            conversation_id=conversation_id,
+            role="companion",
+            content=response,
+        )
 
     async def get_conversations(
         self,

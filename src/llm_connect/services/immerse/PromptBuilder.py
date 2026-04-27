@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, TypedDict
+from typing import Dict, List, TypedDict
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -38,7 +38,7 @@ class NPCParams(TypedDict):
 
 class CompanionParams(TypedDict):
     user_memory: str = None
-    history: Dict
+    history: List
     input: str
 
 

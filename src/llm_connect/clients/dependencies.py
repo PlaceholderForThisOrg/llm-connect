@@ -9,6 +9,7 @@ from llm_connect.repositories.AtomicPointTagRepository import AtomicPointTagRepo
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
+from llm_connect.repositories.MessageRepository import MessageRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.repositories.TagRepository import TagRepository
 from llm_connect.services.ActivityService import ActivityService
@@ -225,6 +226,14 @@ def get_ap_repo(
     )
 
 
+def get_message_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return MessageRepository(
+        session=session,
+    )
+
+
 def get_companion(
     llm=Depends(get_llm),
     learner_repo=Depends(get_learner_repository),
@@ -233,16 +242,21 @@ def get_companion(
     ses_repo=Depends(get_session_repo),
     ac_repo=Depends(get_activity_repo),
     ap_repo=Depends(get_ap_repo),
+    message_repo=Depends(get_message_repo),
 ):
+    # create all the parts of the companion
+    # just like the normal companion
+    # but they don't have any dependencies
     brain = Brain(llm)
+
     memory = Memory(
-        learner_repo,
-        con_repo,
-        ses_repo,
-        ac_repo,
+        learner_repo, con_repo, ses_repo, ac_repo, message_repo=message_repo
     )
+
     k = Knowledge(ap_repo)
+
     # FIXME: Not needed in prototype
+
     p = Persionality()
 
     return Companion(
@@ -258,11 +272,13 @@ def get_conversation_service(
     con_repo=Depends(get_conversation_repo),
     com=Depends(get_companion),
     session: AsyncSession = Depends(get_db_session),
+    message_repo: MessageRepository = Depends(get_message_repo),
 ):
     return ConversationService(
         con_repo,
         com,
         session=session,
+        message_repo=message_repo,
     )
 
 
