@@ -1,4 +1,5 @@
 import uuid
+from typing import List
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -58,4 +59,9 @@ class TagRepository:
 
     async def get_by_ids(self, ids: list[str]) -> list[Tag]:
         result = await self.db.execute(select(Tag).where(Tag.id.in_(ids)))
+        return result.scalars().all()
+
+    async def get_by_names(self, names: List[str]) -> List[Tag]:
+        stmt = select(Tag).where(Tag.name.in_(names))
+        result = await self.session.execute(stmt)
         return result.scalars().all()

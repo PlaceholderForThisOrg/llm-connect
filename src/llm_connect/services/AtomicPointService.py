@@ -32,10 +32,10 @@ class AtomicPointService:
     async def create_atomic_point(self, request: CreateAPRequest):
         # 1. validate tags exist
         # FIXME: Skip validation
-        tags = await self.tag_repo.get_by_ids(request.tagIds)
+        tags = await self.tag_repo.get_by_names(request.tags)
 
-        if len(tags) != len(request.tagIds):
-            raise ValueError("Some tagIds are invalid")
+        if len(tags) != len(request.tags):
+            raise ValueError("Some tag's names are invalid")
 
         atomic_point = AtomicPoint(
             id=str(uuid.uuid4()),

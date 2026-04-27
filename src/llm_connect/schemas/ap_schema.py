@@ -11,7 +11,8 @@ class CreateAPRequest(BaseModel):
     level: str
     popularity: float
 
-    tagIds: List[str]
+    # tagIds: List[str] = None
+    tags: List[str]
 
 
 class CreateAPResponse(BaseModel):
