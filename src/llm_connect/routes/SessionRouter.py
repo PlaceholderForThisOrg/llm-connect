@@ -42,6 +42,15 @@ async def submit_interaction(
     )
 
 
+@router.get("/{sessionId}/progresses/{taskId}/interactions/")
+def get_all_interactions(
+    sessionId: str,
+    taskId: str,
+    payload: Payload = Depends(verify_token),
+):
+    learner_id = payload["sub"]
+
+
 @router.get("/{sessionId}/current-task")
 async def get_current_task(
     sessionId: str,
