@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
-    from llm_connect.models import Learner, Progress
+    from llm_connect.models import Conversation, Learner, Progress
 
 
 class Session(Base):
@@ -45,3 +45,15 @@ class Session(Base):
         index=True,
     )
     learner: Mapped["Learner"] = relationship(back_populates="sessions")
+
+    conversation_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("conversation.id", ondelete="SET NULL"),
+        unique=True,
+        nullable=True,
+    )
+
+    conversation: Mapped["Conversation"] = relationship(
+        back_populates="session",
+        uselist=False,
+    )

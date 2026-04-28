@@ -9,7 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
-    from llm_connect.models import Learner, Message
+    from llm_connect.models import Learner, Message, Session
 
 
 class Conversation(Base):
@@ -41,3 +41,8 @@ class Conversation(Base):
 
     # relationship with Learner
     learner: Mapped["Learner"] = relationship(back_populates="conversations")
+
+    session: Mapped["Session"] = relationship(
+        back_populates="conversation",
+        uselist=False,
+    )
