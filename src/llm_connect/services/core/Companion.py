@@ -15,6 +15,7 @@ from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.immerse.PromptBuilder import (
     CompanionHelpParams,
     CompanionParams,
+    CompanionSessionParams,
     PromptBuilder,
 )
 
@@ -95,6 +96,18 @@ class Memory:
         self.ac_repo = ac_repo
         self.message_repo = message_repo
 
+    async def current_activity(self, activity_id: str):
+        activity = await self.ac_repo.get_by_id(activity_id)
+
+        context = ""
+        context += activity.metadata.type
+        context += "\n"
+        context += activity.metadata.title
+        context += "\n"
+        context += activity.metadata.description
+
+        return context
+
     def longterm(self, learner_id: str):
         profile = self.long_term.get_by_id(learner_id)
         return profile["proto"]
@@ -152,32 +165,66 @@ class Companion:
         learner_id: str,
         conversation_id: str,
         message: str,
+        type: str,
+        activity_id: str,
+        session_id: str,
     ):
-        logger.info("[Companion] - [Get the long-term memory]")
-        # learner = await self.memory.longterm_v2(learner_id)
+        if type == "NORMAL":
+            logger.info("[Companion] - [Get the long-term memory]")
+            # learner = await self.memory.longterm_v2(learner_id)
 
-        logger.info("[Companion] - [Get the short-term memory]")
-        messages = await self.memory.shortterm_v2(conversation_id)
-        logger.info(f"[Companion] - [Short-term memory's length {len(messages)}]")
+            logger.info("[Companion] - [Get the short-term memory]")
+            messages = await self.memory.shortterm_v2(conversation_id)
+            logger.info(f"[Companion] - [Short-term memory's length {len(messages)}]")
 
-        # The companion's response
+            # The companion's response
 
-        # Build the companion prompt
-        logger.info("[Companion] - [Build the prompt]")
-        params = CompanionParams(
-            # longterm
-            user_memory="Currently not specified",
-            # shortterm
-            history=messages,
-            input=message,
-        )
+            # Build the companion prompt
+            logger.info("[Companion] - [Build the prompt]")
+            params = CompanionParams(
+                # longterm
+                user_memory="Currently not specified",
+                # shortterm
+                history=messages,
+                input=message,
+            )
 
-        prompt = self.pb.companion_prompt(params)
+            prompt = self.pb.companion_prompt(params)
 
-        logger.info("[Companion] - [Yield the token from LLM]")
-        async for token in self.brain.think(prompt):
-            yield token
-            # response += token
+            logger.info("[Companion] - [Yield the token from LLM]")
+
+            async for token in self.brain.think(prompt):
+                yield token
+                # response += token
+        elif type == "EMBEDDED":
+            # inject the context
+            logger.info("[Companion] - [Get the long-term memory]")
+            # learner = await self.memory.longterm_v2(learner_id)
+
+            logger.info("[Companion] - [Get the activity context]")
+            context = await self.m.current_activity(activity_id)
+
+            logger.info("[Companion] - [Get the short-term memory]")
+            messages = await self.memory.shortterm_v2(conversation_id)
+            logger.info(f"[Companion] - [Short-term memory's length {len(messages)}]")
+
+            # The companion's response
+
+            # Build the companion prompt
+            logger.info("[Companion] - [Build the prompt]")
+            params = CompanionSessionParams(
+                user_memory="Currently not available",
+                context=context,
+                history=messages,
+                input=message,
+            )
+
+            prompt = self.pb.companion_session_prompt(params)
+
+            logger.info("[Companion] - [Yield the token from LLM]")
+            async for token in self.brain.think(prompt):
+                yield token
+                # response += token
 
     async def response(self, learner_id: str, con_id: str, message: str):
         # TODO:

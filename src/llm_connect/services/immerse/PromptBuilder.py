@@ -42,6 +42,12 @@ class CompanionParams(TypedDict):
     input: str
 
 
+class CompanionSessionParams(TypedDict):
+    context: str = None
+    history: List
+    input: str
+
+
 class CompanionHelpParams(TypedDict):
     activity: str
     goal: str
@@ -60,6 +66,13 @@ class PromptBuilder:
         )
 
         self.env = Environment(loader=loader)
+
+    def companion_session_prompt(
+        self,
+        params: CompanionSessionParams,
+    ):
+        template = self.env.get_template(name="companion_session.jinja")
+        return template.render(**params)
 
     def companion_help_prompt(
         self,

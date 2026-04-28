@@ -119,6 +119,9 @@ async def chat(
                 conversation_id=conversationId,
                 user_input=request.content,
                 learner_id=learner_id,
+                activity_id=request.activityId,
+                session_id=request.sessionId,
+                type=request.type,
             ):
                 yield chunk
 

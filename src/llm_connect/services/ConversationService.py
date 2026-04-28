@@ -29,7 +29,12 @@ class ConversationService:
         conversation_id: UUID,
         user_input: str,
         learner_id: str,
+        activity_id: str,
+        session_id: str,
+        type: str,
     ):
+        conversation = await self.con_repo.get_by_id(conversation_id)
+
         # Save user message
         await self.message_repo.create_message(
             conversation_id=conversation_id,
@@ -66,6 +71,9 @@ class ConversationService:
             learner_id=learner_id,
             conversation_id=conversation_id,
             message=user_input,
+            activity_id=activity_id,
+            session_id=session_id,
+            type=conversation.type,
         ):
             response += token
             yield token

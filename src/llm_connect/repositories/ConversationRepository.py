@@ -37,6 +37,13 @@ class ConversationRepository:
         # Initial sync to ensure file exists
         self.sync()
 
+    async def get_by_id(self, id):
+        stmt = select(Conversation).where(Conversation.id == id)
+
+        result = await self.session.execute(stmt)
+
+        return result.scalar()
+
     async def get_conversations(
         self,
         learner_id: str,

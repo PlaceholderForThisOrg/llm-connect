@@ -25,6 +25,9 @@ class CreateConversationResponse(BaseModel):
 
 class PostMessageRequest(BaseModel):
     content: str
+    activityId: str = None
+    sessionId: str = None
+    type: str = None
 
 
 class PostMessageResponse(BaseModel):

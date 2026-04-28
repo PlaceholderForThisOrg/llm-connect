@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect import logger
 from llm_connect.models import Activity, Progress, Session
+from llm_connect.models.Conversation import Conversation
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
@@ -142,8 +143,23 @@ class SessionService:
             start_task_id,
         )
 
+        # create the embedded conversation
+        conversation = self._build_conversation(learner_id, activity)
+        session.conversation = conversation
+
         # persist the session
         return await self.session_repo.create(session)
+
+    def _build_conversation(
+        self,
+        learner_id: str,
+        activity,
+    ) -> Conversation:
+        return Conversation(
+            learner_id=learner_id,
+            type="EMBEDDED",
+            title=f"Session for {activity.metadata.title}",
+        )
 
     def _build_progress(
         self,
