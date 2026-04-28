@@ -1,8 +1,9 @@
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import BackgroundTasks
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect import logger
 from llm_connect.models import Activity, Progress, Session
@@ -19,11 +20,34 @@ class SessionService:
         session_repo: SessionRepository,
         activity_repo: ActivityRepository,
         con_repo: ConversationRepository,
+        session: AsyncSession,
     ):
-        self.o = orchestrator
+        self.orchestrator = orchestrator
+        self.repo = session_repo
         self.session_repo = session_repo
         self.activity_repo = activity_repo
-        self.con_repo = con_repo
+        self.conversation_repo = con_repo
+        self.session = session
+
+    async def submit_interaction(self, learner_id, session_id, task_id, interaction):
+        async for token in self.orchestrator.flow(
+            learner_id=learner_id,
+            session_id=session_id,
+            task_id=task_id,
+            interaction=interaction,
+        ):
+            yield token
+
+    def _compute_progress(self, session) -> float:
+        total = len(session.progresses)
+        completed = sum(1 for p in session.progresses if p.status == "completed")
+        return completed / total if total > 0 else 0.0
+
+    def _compute_score(self, session) -> Optional[float]:
+        scores = [p.score for p in session.progresses if p.score is not None]
+        if not scores:
+            return None
+        return sum(scores) / len(scores)
 
     async def get_current_task(self, session_id: str) -> Dict[str, Any]:
 
@@ -85,6 +109,7 @@ class SessionService:
         learner_id: str,
     ) -> Session:
 
+        # FIXME: Remember to also create the conversation inside the session
         # get activity from mongodb
         activity = await self.activity_repo.get_by_id(activity_id)
 
@@ -110,7 +135,7 @@ class SessionService:
             },
         )
 
-        # build all progresses
+        # Build all progresses
         session.progresses = self._build_progress(
             activity,
             session_id,
@@ -152,6 +177,7 @@ class SessionService:
     def get_session(self, session_id: str):
         return self.session_repo.get_session_by_id(session_id)
 
+    # FIXME:
     async def handle_interaction(
         self,
         session_id: str,
@@ -169,6 +195,7 @@ class SessionService:
         ):
             yield token
 
+    # FIXME:
     async def get_current_goal(self, session_id):
         session = self.session_repo.get_session_by_id(session_id)
         activity_id = session["activity_id"]
@@ -179,6 +206,7 @@ class SessionService:
         )
         return goal, session["status"]
 
+    # FIXME:
     def new_session(self, learner_id: str, activity_id: str):
         con_id = self.con_repo.create_new_conversation(type="EMBEDDED")
 

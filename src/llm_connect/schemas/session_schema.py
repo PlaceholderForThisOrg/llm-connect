@@ -1,4 +1,11 @@
+from typing import List
+
 from pydantic import BaseModel
+
+
+class SubmitInteraction(BaseModel):
+    type: str
+    interaction: str | List[str]
 
 
 class Interaction(BaseModel):
@@ -10,6 +17,7 @@ class Interaction(BaseModel):
 
 
 class CreateSessionRequest(BaseModel):
+    learnerId: str
     activityId: str
 
 

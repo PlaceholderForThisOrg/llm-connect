@@ -1,9 +1,12 @@
+from typing import TYPE_CHECKING, List, Optional
+
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import List, TYPE_CHECKING, Optional
+
 from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
     from llm_connect.models.AtomicPointTag import AtomicPointTag
+    from llm_connect.models.Mastery import Mastery
 
 
 class AtomicPoint(Base):
@@ -19,6 +22,17 @@ class AtomicPoint(Base):
 
     atomic_point_tags: Mapped[List["AtomicPointTag"]] = relationship(
         "AtomicPointTag",
+        back_populates="atomic_point",
+        cascade="all, delete-orphan",
+    )
+
+    p_init: Mapped[float] = mapped_column(default=0.2)
+    p_learn: Mapped[float] = mapped_column(default=0.1)
+    p_guess: Mapped[float] = mapped_column(default=0.2)
+    p_slip: Mapped[float] = mapped_column(default=0.1)
+
+    mastery_records: Mapped[List["Mastery"]] = relationship(
+        "Mastery",
         back_populates="atomic_point",
         cascade="all, delete-orphan",
     )

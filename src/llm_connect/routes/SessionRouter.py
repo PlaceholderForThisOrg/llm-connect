@@ -1,4 +1,5 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
+from fastapi.responses import StreamingResponse
 
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
@@ -6,6 +7,7 @@ from llm_connect.schemas.session_schema import (
     CreateSessionRequest,
     GetGoalResponse,
     Interaction,
+    SubmitInteraction,
 )
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.SessionService import SessionService
@@ -18,10 +20,26 @@ router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
 async def submit_interaction(
     sessionId: str,
     taskId: str,
+    request: SubmitInteraction,
     payload: Payload = Depends(verify_token),
     service: SessionService = Depends(get_session_service),
 ):
-    None
+    learner_id = payload["sub"]
+
+    async def token_stream():
+
+        async for chunk in service.submit_interaction(
+            learner_id=learner_id,
+            session_id=sessionId,
+            task_id=taskId,
+            interaction=request.interaction,
+        ):
+            yield chunk
+
+    return StreamingResponse(
+        token_stream(),
+        media_type="text/plain",
+    )
 
 
 @router.get("/{sessionId}/current-task")
@@ -63,9 +81,7 @@ async def interact(
     # )
 
 
-@router.post(
-    "",
-)
+@router.post("")
 async def create_session_from_activity(
     request: CreateSessionRequest,
     service: SessionService = Depends(get_session_service),

@@ -42,6 +42,18 @@ class SessionRepository:
         # Initial sync (ensures file exists)
         self.sync()
 
+    async def get_full_session(self, session_id: str) -> Session:
+        stmt = (
+            select(Session)
+            .where(Session.id == session_id)
+            .options(
+                selectinload(Session.progresses).selectinload(Progress.interactions)
+            )
+        )
+
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def get_with_progress(self, session_id):
         stmt = (
             select(Session)

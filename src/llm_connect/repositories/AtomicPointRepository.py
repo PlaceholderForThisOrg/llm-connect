@@ -20,6 +20,15 @@ class AtomicPointRepository:
     ):
         self.session = session
 
+    async def get_by_ids(self, ap_ids: List[str]) -> List[AtomicPoint]:
+        if not ap_ids:
+            return []
+
+        stmt = select(AtomicPoint).where(AtomicPoint.id.in_(ap_ids))
+        result = await self.session.execute(stmt)
+
+        return result.scalars().all()
+
     async def get_by_id(self, id: str):
         stmt = select(AtomicPoint).where(AtomicPoint.id == id)
 

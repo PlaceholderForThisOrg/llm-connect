@@ -1,11 +1,21 @@
 import json
 import os
+from typing import Optional
 
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from llm_connect.models.Mastery import Mastery
 from llm_connect.proto.masteries_v1 import masteries_v1
 
 
 class MasteryRepository:
-    def __init__(self):
+    def __init__(
+        self,
+        session: AsyncSession,
+    ):
+        self.session = session
+
         self.file_path = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__), "../proto/runtime_db/masteries.json"
@@ -24,6 +34,58 @@ class MasteryRepository:
 
         # Initial sync to ensure file exists
         self.sync()
+
+    async def create(self, mastery):
+        self.session.add(mastery)
+
+    # async def create_mastery(self, learner_id: str, ap_id: str, p_l: float):
+    #     mastery = Mastery(
+    #         learner_id=learner_id,
+    #         atomic_point_id=ap_id,
+    #         p_l=p_l,
+    #         attempts=0,
+    #         correct_attempts=0,
+    #         mastery_level="not_started",
+    #     )
+    #     self.session.add(mastery)
+    #     return mastery
+
+    async def get_mastery_by_id(
+        self,
+        learner_id: str,
+        ap_id: str,
+    ) -> Optional[Mastery]:
+        stmt = select(Mastery).where(
+            Mastery.learner_id == learner_id,
+            Mastery.atomic_point_id == ap_id,
+        )
+
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
+    async def create_mastery(
+        self,
+        learner_id: str,
+        ap_id: str,
+        p_L: float,
+    ) -> Mastery:
+        mastery = Mastery(
+            learner_id=learner_id,
+            atomic_point_id=ap_id,
+            p_l=p_L,
+            attempts=0,
+            correct_attempts=0,
+            first_attempt_at=None,
+            last_attempt_at=None,
+            mastery_level="not_started",
+        )
+
+        self.session.add(mastery)
+
+        # flush not commit
+        await self.session.flush()
+
+        return mastery
 
     def sync(self):
         """Write current mastery to file"""

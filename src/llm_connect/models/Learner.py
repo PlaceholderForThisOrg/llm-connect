@@ -8,6 +8,7 @@ from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
     from llm_connect.models import Conversation, Session
+    from llm_connect.models.Mastery import Mastery
 
 
 class Learner(Base):
@@ -40,4 +41,10 @@ class Learner(Base):
 
     sessions: Mapped[List["Session"]] = relationship(
         back_populates="learner", cascade="all, delete-orphan"
+    )
+
+    mastery_records: Mapped[List["Mastery"]] = relationship(
+        "Mastery",
+        back_populates="learner",
+        cascade="all, delete-orphan",
     )

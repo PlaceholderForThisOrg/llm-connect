@@ -30,6 +30,7 @@ from llm_connect.services.core.Companion import (
 from llm_connect.services.core.Evaluator import Evaluator
 from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
+from llm_connect.services.core.TaskManager import GenerateTaskManager
 from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
 from llm_connect.services.MasteryService import MasteryService
@@ -104,18 +105,27 @@ def get_BKTEngine():
     return BKTEngine()
 
 
-def get_mastery_repo():
-    return MasteryRepository()
+def get_mastery_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return MasteryRepository(session=session)
+
+
+def get_ap_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointRepository(
+        session=session,
+    )
 
 
 def get_mastery_engine(
     engine: BKTEngine = Depends(get_BKTEngine),
     mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    return MasteryEngine(
-        engine,
-        mastery_repo,
-    )
+    return MasteryEngine(engine, mastery_repo, ap_repo=ap_repo, session=session)
 
 
 def get_evaluator(
@@ -160,6 +170,16 @@ def get_adapter(
     )
 
 
+def get_generate_task_manager(
+    promp_builder: PromptBuilder = Depends(get_prompt_builder),
+    client: AsyncOpenAI = Depends(get_llm),
+):
+    return GenerateTaskManager(
+        prompt_builder=promp_builder,
+        client=client,
+    )
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
@@ -170,6 +190,9 @@ def get_orchestrator(
     session_repo: SessionRepository = Depends(get_session_repo),
     activity_repo: ActivityRepository = Depends(get_activity_repo),
     l_repo: LearnerRepository = Depends(get_learner_repository),
+    task_manager: GenerateTaskManager = Depends(get_generate_task_manager),
+    mastery_engine: MasteryEngine = Depends(get_mastery_engine),
+    session: AsyncSession = Depends(get_db_session),
 ):
     return Orchestrator(
         evaluator,
@@ -181,6 +204,9 @@ def get_orchestrator(
         session_repo,
         activity_repo,
         l_repo,
+        task_manager,
+        mastery_engine,
+        session,
     )
 
 
@@ -213,22 +239,21 @@ def get_session_service(
     session_repo: SessionRepository = Depends(get_session_repo),
     activity_repo: ActivityRepository = Depends(get_activity_repo),
     con_repo: ConversationRepository = Depends(get_conversation_repo),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    return SessionService(orchestrator, session_repo, activity_repo, con_repo)
+    return SessionService(
+        orchestrator,
+        session_repo,
+        activity_repo,
+        con_repo,
+        session=session,
+    )
 
 
 def get_activity_service(
     activity_repo: ActivityRepository = Depends(get_activity_repo),
 ):
     return ActivityService(activity_repo)
-
-
-def get_ap_repo(
-    session: AsyncSession = Depends(get_db_session),
-):
-    return AtomicPointRepository(
-        session=session,
-    )
 
 
 def get_message_repo(
