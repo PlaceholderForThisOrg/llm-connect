@@ -3,9 +3,11 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
-from llm_connect.models import Session
+from llm_connect.models import Progress, Session
 from llm_connect.proto.session.sessions_v3 import sessions_v3
 
 
@@ -39,6 +41,18 @@ class SessionRepository:
 
         # Initial sync (ensures file exists)
         self.sync()
+
+    async def get_with_progress(self, session_id):
+        stmt = (
+            select(Session)
+            .where(Session.id == session_id)
+            .options(
+                selectinload(Session.progresses).selectinload(Progress.interactions)
+            )
+        )
+
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
 
     async def create(self, session: Session) -> Session:
         self.db.add(session)

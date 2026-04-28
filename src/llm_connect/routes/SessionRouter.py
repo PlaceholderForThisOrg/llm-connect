@@ -14,6 +14,25 @@ from llm_connect.types.auth import Payload
 router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
 
 
+@router.post("/{sessionId}/progresses/{taskId}/interactions/")
+async def submit_interaction(
+    sessionId: str,
+    taskId: str,
+    payload: Payload = Depends(verify_token),
+    service: SessionService = Depends(get_session_service),
+):
+    None
+
+
+@router.get("/{sessionId}/current-task")
+async def get_current_task(
+    sessionId: str,
+    service: SessionService = Depends(get_session_service),
+    payload: Payload = Depends(verify_token),
+):
+    return await service.get_current_task(sessionId)
+
+
 # FIXME: Restful API's standard
 @router.post("/{session_id}/loop")
 async def interact(

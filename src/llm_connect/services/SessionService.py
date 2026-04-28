@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from typing import List
+from typing import Any, Dict, List
 
 from fastapi import BackgroundTasks
 
@@ -24,6 +24,60 @@ class SessionService:
         self.session_repo = session_repo
         self.activity_repo = activity_repo
         self.con_repo = con_repo
+
+    async def get_current_task(self, session_id: str) -> Dict[str, Any]:
+
+        session = await self.session_repo.get_with_progress(session_id)
+
+        if not session:
+            raise ValueError("Session not found")
+
+        activity = await self.activity_repo.get_by_id(session.activity_id)
+
+        if not activity:
+            raise ValueError("Activity not found")
+
+        # current task
+        current_task_id = session.current_task
+
+        # get task from activity
+        task = activity.tasks.get(current_task_id)
+
+        if not task:
+            raise ValueError("Task not found in activity")
+
+        #
+        progress = next(
+            (p for p in session.progresses if p.task_id == current_task_id),
+            None,
+        )
+
+        #
+        last_interaction = None
+        if progress and progress.interactions:
+            last = progress.interactions[-1]
+            last_interaction = {
+                "attempt": last.attempt,
+                "is_correct": last.is_correct,
+                "score": last.score,
+            }
+
+        # final
+        return {
+            "session": {
+                "id": str(session.id),
+                "status": session.status,
+                "progress": session.progress,
+                "score": session.score,
+            },
+            "task": task.dict(),
+            "progress": {
+                "status": progress.status if progress else None,
+                "num_attempts": progress.num_attempts if progress else 0,
+                "score": progress.score if progress else None,
+            },
+            "interaction": last_interaction,
+        }
 
     async def create_session_from_activity(
         self,
