@@ -3,17 +3,26 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from llm_connect.models import Session
 from llm_connect.proto.session.sessions_v3 import sessions_v3
 
 
 class SessionRepository:
-    def __init__(self):
+    def __init__(
+        self,
+        session: AsyncSession,
+    ):
         self.file_path = (
             Path(__file__).resolve().parent.parent
             / "proto"
             / "runtime_db"
             / "sessions_v3.json"
         )
+
+        self.session = session
+        self.db = session
 
         # Ensure directory exists
         self.file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -30,6 +39,15 @@ class SessionRepository:
 
         # Initial sync (ensures file exists)
         self.sync()
+
+    async def create(self, session: Session) -> Session:
+        self.db.add(session)
+        await self.db.commit()
+        await self.db.refresh(session)
+        return session
+
+    async def get(self, session_id):
+        return await self.db.get(Session, session_id)
 
     def sync(self):
         """Persist session to disk"""

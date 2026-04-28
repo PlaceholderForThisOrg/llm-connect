@@ -92,8 +92,12 @@ def get_aevaluator():
     return AEvaluator()
 
 
-def get_session_repo():
-    return SessionRepository()
+def get_session_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return SessionRepository(
+        session=session,
+    )
 
 
 def get_BKTEngine():

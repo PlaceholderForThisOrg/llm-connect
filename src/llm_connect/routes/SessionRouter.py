@@ -1,14 +1,15 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
 
+from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service, get_session_service
 from llm_connect.schemas.session_schema import (
     CreateSessionRequest,
-    CreateSessionResponse,
     GetGoalResponse,
     Interaction,
 )
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.SessionService import SessionService
+from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
 
@@ -46,22 +47,42 @@ async def interact(
 @router.post(
     "",
 )
-async def create(
-    # activity_id: str,
+async def create_session_from_activity(
     request: CreateSessionRequest,
-    session_service: SessionService = Depends(get_session_service),
+    service: SessionService = Depends(get_session_service),
+    payload: Payload = Depends(verify_token),
 ):
-    # TODO: Initialize the sessionID
-    # in the database, manage the cache
-    # layer
-    activity_id = request.activityId
-    session = session_service.new_session("", activity_id)
+    learner_id = payload["sub"]
 
-    response = CreateSessionResponse(
-        sessionId=session["session_id"],
-        conId=session["con_id"],
+    res = await service.create_session_from_activity(
+        activity_id=request.activityId,
+        learner_id=learner_id,
     )
+
+    response = res
+
     return response
+
+
+# @router.post(
+#     "",
+# )
+# async def create(
+#     # activity_id: str,
+#     request: CreateSessionRequest,
+#     session_service: SessionService = Depends(get_session_service),
+# ):
+#     # TODO: Initialize the sessionID
+#     # in the database, manage the cache
+#     # layer
+#     activity_id = request.activityId
+#     session = session_service.new_session("", activity_id)
+
+#     response = CreateSessionResponse(
+#         sessionId=session["session_id"],
+#         conId=session["con_id"],
+#     )
+#     return response
 
 
 @router.get("/{session_id}/goals", response_model=GetGoalResponse)

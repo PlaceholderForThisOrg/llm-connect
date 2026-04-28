@@ -1,6 +1,11 @@
+import uuid
+from datetime import datetime, timezone
+from typing import List
+
 from fastapi import BackgroundTasks
 
 from llm_connect import logger
+from llm_connect.models import Activity, Progress, Session
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
@@ -19,6 +24,76 @@ class SessionService:
         self.session_repo = session_repo
         self.activity_repo = activity_repo
         self.con_repo = con_repo
+
+    async def create_session_from_activity(
+        self,
+        activity_id: str,
+        learner_id: str,
+    ) -> Session:
+
+        # get activity from mongodb
+        activity = await self.activity_repo.get_by_id(activity_id)
+
+        if not activity:
+            raise ValueError("Activity not found")
+
+        # Get the start task
+        start_task_id = activity.start_tasks[0]
+
+        # Build the full session record
+        session_id = uuid.uuid4()
+        session = Session(
+            id=session_id,
+            activity_id=str(activity.id),
+            learner_id=learner_id,
+            status="IN_PROGRESS",
+            progress=0.0,
+            started_at=datetime.utcnow(),
+            current_task=start_task_id,
+            meta={
+                "activity_title": activity.metadata.title,
+                "total_tasks": len(activity.tasks),
+            },
+        )
+
+        # build all progresses
+        session.progresses = self._build_progress(
+            activity,
+            session_id,
+            start_task_id,
+        )
+
+        # persist the session
+        return await self.session_repo.create(session)
+
+    def _build_progress(
+        self,
+        activity: Activity,
+        session_id,
+        start_task_id: str,
+    ) -> List[Progress]:
+
+        progresses: List[Progress] = []
+        now = datetime.now(timezone.utc)
+
+        for task_id in activity.tasks.keys():
+
+            is_start = task_id == start_task_id
+
+            progresses.append(
+                Progress(
+                    session_id=session_id,
+                    task_id=task_id,
+                    status="UNLOCKED" if is_start else "LOCKED",
+                    num_attempts=0,
+                    score=None,
+                    started_at=now if is_start else None,
+                    completed_at=None,
+                    meta={"is_start_task": is_start},
+                )
+            )
+
+        return progresses
 
     def get_session(self, session_id: str):
         return self.session_repo.get_session_by_id(session_id)
