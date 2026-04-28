@@ -39,8 +39,8 @@ class ActivityService:
             "total": total,
         }
 
-    def get_activity(self, activity_id):
-        return self.activity_repo.get_activity_by_id(activity_id)
+    async def get_activity(self, activity_id):
+        return await self.activity_repo.get_by_id(activity_id)
 
     def get_activities(self):
         return self.activity_repo.get_activities()
