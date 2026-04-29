@@ -3,7 +3,26 @@ from typing import Dict, List, TypedDict
 
 from jinja2 import Environment, FileSystemLoader
 
+from llm_connect.models import Message
+from llm_connect.models.AtomicPoint import AtomicPoint
 from llm_connect.proto.scenario import scenario, scenario_template
+
+
+class CompanionHelpParams_v1(TypedDict):
+    companion_personality: str
+    learner_information: str
+    intention: str
+    description: str
+    atomic_points: List[AtomicPoint]
+    help_level: str
+    history: List[Message] = []
+    message: str
+
+
+class IntentClassifierParams(TypedDict):
+    message: str
+    has_active_task: bool
+    history: List[str] = []
 
 
 class MoveCheckpointParams(TypedDict):
@@ -66,6 +85,17 @@ class PromptBuilder:
         )
 
         self.env = Environment(loader=loader)
+
+    def companion_help_prompt_v1(self, params: CompanionHelpParams_v1):
+        template = self.env.get_template(name="companion_help_v1.jinja")
+        return template.render(**params)
+
+    def intention_classify(
+        self,
+        params: IntentClassifierParams,
+    ):
+        template = self.env.get_template(name="companion_session.jinja")
+        return template.render(**params)
 
     def companion_session_prompt(
         self,

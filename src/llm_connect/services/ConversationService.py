@@ -67,7 +67,7 @@ class ConversationService:
         #         full_response += delta
         #         yield delta  # 🔥 streaming happens here
 
-        async for token in self.companion.response_v2(
+        async for token in self.companion.response_v3(
             learner_id=learner_id,
             conversation_id=conversation_id,
             message=user_input,

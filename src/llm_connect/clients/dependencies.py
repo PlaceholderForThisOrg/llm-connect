@@ -273,14 +273,21 @@ def get_companion(
     ac_repo=Depends(get_activity_repo),
     ap_repo=Depends(get_ap_repo),
     message_repo=Depends(get_message_repo),
+    mastery_repo=Depends(get_mastery_repo),
 ):
-    # create all the parts of the companion
-    # just like the normal companion
-    # but they don't have any dependencies
-    brain = Brain(llm)
+    # Create the brain of the companion
+    # Not dpendencies, but like
+    # Parts of the companion
+    brain = Brain(llm, pb=pb)
 
     memory = Memory(
-        learner_repo, con_repo, ses_repo, ac_repo, message_repo=message_repo
+        learner_repo,
+        con_repo,
+        ses_repo,
+        ac_repo,
+        message_repo=message_repo,
+        mastery_repo=mastery_repo,
+        ap_repo=ap_repo,
     )
 
     k = Knowledge(ap_repo)

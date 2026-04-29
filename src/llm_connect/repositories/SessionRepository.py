@@ -53,7 +53,7 @@ class SessionRepository:
             select(Session)
             .where(
                 Session.id == session_id,
-                Session.learner_id == learner_id,  # security check
+                Session.learner_id == learner_id,
             )
             .options(
                 selectinload(Session.progresses).selectinload(Progress.interactions)
