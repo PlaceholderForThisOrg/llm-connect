@@ -11,6 +11,7 @@ from llm_connect.models.Conversation import Conversation
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.schemas.session_schema import SessionSearchQuery
 from llm_connect.services.immerse.Orchestrator import Orchestrator
 
 
@@ -29,6 +30,27 @@ class SessionService:
         self.activity_repo = activity_repo
         self.conversation_repo = con_repo
         self.session = session
+
+    async def get_session_detail(self, session_id: str, learner_id: str):
+        session = await self.repo.get_session_detail(session_id, learner_id)
+
+        if not session:
+            raise ValueError("Session not found")
+
+        return session
+
+    async def search_sessions(
+        self,
+        query: SessionSearchQuery,
+    ):
+        sessions, total = await self.repo.search_sessions(query)
+
+        return {
+            "items": sessions,
+            "page": query.page,
+            "page_size": query.page_size,
+            "total": total,
+        }
 
     async def submit_interaction(self, learner_id, session_id, task_id, interaction):
         async for token in self.orchestrator.flow(

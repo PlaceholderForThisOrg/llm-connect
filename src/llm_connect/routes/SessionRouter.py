@@ -2,11 +2,17 @@ from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 
 from llm_connect.auth.auth import verify_token
-from llm_connect.clients.dependencies import get_chat_service, get_session_service
+from llm_connect.clients.dependencies import (
+    get_chat_service,
+    get_session_service,
+)
+from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.schemas.session_schema import (
     CreateSessionRequest,
+    GetAllSessionResponse,
     GetGoalResponse,
     Interaction,
+    SessionSearchQuery,
     SubmitInteraction,
 )
 from llm_connect.services.ChatService import ChatService
@@ -14,6 +20,59 @@ from llm_connect.services.SessionService import SessionService
 from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
+
+
+@router.get("/{sessionId}")
+async def get_session_detail(
+    sessionId: str,
+    service: SessionService = Depends(get_session_service),
+    payload: Payload = Depends(verify_token),
+):
+    learner_id = payload["sub"]
+    return await service.get_session_detail(
+        session_id=sessionId,
+        learner_id=learner_id,
+    )
+
+
+@router.get("/")
+async def search_sessions(
+    activity_id: str | None = None,
+    status: str | None = None,
+    # learner_id: str | None = None,
+    started_from: str | None = None,
+    started_to: str | None = None,
+    min_score: float | None = None,
+    max_score: float | None = None,
+    page: int = 1,
+    page_size: int = 20,
+    service: SessionService = Depends(get_session_service),
+    payload: Payload = Depends(verify_token),
+):
+    learner_id = payload["sub"]
+
+    query = SessionSearchQuery(
+        activity_id=activity_id,
+        status=status,
+        learner_id=learner_id,
+        started_from=started_from,
+        started_to=started_to,
+        min_score=min_score,
+        max_score=max_score,
+        page=page,
+        page_size=page_size,
+    )
+
+    res = await service.search_sessions(query)
+
+    response = PaginatedResponse(
+        items=[GetAllSessionResponse.model_validate(s) for s in res["items"]],
+        total=res["total"],
+        page=res["page"],
+        pageSize=res["page_size"],
+    )
+
+    return response
 
 
 @router.post("/{sessionId}/progresses/{taskId}/interactions/")
@@ -42,13 +101,13 @@ async def submit_interaction(
     )
 
 
-@router.get("/{sessionId}/progresses/{taskId}/interactions/")
-def get_all_interactions(
-    sessionId: str,
-    taskId: str,
-    payload: Payload = Depends(verify_token),
-):
-    learner_id = payload["sub"]
+# @router.get("/{sessionId}/progresses/{taskId}/interactions/")
+# def get_all_interactions(
+#     sessionId: str,
+#     taskId: str,
+#     payload: Payload = Depends(verify_token),
+# ):
+#     learner_id = payload["sub"]
 
 
 @router.get("/{sessionId}/current-task")

@@ -2,13 +2,15 @@ import json
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import List
 
-from sqlalchemy import select
+from sqlalchemy import Tuple, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from llm_connect.models import Progress, Session
 from llm_connect.proto.session.sessions_v3 import sessions_v3
+from llm_connect.schemas.session_schema import SessionSearchQuery
 
 
 class SessionRepository:
@@ -41,6 +43,69 @@ class SessionRepository:
 
         # Initial sync (ensures file exists)
         self.sync()
+
+    async def get_session_detail(
+        self,
+        session_id: str,
+        learner_id: str,
+    ) -> Session | None:
+        stmt = (
+            select(Session)
+            .where(
+                Session.id == session_id,
+                Session.learner_id == learner_id,  # security check
+            )
+            .options(
+                selectinload(Session.progresses).selectinload(Progress.interactions)
+            )
+        )
+
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
+    async def search_sessions(
+        self,
+        query: SessionSearchQuery,
+    ) -> Tuple[List[Session], int]:
+        stmt = select(Session)
+
+        # filtering
+        if query.activity_id:
+            stmt = stmt.where(Session.activity_id == query.activity_id)
+
+        if query.status:
+            stmt = stmt.where(Session.status == query.status)
+
+        if query.learner_id:
+            stmt = stmt.where(Session.learner_id == query.learner_id)
+
+        if query.started_from:
+            stmt = stmt.where(Session.started_at >= query.started_from)
+
+        if query.started_to:
+            stmt = stmt.where(Session.started_at <= query.started_to)
+
+        if query.min_score is not None:
+            stmt = stmt.where(Session.score >= query.min_score)
+
+        if query.max_score is not None:
+            stmt = stmt.where(Session.score <= query.max_score)
+
+        # total sessions
+        count_stmt = select(func.count()).select_from(stmt.subquery())
+        total = await self.session.scalar(count_stmt)
+
+        # pagination
+        offset = (query.page - 1) * query.page_size
+        stmt = stmt.offset(offset).limit(query.page_size)
+
+        # sorting
+        stmt = stmt.order_by(Session.created_at.desc())
+
+        result = await self.session.execute(stmt)
+        sessions = result.scalars().all()
+
+        return sessions, total
 
     async def get_full_session(self, session_id: str) -> Session:
         stmt = (
