@@ -2,9 +2,11 @@ import json
 import os
 from typing import Optional
 
-from sqlalchemy import select
+from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
+from llm_connect.models import AtomicPoint
 from llm_connect.models.Mastery import Mastery
 from llm_connect.proto.masteries_v1 import masteries_v1
 
@@ -15,6 +17,7 @@ class MasteryRepository:
         session: AsyncSession,
     ):
         self.session = session
+        self.db = session
 
         self.file_path = os.path.abspath(
             os.path.join(
@@ -49,6 +52,96 @@ class MasteryRepository:
     #     )
     #     self.session.add(mastery)
     #     return mastery
+
+    async def get_mastery(
+        self, learner_id: str, atomic_point_id: str
+    ) -> Optional[Mastery]:
+        stmt = (
+            select(Mastery)
+            .where(Mastery.learner_id == learner_id)
+            .where(Mastery.atomic_point_id == atomic_point_id)
+        )
+
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
+
+    async def count_mastery(
+        self,
+        learner_id: str,
+        search: str | None = None,
+        mastery_level: str | None = None,
+        min_p: float | None = None,
+        max_p: float | None = None,
+    ):
+        query = (
+            select(func.count())
+            .select_from(Mastery)
+            .where(Mastery.learner_id == learner_id)
+        )
+
+        if mastery_level:
+            query = query.where(Mastery.mastery_level == mastery_level)
+
+        if min_p is not None:
+            query = query.where(Mastery.p_l >= min_p)
+
+        if max_p is not None:
+            query = query.where(Mastery.p_l <= max_p)
+
+        if search:
+            query = query.join(Mastery.atomic_point).where(
+                func.lower(AtomicPoint.name).like(f"%{search.lower()}%")
+            )
+
+        result = await self.session.execute(query)
+        return result.scalar_one()
+
+    async def get_mastery_overview(
+        self,
+        learner_id: str,
+        search: str | None = None,
+        mastery_level: str | None = None,
+        min_p: float | None = None,
+        max_p: float | None = None,
+        limit: int = 20,
+        offset: int = 0,
+    ):
+        query = (
+            select(Mastery)
+            .where(Mastery.learner_id == learner_id)
+            .options(selectinload(Mastery.atomic_point))
+        )
+
+        # filtering
+        filters = []
+
+        if mastery_level:
+            filters.append(Mastery.mastery_level == mastery_level)
+
+        if min_p is not None:
+            filters.append(Mastery.p_l >= min_p)
+
+        if max_p is not None:
+            filters.append(Mastery.p_l <= max_p)
+
+        if filters:
+            query = query.where(and_(*filters))
+
+        if search:
+            query = query.join(Mastery.atomic_point).where(
+                func.lower(AtomicPoint.name).like(f"%{search.lower()}%")
+            )
+
+        # sorting
+        query = query.order_by(Mastery.p_l.asc())
+
+        # pagination
+        query = query.limit(limit).offset(offset)
+
+        result = await self.session.execute(query)
+        items = result.scalars().all()
+
+        return items
 
     async def get_mastery_by_id(
         self,
@@ -117,14 +210,14 @@ class MasteryRepository:
             masteries_v1[learner_id][ap_id] = mastery
             self.sync()
 
-    def get_mastery(
-        self,
-        learner_id: str,
-        ap_id: str,
-    ):
-        if ap_id not in masteries_v1[learner_id]:
-            self.new_mastery(learner_id, ap_id)
-        return masteries_v1[learner_id][ap_id]
+    # def get_mastery(
+    #     self,
+    #     learner_id: str,
+    #     ap_id: str,
+    # ):
+    #     if ap_id not in masteries_v1[learner_id]:
+    #         self.new_mastery(learner_id, ap_id)
+    #     return masteries_v1[learner_id][ap_id]
 
     def update_mastery(
         self,
