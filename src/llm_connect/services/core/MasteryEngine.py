@@ -46,7 +46,7 @@ class MasteryEngine:
                 )
                 is_new = True
 
-            # ---- BKT update ----
+            # update based on Bayesian Knowledge Tracing
             new_p_L = self.e.run(
                 p_L=mastery.p_l,
                 correct=result,
@@ -75,7 +75,8 @@ class MasteryEngine:
             else:
                 mastery.mastery_level = "BEGINNER"
 
-            # ✅ ONLY add if it's new
+            # only add this record if
+            # this is new
             if is_new:
                 await self.mastery_repo.create(mastery)
 

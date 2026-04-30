@@ -10,7 +10,21 @@ from llm_connect.schemas.activity_schema import (
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.types.auth import Payload
 
-router = APIRouter(prefix="/api/v1/activities", tags=["Tasks", "Activities"])
+router = APIRouter(prefix="/api/v1/activities", tags=["Activities"])
+
+
+@router.get("/recommendation")
+async def recommend_activities(
+    service: ActivityService = Depends(get_activity_service),
+    payload: Payload = Depends(verify_token),
+):
+    learner_id = payload["sub"]
+
+    res = await service.recommend(learner_id)
+
+    response = res
+
+    return response
 
 
 @router.get("/{activity_id}")

@@ -12,6 +12,9 @@ class ActivityRepository:
     def __init__(self):
         pass
 
+    async def get_all_activities(self) -> List[Activity]:
+        return await Activity.find_all().to_list()
+
     async def get_by_id(self, activity_id: str) -> Optional[Activity]:
         return await Activity.get(activity_id)
 

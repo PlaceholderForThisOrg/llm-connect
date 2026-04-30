@@ -166,10 +166,14 @@ def get_learner_repository(session: AsyncSession = Depends(get_db_session)):
 def get_adapter(
     l_r=Depends(get_learner_repository),
     a_r=Depends(get_activity_repo),
+    mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
 ):
     return Adapter(
         l_r=l_r,
         a_r=a_r,
+        mastery_repo=mastery_repo,
+        ap_repo=ap_repo,
     )
 
 
@@ -255,8 +259,16 @@ def get_session_service(
 
 def get_activity_service(
     activity_repo: ActivityRepository = Depends(get_activity_repo),
+    adapter: Adapter = Depends(get_adapter),
+    learner_repo: LearnerRepository = Depends(get_learner_repository),
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
 ):
-    return ActivityService(activity_repo)
+    return ActivityService(
+        activity_repo,
+        adapter=adapter,
+        learner_repo=learner_repo,
+        ap_repo=ap_repo,
+    )
 
 
 def get_message_repo(

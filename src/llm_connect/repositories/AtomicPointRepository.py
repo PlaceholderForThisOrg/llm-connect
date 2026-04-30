@@ -20,6 +20,17 @@ class AtomicPointRepository:
     ):
         self.session = session
 
+    async def get_all_atomic_points(self) -> List[AtomicPoint]:
+        stmt = select(AtomicPoint).options(
+            selectinload(AtomicPoint.atomic_point_tags),
+            selectinload(AtomicPoint.mastery_records),
+            selectinload(AtomicPoint.outgoing_relations),
+            selectinload(AtomicPoint.incoming_relations),
+        )
+
+        result = await self.session.execute(stmt)
+        return result.scalars().all()
+
     async def get_by_ids(self, ap_ids: List[str]) -> List[AtomicPoint]:
         if not ap_ids:
             return []
