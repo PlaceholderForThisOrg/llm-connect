@@ -3,7 +3,11 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, Query
 
 from llm_connect.clients.dependencies import get_ap_s
-from llm_connect.schemas.ap_schema import CreateAPRequest, GetAtomicPointResponse
+from llm_connect.schemas.ap_schema import (
+    CreateAPRequest,
+    CreateAtomicPointRelationRequest,
+    GetAtomicPointResponse,
+)
 from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.services.AtomicPointService import AtomicPointService
 
@@ -15,6 +19,14 @@ router = APIRouter(prefix="/api/v1/atomic-points", tags=["Atomic points"])
 #     # payload: Payload = Depends(verify_token),
 # ):
 #     return {"message": "OK"}
+
+
+@router.post("/relations")
+async def create_relation(
+    request: CreateAtomicPointRelationRequest,
+    service: AtomicPointService = Depends(get_ap_s),
+):
+    return await service.create_relation(request)
 
 
 @router.get("/{id}")

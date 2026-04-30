@@ -1,6 +1,9 @@
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import ForeignKey
+import uuid
 from typing import TYPE_CHECKING
+
+from sqlalchemy import UUID, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
@@ -11,22 +14,14 @@ if TYPE_CHECKING:
 class AtomicPointTag(Base):
     __tablename__ = "atomicpoint_tag"
 
-    ap_id: Mapped[str] = mapped_column(
-        ForeignKey("atomic_point.id"),
-        primary_key=True
+    ap_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("atomic_point.id"), primary_key=True
     )
 
-    tag_id: Mapped[str] = mapped_column(
-        ForeignKey("tag.id"),
-        primary_key=True
-    )
+    tag_id: Mapped[str] = mapped_column(ForeignKey("tag.id"), primary_key=True)
 
     atomic_point: Mapped["AtomicPoint"] = relationship(
-        "AtomicPoint",
-        back_populates="atomic_point_tags"
+        "AtomicPoint", back_populates="atomic_point_tags"
     )
 
-    tag: Mapped["Tag"] = relationship(
-        "Tag",
-        back_populates="atomic_point_tags"
-    )
+    tag: Mapped["Tag"] = relationship("Tag", back_populates="atomic_point_tags")

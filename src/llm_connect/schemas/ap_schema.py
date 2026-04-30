@@ -1,6 +1,24 @@
-from typing import List
+import uuid
+from typing import List, Optional
 
 from pydantic import BaseModel
+
+
+class CreateAtomicPointRelationRequest(BaseModel):
+    from_id: uuid.UUID
+    to_id: uuid.UUID
+    relation_type: str
+    weight: float = 1.0
+
+
+class CreateAPRelation(BaseModel):
+    to_id: str
+    # PREREQUISITE
+    # PART-OF
+    # SIMILAR
+    # EASIER
+    relation_type: str
+    weight: float = 1.0
 
 
 class CreateAPRequest(BaseModel):
@@ -12,7 +30,8 @@ class CreateAPRequest(BaseModel):
     popularity: float
 
     # tagIds: List[str] = None
-    tags: List[str]
+    tags: List[str] = None
+    relations: Optional[List["CreateAPRelation"]] = None
 
 
 class CreateAPResponse(BaseModel):
@@ -27,7 +46,7 @@ class CreateAPResponse(BaseModel):
 
 
 class GetAtomicPointResponse(BaseModel):
-    id: str
+    id: uuid.UUID
     name: str
     type: str
     level: str

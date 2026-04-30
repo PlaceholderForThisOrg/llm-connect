@@ -4,6 +4,9 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.AtomicPointRelationRepository import (
+    AtomicPointRelationRepository,
+)
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.AtomicPointTagRepository import AtomicPointTagRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
@@ -333,17 +336,25 @@ def get_apt_repo(
     )
 
 
+def get_ap_relation_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointRelationRepository(session)
+
+
 def get_ap_s(
     ap_repo: AtomicPointRepository = Depends(get_ap_repo),
     tag_repo: TagRepository = Depends(get_tag_repo),
     ap_tag_repo: AtomicPointTagRepository = Depends(get_apt_repo),
     session: AsyncSession = Depends(get_db_session),
+    ap_relation_repo: AtomicPointRelationRepository = Depends(get_ap_relation_repo),
 ):
     return AtomicPointService(
         ap_repo=ap_repo,
         tag_repo=tag_repo,
         ap_tag_repo=ap_tag_repo,
         session=session,
+        ap_relation_repo=ap_relation_repo,
     )
 
 

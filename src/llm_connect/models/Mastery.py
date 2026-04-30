@@ -1,7 +1,9 @@
+import uuid
 from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import (
+    UUID,
     CheckConstraint,
     DateTime,
     Float,
@@ -26,8 +28,8 @@ class Mastery(Base):
 
     learner = relationship("Learner", back_populates="mastery_records")
 
-    atomic_point_id: Mapped[str] = mapped_column(
-        String, ForeignKey("atomic_point.id"), primary_key=True
+    atomic_point_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("atomic_point.id"), primary_key=True
     )
 
     atomic_point = relationship("AtomicPoint", back_populates="mastery_records")
