@@ -1,12 +1,19 @@
+import uuid
+from datetime import datetime, timezone
+
 from fastapi import BackgroundTasks
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect import logger
+from llm_connect.models import Interaction
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.analyzer.Analyzer import Analyzer
 from llm_connect.services.core.aevaluator import AEvaluator
+from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
+from llm_connect.services.core.TaskManager import TaskManager
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
 
 
@@ -22,6 +29,9 @@ class Orchestrator:
         session_repo: SessionRepository,
         activity_repo: ActivityRepository,
         l_repo: LearnerRepository,
+        task_manager: TaskManager,
+        mastery_engine: MasteryEngine,
+        session: AsyncSession,
     ):
         self.evaluator = evaluator
         self.actor = actor
@@ -32,8 +42,120 @@ class Orchestrator:
         self.session_repo = session_repo
         self.activity_repo = activity_repo
         self.l_repo = l_repo
+        self.task_manager = task_manager
+        self.mastery_engine = mastery_engine
+        self.session = session
 
-    # Orchestrate on the interaction
+    async def flow(
+        self,
+        learner_id: str,
+        session_id: str,
+        task_id: str,
+        interaction,
+    ):
+        logger.info("[1] --- Load metadata")
+        # Session
+        session = await self.session_repo.get_full_session(session_id)
+        if not session:
+            raise ValueError("Session not found")
+
+        # Activity
+        activity = await self.activity_repo.get_by_id(session.activity_id)
+        # activity_type = activity.metadata.type
+        if not activity:
+            raise ValueError("Activity not found")
+
+        # Current task
+        task = activity.tasks.get(task_id)
+        if not task:
+            raise ValueError("Task not found")
+        # task_type = task.type
+        ap_ids = task.atomic_points
+
+        # Next possible tasks
+        # FIXME: ALways choose the second
+        next_task_id = task.next_possibles[0] if len(task.next_possibles) > 0 else None
+        next_task = activity.tasks.get(next_task_id, None)
+
+        # Current progress
+        progress = next(
+            (p for p in session.progresses if p.task_id == task_id),
+            None,
+        )
+        if not progress:
+            raise ValueError("Progress not found")
+        attempt = (progress.num_attempts or 0) + 1
+        now = datetime.now(timezone.utc)
+        if progress.started_at is None:
+            progress.started_at = now
+
+        logger.info("[2] --- Core evaluation")
+        result = await self.task_manager.evaluate(
+            activity_id=activity.id, task=task, interactions=interaction
+        )
+
+        response = ""
+
+        async for token in self.task_manager.response(
+            activity_id=activity.id,
+            task=task,
+            next_task=next_task,
+            result=result,
+            interactions=interaction,
+        ):
+            response += token
+            yield token
+
+        logger.info("[3] --- Core mastery update")
+        await self.mastery_engine.update_v2(
+            result=result, learner_id=learner_id, ap_ids=ap_ids
+        )
+
+        logger.info("[4] --- Update session")
+        interaction = Interaction(
+            id=uuid.uuid4(),
+            progress_id=progress.id,
+            attempt=attempt,
+            input=interaction,
+            output=response,
+            is_correct=result,
+            score=0.0,
+            created_at=now,
+            meta="{}",
+        )
+        # update progress
+        progress.interactions.append(interaction)
+        progress.num_attempts = attempt
+
+        if result:
+            progress.status = "COMPLETED"
+            progress.completed_at = now
+        else:
+            progress.status = "IN_PROGRESS"
+
+            # Move to the next goal
+            if progress.status == "COMPLETED":
+                for next_id in task.next_possibles:
+                    next_progress = next(
+                        (p for p in session.progresses if p.task_id == next_id),
+                        None,
+                    )
+                if next_progress and next_progress.status == "LOCKED":
+                    next_progress.status = "UNLOCKED"
+
+        if next_task_id:
+            session.current_task = next_task_id
+        else:
+            session.status = "COMPLETED"
+            session.completed_at = now
+
+        await self.session.commit()
+
+        # compute the progress
+        # compute the score
+        # Orchestrate on the interaction
+
+    # FIXME:
     async def start(
         self,
         learner_id: str,

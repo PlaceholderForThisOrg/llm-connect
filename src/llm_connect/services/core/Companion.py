@@ -1,23 +1,63 @@
-from typing import List
+from enum import Enum
+from typing import List, Optional
+from uuid import UUID
 
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, BaseModel
 
-from llm_connect.configs.llm import GPT41
+from llm_connect import logger
+from llm_connect.configs.llm import GPT4OMINI, GPT41
 from llm_connect.proto.atomic_points import ap2str
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
+from llm_connect.repositories.MasteryRepository import MasteryRepository
+from llm_connect.repositories.MessageRepository import MessageRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.immerse.PromptBuilder import (
     CompanionHelpParams,
+    CompanionHelpParams_v1,
     CompanionParams,
+    CompanionSessionParams,
+    IntentClassifierParams,
     PromptBuilder,
 )
 
 
+class Scope(str, Enum):
+    GLOBAL = "global"
+    SESSION_TASK = "session_task"
+
+
+class Intent(str, Enum):
+    CORRECTION = "correction"
+    EXPLANATION = "explanation"
+    ERROR_EXPLANATION = "error_explanation"
+    TASK_HELP = "task_help"
+    META = "meta"
+    RECITE = "recite"
+    RECOMMEND = "recommend"
+    OTHER = "other"
+
+
+class HelpLevel(str, Enum):
+    NUDGE = "nudge"
+    SCAFFORD = "scafford"
+    EXPLANATION = "explanation"
+
+
+class IntentionResult(BaseModel):
+    intent: Intent
+    scope: Scope
+    confidence: float
+
+
 class Persionality:
-    pass
+    def get_personality_1():
+        return "You are very kind"
+
+    def get_personality_2():
+        return "You are a little angry"
 
 
 class Knowledge:
@@ -27,6 +67,11 @@ class Knowledge:
     ):
         self.ap_repo = ap_repo
 
+    async def get_atomic_point(self, atomic_point_id: str):
+        atomic_point = await self.ap_repo.get_by_id(atomic_point_id)
+
+        return atomic_point
+
     def get_aps(self, ids: List[str]):
         aps = [ap2str(self.ap_repo.get_atomic_point_by_id(id)) for id in ids]
 
@@ -34,8 +79,153 @@ class Knowledge:
 
 
 class Brain:
-    def __init__(self, llm: AsyncOpenAI):
+    def __init__(
+        self,
+        llm: AsyncOpenAI,
+        pb: PromptBuilder,
+    ):
         self.llm = llm
+        self.pb = pb
+
+    async def detect_intent(
+        self,
+        message: str,
+        has_active_task: bool,
+        history: list[str] | None = None,
+    ) -> IntentionResult:
+
+        # [1] rule-based
+        result = self._rule_based_intent(message, has_active_task)
+
+        if result:
+            return result
+
+        # [2] llm fallback
+        try:
+            return await self._llm_classify(message, has_active_task, history)
+        except Exception:
+            # Safe fallback
+            return IntentionResult(
+                intent=Intent.OTHER,
+                scope=Scope.SESSION_TASK if has_active_task else Scope.GLOBAL,
+                confidence=0.3,
+            )
+
+    def _rule_based_intent(
+        self,
+        message: str,
+        has_active_task: bool,
+    ) -> Optional[IntentionResult]:
+        msg = message.lower().strip()
+
+        # correct
+        if any(
+            x in msg
+            for x in ["is this correct", "check my", "correct this", "fix this"]
+        ):
+            return IntentionResult(
+                intent=Intent.CORRECTION,
+                scope=Scope.SESSION_TASK if has_active_task else Scope.GLOBAL,
+                confidence=0.9,
+            )
+
+        # Detect sentence-like input (simple heuristic)
+        # if re.match(r"^[a-zA-Z\s,'?.!]+$", msg) and len(msg.split()) > 3:
+        #     # Likely user wrote a sentence → correction
+        #     return IntentionResult(
+        #         intent=Intent.CORRECTION,
+        #         scope=Scope.SESSION_TASK if has_active_task else Scope.GLOBAL,
+        #         confidence=0.6,
+        #     )
+
+        # error
+        if any(
+            x in msg
+            for x in ["why is this wrong", "why wrong", "why error", "what's wrong"]
+        ):
+            return IntentionResult(
+                intent=Intent.ERROR_EXPLANATION,
+                scope=Scope.SESSION_TASK if has_active_task else Scope.GLOBAL,
+                confidence=0.9,
+            )
+
+        # explain
+        if any(x in msg for x in ["what is", "explain", "define", "what does mean"]):
+            return IntentionResult(
+                intent=Intent.EXPLANATION,
+                scope=Scope.GLOBAL,
+                confidence=0.85,
+            )
+
+        # task help
+        if has_active_task and any(
+            x in msg for x in ["help", "stuck", "don't know", "not sure", "how to do"]
+        ):
+            return IntentionResult(
+                intent=Intent.TASK_HELP,
+                scope=Scope.SESSION_TASK,
+                confidence=0.85,
+            )
+
+        # recite
+        if any(
+            x in msg
+            for x in ["quiz me", "test me", "flashcard", "recite", "practice words"]
+        ):
+            return IntentionResult(
+                intent=Intent.RECITE,
+                scope=Scope.GLOBAL,
+                confidence=0.9,
+            )
+
+        # recommend
+        if any(
+            x in msg
+            for x in ["recommend", "suggest", "what should i learn", "next lesson"]
+        ):
+            return IntentionResult(
+                intent=Intent.RECOMMEND,
+                scope=Scope.GLOBAL,
+                confidence=0.85,
+            )
+
+        # meta
+        if any(
+            x in msg
+            for x in ["what should i do", "what is this task", "how does this work"]
+        ):
+            return IntentionResult(
+                intent=Intent.META,
+                scope=Scope.SESSION_TASK if has_active_task else Scope.GLOBAL,
+                confidence=0.8,
+            )
+
+        return None
+
+    async def _llm_classify(
+        self,
+        message: str,
+        has_active_task: bool,
+        history: list[str] | None = None,
+    ) -> IntentionResult:
+
+        history_text = "\n".join(history[-3:]) if history else ""
+
+        params = IntentClassifierParams(
+            message=message, has_active_task=has_active_task, history=history_text
+        )
+
+        prompt = self.pb.intention_classify(params)
+
+        response = await self.llm.chat.completions.create(
+            model=GPT4OMINI,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+        )
+
+        content = response.choices[0].message.content.strip()
+
+        return IntentionResult.model_validate_json(content)
 
     async def think(self, prompt: str):
         async with self.llm.chat.completions.stream(
@@ -84,15 +274,102 @@ class Memory:
         con_repo: ConversationRepository,
         ses_repo: SessionRepository,
         ac_repo: ActivityRepository,
+        message_repo: MessageRepository,
+        mastery_repo: MasteryRepository,
+        ap_repo: AtomicPointRepository,
     ):
         self.long_term = learner_repo
         self.short_term = con_repo
         self.ses_repo = ses_repo
         self.ac_repo = ac_repo
+        self.message_repo = message_repo
+        self.mastery_repo = mastery_repo
+        self.session_repo = ses_repo
+        self.activity_repo = ac_repo
+        self.ap_repo = ap_repo
+
+    async def get_current_session(self, session_id: str):
+        session = await self.session_repo.get_full_session(session_id)
+
+        if not session:
+            raise KeyError("Session not found")
+
+        return session
+
+    async def get_current_progress(self, session_id: str):
+        session = await self.session_repo.get_full_session(session_id)
+
+        current_task_id = session.current_task
+
+        current_progress = [p for p in session.progresses if p.id == current_task_id][0]
+
+        return current_progress
+
+    async def get_current_task(
+        self,
+        session_id: str,
+        learner_id,
+    ):
+        session = await self.session_repo.get_session_detail(session_id, learner_id)
+        activity_id = session.activity_id
+        activity = await self.activity_repo.get_by_id(activity_id)
+
+        current_task_id = session.current_task
+        current_task = activity.tasks.get(current_task_id, None)
+
+        if not current_task:
+            raise KeyError("No task found")
+
+        return current_task
+
+    async def get_current_activity(self, activity_id: str):
+        activity = await self.activity_repo.get_by_id(activity_id)
+
+        return activity
+
+    async def get_mastery(self, learner_id: str, atomic_point_id: str):
+        mastery = await self.mastery_repo.get_mastery_by_id(learner_id, atomic_point_id)
+
+        if not mastery:
+            # no information
+            return None
+
+        return mastery
+
+    async def get_history(self, conversation_id: str):
+        messages = await self.message_repo.get_conversation_messages(conversation_id)
+
+        return messages
+
+    async def current_activity(self, activity_id: str):
+        activity = await self.ac_repo.get_by_id(activity_id)
+
+        context = ""
+        context += activity.metadata.type
+        context += "\n"
+        context += activity.metadata.title
+        context += "\n"
+        context += activity.metadata.description
+
+        return context
 
     def longterm(self, learner_id: str):
         profile = self.long_term.get_by_id(learner_id)
         return profile["proto"]
+
+    async def longterm_v2(self, learner_id: str):
+        learner = await self.long_term.get_by_id(learner_id)
+        return learner
+
+    async def shortterm_v2(self, conversation_id: UUID):
+        """Return the short-term memory for the companion
+
+        Args:
+            con_id (str): The conversation id
+        """
+        messages = await self.message_repo.get_conversation_messages(conversation_id)
+
+        return messages
 
     def shortterm(self, con_id):
         con = self.short_term.get_conversation_by_id(con_id=con_id)
@@ -123,9 +400,182 @@ class Companion:
         self.k = k
         self.p = p
         self.pb = pb
+        self.memory = self.m
+        self.brain = self.b
+
+    def mode_explanation():
+        None
+
+    async def mode_task_help(
+        self,
+        conversation_id: str,
+        session_id: str,
+        learner_id: str,
+        message: str,
+    ):
+        # TODO:
+        intention = "Help the learner to complate the current task inside this activity"
+
+        current_task = await self.memory.get_current_task(session_id, learner_id)
+
+        atomic_points = [
+            await self.k.get_atomic_point(id) for id in current_task.atomic_points
+        ]
+
+        messages = await self.m.shortterm_v2(conversation_id)
+
+        params = CompanionHelpParams_v1(
+            companion_personality="Not avalable",
+            intention=intention,
+            description=current_task.prompt,
+            atomic_points=atomic_points,
+            help_level=HelpLevel.NUDGE,
+            history=messages,
+            message=message,
+        )
+
+        prompt = self.pb.companion_help_prompt_v1(params)
+
+        async for token in self.b.think(prompt):
+            yield token
+
+    def mode_meta():
+        None
+
+    def mode_recommend():
+        None
+
+    async def mode_other(
+        self,
+        learner_id: str,
+        session_id: str,
+        conversation_id: str,
+        message: str,
+    ):
+        # intention = "Normal chat"
+        messages = await self.memory.shortterm_v2(conversation_id)
+
+        params = CompanionParams(
+            # longterm
+            user_memory="Currently not specified",
+            # shortterm
+            history=messages,
+            input=message,
+        )
+
+        prompt = self.pb.companion_prompt(params)
+
+        async for token in self.brain.think(prompt):
+            yield token
+
+    async def response_v3(
+        self,
+        learner_id: str,
+        conversation_id: str,
+        message: str,
+        type: str,
+        activity_id: str,
+        session_id: str,
+    ):
+        has_active_task = True if type == "EMBEDDED" else False
+
+        logger.info("[1] Get the intention of the current message")
+        intention = await self.b.detect_intent(
+            message=message,
+            has_active_task=has_active_task,
+            # FIXME: skip history
+            history="",
+        )
+
+        logger.info(
+            f"[2] Check the intention with {intention.intent} and return the result"
+        )
+        if intention.intent == Intent.TASK_HELP:
+            async for token in self.mode_task_help(
+                conversation_id,
+                session_id,
+                learner_id,
+                message,
+            ):
+                yield token
+
+        else:
+            async for token in self.mode_other(
+                learner_id,
+                session_id,
+                conversation_id,
+                message,
+            ):
+                yield token
 
     # TODO: Emulate the companion role
     # need learner_id, the current con_id, the current message
+    async def response_v2(
+        self,
+        learner_id: str,
+        conversation_id: str,
+        message: str,
+        type: str,
+        activity_id: str,
+        session_id: str,
+    ):
+        if type == "NORMAL":
+            logger.info("[Companion] - [Get the long-term memory]")
+            # learner = await self.memory.longterm_v2(learner_id)
+
+            logger.info("[Companion] - [Get the short-term memory]")
+            messages = await self.memory.shortterm_v2(conversation_id)
+            logger.info(f"[Companion] - [Short-term memory's length {len(messages)}]")
+
+            # The companion's response
+
+            # Build the companion prompt
+            logger.info("[Companion] - [Build the prompt]")
+            params = CompanionParams(
+                # longterm
+                user_memory="Currently not specified",
+                # shortterm
+                history=messages,
+                input=message,
+            )
+
+            prompt = self.pb.companion_prompt(params)
+
+            logger.info("[Companion] - [Yield the token from LLM]")
+
+            async for token in self.brain.think(prompt):
+                yield token
+                # response += token
+        elif type == "EMBEDDED":
+            # inject the context
+            logger.info("[Companion] - [Get the long-term memory]")
+            # learner = await self.memory.longterm_v2(learner_id)
+
+            logger.info("[Companion] - [Get the activity context]")
+            context = await self.m.current_activity(activity_id)
+
+            logger.info("[Companion] - [Get the short-term memory]")
+            messages = await self.memory.shortterm_v2(conversation_id)
+            logger.info(f"[Companion] - [Short-term memory's length {len(messages)}]")
+
+            # The companion's response
+
+            # Build the companion prompt
+            logger.info("[Companion] - [Build the prompt]")
+            params = CompanionSessionParams(
+                user_memory="Currently not available",
+                context=context,
+                history=messages,
+                input=message,
+            )
+
+            prompt = self.pb.companion_session_prompt(params)
+
+            logger.info("[Companion] - [Yield the token from LLM]")
+            async for token in self.brain.think(prompt):
+                yield token
+                # response += token
+
     async def response(self, learner_id: str, con_id: str, message: str):
         # TODO:
         # - Receive the learner

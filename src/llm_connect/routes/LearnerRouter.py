@@ -3,6 +3,7 @@ import asyncpg
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 
 # from llm_connect.auth.auth import verify_token
+from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import (
     get_learner_service,
     get_postgre_pool,
@@ -19,6 +20,7 @@ from llm_connect.services.LearnerService import (
     update_avatar,
     update_learner,
 )
+from llm_connect.types.auth import Payload
 
 # from llm_connect.types.auth import Payload
 
@@ -81,11 +83,10 @@ async def update_infor(
     response_model=GetLearnerResponse,
 )
 async def get_me(
-    # jwt_payload: Payload = Depends(verify_token),
+    jwt_payload: Payload = Depends(verify_token),
     learner_service: LearnerService = Depends(get_learner_service),
 ) -> GetLearnerResponse:
-    # user_id = jwt_payload["sub"]
-    user_id = 1
+    user_id = jwt_payload["sub"]
     learner = await learner_service.get_learner_information(user_id)
     return GetLearnerResponse(
         user_id=user_id,

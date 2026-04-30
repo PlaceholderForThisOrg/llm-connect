@@ -1,4 +1,4 @@
-from typing import Generic, List, Literal, TypeVar
+from typing import Any, Generic, List, Literal, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -23,3 +23,15 @@ class ListResponse(BaseModel, Generic[T]):
 class PaginationParams(BaseModel):
     page: int = Field(1, ge=1, description="1-based page number")
     limit: int = Field(20, ge=1, le=100, description="Items per page")
+
+
+class PaginatedResponse(BaseModel, Generic[T]):
+    items: List[T]
+    total: int
+    page: int
+    pageSize: int
+
+
+class CursorPaginatedResponse(BaseModel, Generic[T]):
+    items: List[T]
+    nextCursor: Any

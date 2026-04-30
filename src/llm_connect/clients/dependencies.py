@@ -4,11 +4,17 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.AtomicPointRelationRepository import (
+    AtomicPointRelationRepository,
+)
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
+from llm_connect.repositories.AtomicPointTagRepository import AtomicPointTagRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
+from llm_connect.repositories.MessageRepository import MessageRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.repositories.TagRepository import TagRepository
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.AtomicPointService import AtomicPointService
@@ -27,10 +33,13 @@ from llm_connect.services.core.Companion import (
 from llm_connect.services.core.Evaluator import Evaluator
 from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
+from llm_connect.services.core.TaskManager import GenerateTaskManager
 from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
 from llm_connect.services.MasteryService import MasteryService
+from llm_connect.services.MessageService import MessageService
 from llm_connect.services.SessionService import SessionService
+from llm_connect.services.TagService import TagService
 
 
 # 🤷‍♂️ Outside clients, created in lifespan
@@ -87,26 +96,39 @@ def get_aevaluator():
     return AEvaluator()
 
 
-def get_session_repo():
-    return SessionRepository()
+def get_session_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return SessionRepository(
+        session=session,
+    )
 
 
 def get_BKTEngine():
     return BKTEngine()
 
 
-def get_mastery_repo():
-    return MasteryRepository()
+def get_mastery_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return MasteryRepository(session=session)
+
+
+def get_ap_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointRepository(
+        session=session,
+    )
 
 
 def get_mastery_engine(
     engine: BKTEngine = Depends(get_BKTEngine),
     mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    return MasteryEngine(
-        engine,
-        mastery_repo,
-    )
+    return MasteryEngine(engine, mastery_repo, ap_repo=ap_repo, session=session)
 
 
 def get_evaluator(
@@ -144,10 +166,24 @@ def get_learner_repository(session: AsyncSession = Depends(get_db_session)):
 def get_adapter(
     l_r=Depends(get_learner_repository),
     a_r=Depends(get_activity_repo),
+    mastery_repo: MasteryRepository = Depends(get_mastery_repo),
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
 ):
     return Adapter(
         l_r=l_r,
         a_r=a_r,
+        mastery_repo=mastery_repo,
+        ap_repo=ap_repo,
+    )
+
+
+def get_generate_task_manager(
+    promp_builder: PromptBuilder = Depends(get_prompt_builder),
+    client: AsyncOpenAI = Depends(get_llm),
+):
+    return GenerateTaskManager(
+        prompt_builder=promp_builder,
+        client=client,
     )
 
 
@@ -161,6 +197,9 @@ def get_orchestrator(
     session_repo: SessionRepository = Depends(get_session_repo),
     activity_repo: ActivityRepository = Depends(get_activity_repo),
     l_repo: LearnerRepository = Depends(get_learner_repository),
+    task_manager: GenerateTaskManager = Depends(get_generate_task_manager),
+    mastery_engine: MasteryEngine = Depends(get_mastery_engine),
+    session: AsyncSession = Depends(get_db_session),
 ):
     return Orchestrator(
         evaluator,
@@ -172,6 +211,9 @@ def get_orchestrator(
         session_repo,
         activity_repo,
         l_repo,
+        task_manager,
+        mastery_engine,
+        session,
     )
 
 
@@ -193,8 +235,10 @@ def get_learner_service(
     )
 
 
-def get_conversation_repo():
-    return ConversationRepository()
+def get_conversation_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return ConversationRepository(session=session)
 
 
 def get_session_service(
@@ -202,18 +246,37 @@ def get_session_service(
     session_repo: SessionRepository = Depends(get_session_repo),
     activity_repo: ActivityRepository = Depends(get_activity_repo),
     con_repo: ConversationRepository = Depends(get_conversation_repo),
+    session: AsyncSession = Depends(get_db_session),
 ):
-    return SessionService(orchestrator, session_repo, activity_repo, con_repo)
+    return SessionService(
+        orchestrator,
+        session_repo,
+        activity_repo,
+        con_repo,
+        session=session,
+    )
 
 
 def get_activity_service(
     activity_repo: ActivityRepository = Depends(get_activity_repo),
+    adapter: Adapter = Depends(get_adapter),
+    learner_repo: LearnerRepository = Depends(get_learner_repository),
+    ap_repo: AtomicPointRepository = Depends(get_ap_repo),
 ):
-    return ActivityService(activity_repo)
+    return ActivityService(
+        activity_repo,
+        adapter=adapter,
+        learner_repo=learner_repo,
+        ap_repo=ap_repo,
+    )
 
 
-def get_ap_repo():
-    return AtomicPointRepository()
+def get_message_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return MessageRepository(
+        session=session,
+    )
 
 
 def get_companion(
@@ -224,16 +287,28 @@ def get_companion(
     ses_repo=Depends(get_session_repo),
     ac_repo=Depends(get_activity_repo),
     ap_repo=Depends(get_ap_repo),
+    message_repo=Depends(get_message_repo),
+    mastery_repo=Depends(get_mastery_repo),
 ):
-    brain = Brain(llm)
+    # Create the brain of the companion
+    # Not dpendencies, but like
+    # Parts of the companion
+    brain = Brain(llm, pb=pb)
+
     memory = Memory(
         learner_repo,
         con_repo,
         ses_repo,
         ac_repo,
+        message_repo=message_repo,
+        mastery_repo=mastery_repo,
+        ap_repo=ap_repo,
     )
+
     k = Knowledge(ap_repo)
+
     # FIXME: Not needed in prototype
+
     p = Persionality()
 
     return Companion(
@@ -248,17 +323,71 @@ def get_companion(
 def get_conversation_service(
     con_repo=Depends(get_conversation_repo),
     com=Depends(get_companion),
+    session: AsyncSession = Depends(get_db_session),
+    message_repo: MessageRepository = Depends(get_message_repo),
 ):
-    return ConversationService(con_repo, com)
+    return ConversationService(
+        con_repo,
+        com,
+        session=session,
+        message_repo=message_repo,
+    )
+
+
+def get_tag_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return TagRepository(ses=session)
+
+
+def get_apt_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointTagRepository(
+        session=session,
+    )
+
+
+def get_ap_relation_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointRelationRepository(session)
 
 
 def get_ap_s(
     ap_repo: AtomicPointRepository = Depends(get_ap_repo),
+    tag_repo: TagRepository = Depends(get_tag_repo),
+    ap_tag_repo: AtomicPointTagRepository = Depends(get_apt_repo),
+    session: AsyncSession = Depends(get_db_session),
+    ap_relation_repo: AtomicPointRelationRepository = Depends(get_ap_relation_repo),
 ):
-    return AtomicPointService(ap_repo)
+    return AtomicPointService(
+        ap_repo=ap_repo,
+        tag_repo=tag_repo,
+        ap_tag_repo=ap_tag_repo,
+        session=session,
+        ap_relation_repo=ap_relation_repo,
+    )
 
 
 def get_mastery_service(
     m_repo: MasteryRepository = Depends(get_mastery_repo),
 ):
     return MasteryService(m_repo)
+
+
+def get_tag_ser(
+    repo: TagRepository = Depends(get_tag_repo),
+    session: AsyncSession = Depends(get_db_session),
+):
+    return TagService(session=session, repo=repo)
+
+
+def get_message_service(
+    repo: MessageRepository = Depends(get_message_repo),
+    session: AsyncSession = Depends(get_db_session),
+):
+    return MessageService(
+        repo=repo,
+        session=session,
+    )

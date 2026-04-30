@@ -1,10 +1,14 @@
 import datetime
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any, Dict, List
 
 from sqlalchemy import JSON, Date, DateTime, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from llm_connect.models.Base import Base
+
+if TYPE_CHECKING:
+    from llm_connect.models import Conversation, Session
+    from llm_connect.models.Mastery import Mastery
 
 
 class Learner(Base):
@@ -29,4 +33,18 @@ class Learner(Base):
 
     updated_at: Mapped[datetime.datetime] = mapped_column(
         DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow
+    )
+
+    conversations: Mapped[List["Conversation"]] = relationship(
+        back_populates="learner", cascade="all, delete-orphan"
+    )
+
+    sessions: Mapped[List["Session"]] = relationship(
+        back_populates="learner", cascade="all, delete-orphan"
+    )
+
+    mastery_records: Mapped[List["Mastery"]] = relationship(
+        "Mastery",
+        back_populates="learner",
+        cascade="all, delete-orphan",
     )

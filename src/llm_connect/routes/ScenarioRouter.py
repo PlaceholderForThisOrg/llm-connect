@@ -1,16 +1,14 @@
 from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 
-from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_chat_service
 from llm_connect.schemas.scenario_schema import ImmerseScenarioRequest
 from llm_connect.services.ChatService import ChatService
-from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/me/scenarios", tags=["Scenario"])
 
 
-@router.post(path="/", response_model=None, description="Continue the scenario")
+@router.post(path="/", description="Continue the scenario")
 async def immerse(
     request: ImmerseScenarioRequest,
     engine: BackgroundTasks,

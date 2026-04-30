@@ -1,4 +1,90 @@
-from pydantic import BaseModel
+from datetime import datetime
+from typing import List, Optional
+from uuid import UUID
+
+from pydantic import BaseModel, ConfigDict
+
+
+class InteractionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    attempt: int
+    input: dict
+    output: dict
+    is_correct: bool
+    score: Optional[float]
+    created_at: datetime
+
+
+class ProgressResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    task_id: str
+    status: str
+    num_attempts: int
+    score: Optional[float]
+
+    started_at: Optional[datetime]
+    completed_at: Optional[datetime]
+    created_at: datetime
+
+    interactions: List[InteractionResponse]
+
+
+class GetSessionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    activity_id: str
+    status: str
+    progress: Optional[float]
+    score: Optional[float]
+
+    started_at: Optional[datetime]
+    completed_at: Optional[datetime]
+    created_at: datetime
+
+    current_task: str
+
+    progresses: List[ProgressResponse]
+
+
+class GetAllSessionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    activity_id: str
+    status: str
+    progress: Optional[float]
+    score: Optional[float]
+
+    started_at: Optional[datetime]
+    completed_at: Optional[datetime]
+    created_at: datetime
+
+    current_task: str
+
+
+class SessionSearchQuery(BaseModel):
+    activity_id: Optional[str] = None
+    status: Optional[str] = None
+    learner_id: Optional[str] = None
+
+    started_from: Optional[datetime] = None
+    started_to: Optional[datetime] = None
+
+    min_score: Optional[float] = None
+    max_score: Optional[float] = None
+
+    page: int = 1
+    page_size: int = 20
+
+
+class SubmitInteraction(BaseModel):
+    type: str
+    interaction: str | List[str]
 
 
 class Interaction(BaseModel):
@@ -10,6 +96,7 @@ class Interaction(BaseModel):
 
 
 class CreateSessionRequest(BaseModel):
+    learnerId: str
     activityId: str
 
 

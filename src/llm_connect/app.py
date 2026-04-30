@@ -13,6 +13,7 @@ from llm_connect.routes import (
     MasteryRouter,
     ScenarioRouter,
     SessionRouter,
+    TagRouter,
     cards,
     decks,
     dictionary,
@@ -22,6 +23,7 @@ from llm_connect.routes import (
     reviews,
     scenario_template,
 )
+# import llm_connect.models
 
 # 🧠 The main FastAPI app
 app = FastAPI(
@@ -52,6 +54,7 @@ app.include_router(router=SessionRouter.router)
 app.include_router(router=ActivityRouter.router)
 app.include_router(router=ConversationRouter.router)
 app.include_router(router=MasteryRouter.router)
+app.include_router(router=TagRouter.router)
 
 # ⁉️ Exception handler
 
