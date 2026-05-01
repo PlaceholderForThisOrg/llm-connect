@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_activity_service
 from llm_connect.schemas.activity_schema import (
-    CreateActivityRequest,
+    CreateNewActivityRequest,
 )
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.types.auth import Payload
@@ -80,11 +80,12 @@ async def search_activities(
 
 @router.post("/")
 async def create_activity(
-    request: CreateActivityRequest,
+    request: CreateNewActivityRequest,
     service: ActivityService = Depends(get_activity_service),
     payload: Payload = Depends(verify_token),
 ):
-    res = await service.create_activity(request)
+    # learner_id = payload["sub"]
+    res = await service.create_activity_v2(request)
 
     # Why Paginated happens here?
     # response = PaginatedResponse(
