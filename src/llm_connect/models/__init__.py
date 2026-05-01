@@ -1,4 +1,4 @@
-from .Activity import Activity
+from .Activity import Activity, TaskType
 from .AtomicPoint import AtomicPoint
 from .AtomicPointRelation import AtomicPointRelation
 from .AtomicPointTag import AtomicPointTag
@@ -26,4 +26,5 @@ __all__ = [
     "AtomicPointRelation",
     "Mastery",
     "Activity",
+    "TaskType",
 ]

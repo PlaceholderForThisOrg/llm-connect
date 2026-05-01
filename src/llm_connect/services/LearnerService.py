@@ -30,7 +30,7 @@ class LearnerService:
         )
 
     async def get_learner_information(self, user_id: str):
-        return await self.learner_repository.get_by_id(user_id)
+        return await self.learner_repository.get_or_create(user_id)
 
 
 async def sync_learner(user_id: str, pool: Pool):

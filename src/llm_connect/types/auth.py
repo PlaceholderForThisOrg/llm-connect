@@ -16,22 +16,23 @@ class ResourceAccess(TypedDict):
 class Payload(TypedDict):
     exp: int
     iat: int
-    auth_time: int
-    jti: str
-    iss: str
-    aud: str
-    sub: str
-    typ: str
-    azp: str
-    sid: str
-    acr: str
-    allowed_origins: List[str]
-    realm_access: RealmAccess
-    resource_access: ResourceAccess
-    scope: str
-    email_verified: bool
-    name: str
-    preferred_username: str
-    given_name: str
-    family_name: str
-    email: str
+    auth_time: int = None
+    jti: str = None
+    iss: str = None
+    aud: str = None
+    sub: str = None
+    typ: str = None
+    azp: str = None
+    sid: str = None
+    acr: str = None
+    allowed_origins: List[str] = None
+    realm_access: RealmAccess = None
+    resource_access: ResourceAccess = None
+    scope: str = None
+    email_verified: bool = None
+    name: str = None
+    preferred_username: str = None
+    given_name: str = None
+    family_name: str = None
+    email: str = None
+    accountId: str = None

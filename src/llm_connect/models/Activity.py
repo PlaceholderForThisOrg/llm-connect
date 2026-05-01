@@ -68,6 +68,7 @@ class BaseTask(BaseModel):
     hints: List[str] = Field(default_factory=list)
     feedback: Dict = Field(default_factory=dict)
     next_possibles: List[str] = Field(default_factory=list)
+    atomic_points: List[str] = Field(default_factory=list)
 
 
 class GenerateTask(BaseTask):
@@ -92,7 +93,7 @@ class MatchTask(BaseTask):
     type: Literal[TaskType.MATCH]
     a: Optional[List[str]] = None
     b: Optional[List[str]] = None
-    correct_pairs: Optional[Dict[int, int]] = None
+    correct_pairs: Optional[Dict[int | str, int | str]] = None
 
 
 class ReorderTask(BaseTask):
@@ -118,7 +119,7 @@ class ActivityType(str, Enum):
 
 
 class Metadata(BaseModel):
-    type: ActivityType
+    type: str
     title: str
     description: str
     general_difficulty: str
@@ -126,6 +127,7 @@ class Metadata(BaseModel):
     tags: List[str] = Field(default_factory=list)
     media: Optional[List[str]] = None
     content: Optional[str] = None
+    task_count: int = None
 
 
 class Activity(Document):

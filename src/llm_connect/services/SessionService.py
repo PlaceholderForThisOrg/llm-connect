@@ -1,12 +1,12 @@
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from fastapi import BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect import logger
-from llm_connect.models import Activity, Progress, Session
+from llm_connect.models import Activity, Progress, Session, TaskType
 from llm_connect.models.Conversation import Conversation
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
@@ -52,25 +52,61 @@ class SessionService:
             "total": total,
         }
 
-    async def submit_interaction(self, learner_id, session_id, task_id, interaction):
-        async for token in self.orchestrator.flow(
+    async def submit_interaction_stream(
+        self,
+        learner_id,
+        session_id,
+        task_id,
+        interaction,
+        answer,
+    ):
+        # get the current task to see the type
+
+        # Session
+        session = await self.session_repo.get_full_session(session_id)
+        if not session:
+            raise ValueError("Session not found")
+
+        # Activity
+        activity = await self.activity_repo.get_by_id(session.activity_id)
+
+        # Task
+        task = activity.tasks.get(task_id)
+        if not task:
+            raise ValueError("Task not found")
+
+        task_type = task.type
+
+        if task_type == TaskType.GENERATE:
+            # handle generate type
+            async for token in self.orchestrator.stream_flow(
+                learner_id=learner_id,
+                session_id=session_id,
+                task_id=task_id,
+                interaction=interaction,
+                answer=answer,
+            ):
+                yield token
+        else:
+            None
+
+    async def submit_interaction(
+        self,
+        learner_id,
+        session_id,
+        task_id,
+        interaction,
+        answer,
+    ):
+        interaction = await self.orchestrator.flow(
             learner_id=learner_id,
             session_id=session_id,
             task_id=task_id,
             interaction=interaction,
-        ):
-            yield token
+            answer=answer,
+        )
 
-    def _compute_progress(self, session) -> float:
-        total = len(session.progresses)
-        completed = sum(1 for p in session.progresses if p.status == "completed")
-        return completed / total if total > 0 else 0.0
-
-    def _compute_score(self, session) -> Optional[float]:
-        scores = [p.score for p in session.progresses if p.score is not None]
-        if not scores:
-            return None
-        return sum(scores) / len(scores)
+        return interaction
 
     async def get_current_task(self, session_id: str) -> Dict[str, Any]:
 

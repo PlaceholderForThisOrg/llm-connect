@@ -33,7 +33,11 @@ from llm_connect.services.core.Companion import (
 from llm_connect.services.core.Evaluator import Evaluator
 from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
-from llm_connect.services.core.TaskManager import GenerateTaskManager
+from llm_connect.services.core.TaskManager import (
+    FillTaskManager,
+    GenerateTaskManager,
+    SelectTaskManager,
+)
 from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
 from llm_connect.services.LearnerService import LearnerService
 from llm_connect.services.MasteryService import MasteryService
@@ -187,6 +191,14 @@ def get_generate_task_manager(
     )
 
 
+def get_select_task_manager():
+    return SelectTaskManager()
+
+
+def get_fill_task_manager():
+    return FillTaskManager()
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
@@ -200,6 +212,8 @@ def get_orchestrator(
     task_manager: GenerateTaskManager = Depends(get_generate_task_manager),
     mastery_engine: MasteryEngine = Depends(get_mastery_engine),
     session: AsyncSession = Depends(get_db_session),
+    select_task_manager: SelectTaskManager = Depends(get_select_task_manager),
+    fill_task_manager: FillTaskManager = Depends(get_fill_task_manager),
 ):
     return Orchestrator(
         evaluator,
@@ -214,6 +228,8 @@ def get_orchestrator(
         task_manager,
         mastery_engine,
         session,
+        select_task_manager,
+        fill_task_manager,
     )
 
 
