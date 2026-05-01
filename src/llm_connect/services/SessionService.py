@@ -1,12 +1,13 @@
 import uuid
-from datetime import datetime, timezone
-from typing import Any, Dict, List
+from datetime import datetime, timedelta, timezone
+from typing import Any, Dict, List, Optional
 
 from fastapi import BackgroundTasks
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect import logger
-from llm_connect.models import Activity, Progress, Session, TaskType
+from llm_connect.models import Activity, Interaction, Progress, Session, TaskType
 from llm_connect.models.Conversation import Conversation
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
@@ -30,6 +31,72 @@ class SessionService:
         self.activity_repo = activity_repo
         self.conversation_repo = con_repo
         self.session = session
+        self.db = session
+
+    async def get_interactions_by_session(
+        self,
+        session_id: uuid.UUID,
+        cursor: Optional[datetime],
+        limit: int,
+    ) -> List[Interaction]:
+
+        query = (
+            select(Interaction)
+            .join(Progress)
+            .where(Progress.session_id == session_id)
+            .order_by(Interaction.created_at.desc())
+            .limit(limit + 1)
+        )
+
+        if cursor:
+            query = query.where(Interaction.created_at < cursor)
+
+        result = await self.db.execute(query)
+        return result.scalars().all()
+
+    def flatten_interactions(self, interactions: List[Interaction]):
+        messages = []
+
+        for i in interactions:
+            if i.input:
+                messages.append(
+                    {
+                        "id": f"{i.id}_user",
+                        "role": "learner",
+                        "content": i.input,
+                        "created_at": i.created_at,
+                    }
+                )
+
+            if i.output:
+                messages.append(
+                    {
+                        "id": f"{i.id}_assistant",
+                        "role": "npc",
+                        "content": i.output,
+                        "created_at": i.created_at + timedelta(milliseconds=100),
+                    }
+                )
+
+        messages.sort(key=lambda x: x["created_at"], reverse=True)
+
+        return messages
+
+    def paginate(
+        self,
+        messages,
+        limit,
+    ):
+        has_next = len(messages) > limit
+        items = messages[:limit]
+
+        next_cursor = items[-1]["created_at"] if items else None
+
+        return {
+            "items": items,
+            "next_cursor": next_cursor,
+            "has_next": has_next,
+        }
 
     async def get_session_detail(self, session_id: str, learner_id: str):
         session = await self.repo.get_session_detail(session_id, learner_id)

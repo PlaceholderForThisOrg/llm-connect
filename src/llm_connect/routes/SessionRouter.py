@@ -1,3 +1,7 @@
+from datetime import datetime
+from typing import Optional
+from uuid import UUID
+
 from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 
@@ -21,6 +25,20 @@ from llm_connect.services.SessionService import SessionService
 from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
+
+
+@router.get("/{sessionId}/messages")
+async def fetch_messages_in_role_play_activity(
+    session_id: UUID,
+    cursor: Optional[datetime] = None,
+    limit: int = 10,
+    service: SessionService = Depends(get_session_service),
+):
+    interactions = await service.get_interactions_by_session(session_id, cursor, limit)
+
+    messages = service.flatten_interactions(interactions)
+
+    return service.paginate(messages, limit)
 
 
 @router.get("/{sessionId}")

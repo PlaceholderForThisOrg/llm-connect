@@ -154,7 +154,7 @@ class Orchestrator:
             id=uuid.uuid4(),
             progress_id=progress.id,
             attempt=attempt,
-            input=interaction,
+            input=answer.response,
             output=response,
             is_correct=result,
             score=0.0,
@@ -250,6 +250,9 @@ class Orchestrator:
 
         # Evaluation
         if task_type == TaskType.SELECT:
+
+            input = answer.selected
+
             result = await self.select_manager.evaluate(
                 interactions=answer,
                 task=task,
@@ -260,6 +263,9 @@ class Orchestrator:
             )
 
         elif task_type == TaskType.FILL:
+
+            input = answer.filled
+
             result, score = await self.fill_manager.evaluate(
                 answer,
                 task=task,
@@ -270,9 +276,11 @@ class Orchestrator:
             response = await self.fill_manager.response(result)
 
         elif task_type == TaskType.MATCH:
+            input = answer.matched
             None
 
         elif task_type == TaskType.REORDER:
+            input = answer.reorder
             None
 
             # MASTERY UPDATE
@@ -291,7 +299,7 @@ class Orchestrator:
             id=uuid.uuid4(),
             progress_id=progress.id,
             attempt=attempt,
-            input=interaction,
+            input=input,
             output=response,
             is_correct=result,
             score=0.0,
@@ -339,7 +347,7 @@ class Orchestrator:
             "id": interaction.id,
             "progress_id": progress.id,
             "attempt": attempt,
-            "input": answer,
+            "input": input,
             "output": response,
             "is_correct": result,
             "score": 0.0,
