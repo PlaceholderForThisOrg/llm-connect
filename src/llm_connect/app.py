@@ -3,7 +3,8 @@ from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from llm_connect.clients import lifespan
-from llm_connect.configs.app import ORIGINS
+
+# from llm_connect.configs.app import ORIGINS
 from llm_connect.errors import global_exception_handler, http_exception_handler
 from llm_connect.routes import (
     ActivityRouter,
@@ -23,6 +24,7 @@ from llm_connect.routes import (
     reviews,
     scenario_template,
 )
+
 # import llm_connect.models
 
 # 🧠 The main FastAPI app
@@ -69,7 +71,7 @@ app.add_exception_handler(Exception, global_exception_handler)
 # the response from the server (SOP)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ORIGINS,
+    allow_origins=["*"],  # or your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

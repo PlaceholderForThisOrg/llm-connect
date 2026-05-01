@@ -13,6 +13,34 @@ class TagRepository:
         self.db = ses
         self.session = ses
 
+    async def get_or_create_by_names(self, names: list[str]) -> list[Tag]:
+        # existing tags
+        existing_tags = await self.get_by_names(names)
+        existing_map = {tag.name: tag for tag in existing_tags}
+
+        # find missing names
+        missing_names = [name for name in names if name not in existing_map]
+
+        # create missing tags
+        new_tags = []
+        for name in missing_names:
+            tag = Tag(
+                id=str(uuid.uuid4()),
+                name=name,
+            )
+            self.ses.add(tag)
+            new_tags.append(tag)
+
+        # flush once for all new tags
+        if new_tags:
+            await self.ses.flush()
+
+        # return full list
+        return [
+            existing_map.get(name) or next(t for t in new_tags if t.name == name)
+            for name in names
+        ]
+
     async def create_tag(self, name: str) -> Tag:
         tag = Tag(
             id=str(uuid.uuid4()),

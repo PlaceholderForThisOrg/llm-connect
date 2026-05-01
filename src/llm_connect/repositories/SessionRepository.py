@@ -2,13 +2,13 @@ import json
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
-from sqlalchemy import Tuple, func, select
+from sqlalchemy import UUID, Tuple, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from llm_connect.models import Progress, Session
+from llm_connect.models import Interaction, Progress, Session
 from llm_connect.proto.session.sessions_v3 import sessions_v3
 from llm_connect.schemas.session_schema import SessionSearchQuery
 
@@ -43,6 +43,27 @@ class SessionRepository:
 
         # Initial sync (ensures file exists)
         self.sync()
+
+    async def get_interactions_by_session(
+        self,
+        session_id: UUID,
+        cursor: Optional[datetime],
+        limit: int,
+    ) -> List[Interaction]:
+
+        query = (
+            select(Interaction)
+            .join(Progress)
+            .where(Progress.session_id == session_id)
+            .order_by(Interaction.created_at.asc())
+            .limit(limit + 1)
+        )
+
+        if cursor:
+            query = query.where(Interaction.created_at > cursor)
+
+        result = await self.db.execute(query)
+        return result.scalars().all()
 
     async def get_session_detail(
         self,

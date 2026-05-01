@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -82,9 +82,36 @@ class SessionSearchQuery(BaseModel):
     page_size: int = 20
 
 
+class GenerateAnswer(BaseModel):
+    response: str = None
+
+
+class SelectAnswer(BaseModel):
+    selected: List[str] = None
+
+
+class FillAnswer(BaseModel):
+    filled: List[str] = None
+
+
+class MatchAnswer(BaseModel):
+    matched: Dict[str | int, str | int]
+
+
+class ReorderAnswer(BaseModel):
+    reordered: List[str | int]
+
+
 class SubmitInteraction(BaseModel):
     type: str
-    interaction: str | List[str]
+    interaction: str | List[str] = None
+    answer: Union[
+        GenerateAnswer,
+        SelectAnswer,
+        FillAnswer,
+        MatchAnswer,
+        ReorderAnswer,
+    ] = None
 
 
 class Interaction(BaseModel):
@@ -96,7 +123,7 @@ class Interaction(BaseModel):
 
 
 class CreateSessionRequest(BaseModel):
-    learnerId: str
+    # learnerId: str
     activityId: str
 
 

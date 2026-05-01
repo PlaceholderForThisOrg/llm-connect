@@ -1,3 +1,7 @@
+from datetime import datetime
+from typing import Optional
+from uuid import UUID
+
 from fastapi import APIRouter, BackgroundTasks, Depends
 from fastapi.responses import StreamingResponse
 
@@ -6,6 +10,7 @@ from llm_connect.clients.dependencies import (
     get_chat_service,
     get_session_service,
 )
+from llm_connect.models.Activity import TaskType
 from llm_connect.schemas.pagination import PaginatedResponse
 from llm_connect.schemas.session_schema import (
     CreateSessionRequest,
@@ -22,13 +27,31 @@ from llm_connect.types.auth import Payload
 router = APIRouter(prefix="/api/v1/me/sessions", tags=["Session"])
 
 
+@router.get("/{sessionId}/messages")
+async def fetch_messages_in_role_play_activity(
+    session_id: UUID,
+    cursor: Optional[datetime] = None,
+    limit: int = 10,
+    service: SessionService = Depends(get_session_service),
+):
+    interactions = await service.get_interactions_by_session(session_id, cursor, limit)
+
+    messages = service.flatten_interactions(interactions)
+
+    return service.paginate(messages, limit)
+
+
 @router.get("/{sessionId}")
 async def get_session_detail(
     sessionId: str,
     service: SessionService = Depends(get_session_service),
     payload: Payload = Depends(verify_token),
 ):
-    learner_id = payload["sub"]
+    learner_id = str(payload["accountId"])
+
+    if not learner_id:
+        learner_id = payload["sub"]
+
     return await service.get_session_detail(
         session_id=sessionId,
         learner_id=learner_id,
@@ -49,7 +72,10 @@ async def search_sessions(
     service: SessionService = Depends(get_session_service),
     payload: Payload = Depends(verify_token),
 ):
-    learner_id = payload["sub"]
+    learner_id = str(payload["accountId"])
+
+    if not learner_id:
+        learner_id = payload["sub"]
 
     query = SessionSearchQuery(
         activity_id=activity_id,
@@ -83,22 +109,44 @@ async def submit_interaction(
     payload: Payload = Depends(verify_token),
     service: SessionService = Depends(get_session_service),
 ):
-    learner_id = payload["sub"]
+    learner_id = str(payload["accountId"])
 
-    async def token_stream():
+    if not learner_id:
+        learner_id = payload["sub"]
 
-        async for chunk in service.submit_interaction(
+    task_type = request.type
+
+    if task_type == TaskType.GENERATE:
+
+        async def token_stream():
+
+            async for chunk in service.submit_interaction_stream(
+                learner_id=learner_id,
+                session_id=sessionId,
+                task_id=taskId,
+                interaction=request.interaction,
+                answer=request.answer,
+            ):
+                yield chunk
+
+        return StreamingResponse(
+            token_stream(),
+            media_type="text/plain",
+        )
+
+    else:
+        # Normal task
+        res = await service.submit_interaction(
             learner_id=learner_id,
             session_id=sessionId,
             task_id=taskId,
-            interaction=request.interaction,
-        ):
-            yield chunk
+            interaction=None,
+            answer=request.answer,
+        )
 
-    return StreamingResponse(
-        token_stream(),
-        media_type="text/plain",
-    )
+        response = res
+
+        return response
 
 
 # @router.get("/{sessionId}/progresses/{taskId}/interactions/")
@@ -155,7 +203,10 @@ async def create_session_from_activity(
     service: SessionService = Depends(get_session_service),
     payload: Payload = Depends(verify_token),
 ):
-    learner_id = payload["sub"]
+    learner_id = str(payload["accountId"])
+
+    if not learner_id:
+        learner_id = payload["sub"]
 
     res = await service.create_session_from_activity(
         activity_id=request.activityId,

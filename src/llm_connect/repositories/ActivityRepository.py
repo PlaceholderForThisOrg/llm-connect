@@ -18,6 +18,10 @@ class ActivityRepository:
     async def get_by_id(self, activity_id: str) -> Optional[Activity]:
         return await Activity.get(activity_id)
 
+    async def create_activity_v2(self, activity: Activity) -> Activity:
+        await activity.insert()
+        return activity
+
     async def create_activity(self, data: CreateActivityRequest) -> Activity:
         activity = Activity(**data.model_dump())
         # id = str(uuid.uuid4())

@@ -86,7 +86,11 @@ async def get_me(
     jwt_payload: Payload = Depends(verify_token),
     learner_service: LearnerService = Depends(get_learner_service),
 ) -> GetLearnerResponse:
-    user_id = jwt_payload["sub"]
+    user_id = str(jwt_payload["accountId"])
+
+    if not user_id:
+        user_id = str(jwt_payload["sub"])
+
     learner = await learner_service.get_learner_information(user_id)
     return GetLearnerResponse(
         user_id=user_id,
