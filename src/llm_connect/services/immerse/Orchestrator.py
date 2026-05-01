@@ -18,6 +18,8 @@ from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.core.TaskManager import (
     FillTaskManager,
+    MatchTaskManager,
+    ReorderTaskManager,
     SelectTaskManager,
     TaskManager,
 )
@@ -41,6 +43,8 @@ class Orchestrator:
         session: AsyncSession,
         select_manager: SelectTaskManager,
         fill_manager: FillTaskManager,
+        match_manager: MatchTaskManager,
+        reorder_manager: ReorderTaskManager,
     ):
         self.evaluator = evaluator
         self.actor = actor
@@ -56,6 +60,8 @@ class Orchestrator:
         self.session = session
         self.select_manager = select_manager
         self.fill_manager = fill_manager
+        self.match_manager = match_manager
+        self.reorder_manager = reorder_manager
 
     def _compute_progress(self, session: Session) -> float:
         total = len(session.progresses)
@@ -161,10 +167,13 @@ class Orchestrator:
             created_at=now,
             meta="{}",
         )
+
         # update progress
         progress.interactions.append(interaction)
         progress.num_attempts = attempt
 
+        # FIXME: Wrong in update the task
+        # Wrong in update the final task
         if result:
             # current progress is finished
             progress.status = "COMPLETED"
@@ -277,11 +286,30 @@ class Orchestrator:
 
         elif task_type == TaskType.MATCH:
             input = answer.matched
-            None
+
+            result, score = await self.match_manager.evaluate(
+                interactions=answer, task=task
+            )
+
+            progress.score = score
+
+            response = await self.match_manager.response(result)
 
         elif task_type == TaskType.REORDER:
-            input = answer.reorder
-            None
+            input = answer.reordered
+
+            result, score = await self.reorder_manager.evaluate(
+                interactions=answer, task=task
+            )
+
+            progress.score = score
+
+            response = await self.reorder_manager.response(result=result)
+
+        else:
+            # fallback
+            result = True
+            response = ""
 
             # MASTERY UPDATE
         logger.info("[3] --- Core mastery update")

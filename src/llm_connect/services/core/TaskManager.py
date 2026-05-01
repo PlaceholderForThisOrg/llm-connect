@@ -5,8 +5,13 @@ from abc import ABC, abstractmethod
 from openai import AsyncOpenAI
 
 from llm_connect.configs.llm import GPT4OMINI, GPT41
-from llm_connect.models.Activity import FillTask, SelectTask
-from llm_connect.schemas.session_schema import FillAnswer, SelectAnswer
+from llm_connect.models.Activity import FillTask, MatchTask, ReorderTask, SelectTask
+from llm_connect.schemas.session_schema import (
+    FillAnswer,
+    MatchAnswer,
+    ReorderAnswer,
+    SelectAnswer,
+)
 from llm_connect.services.immerse.PromptBuilder import (
     GoalEvaluateParams,
     NPCParams,
@@ -57,6 +62,87 @@ class TaskManager(ABC):
         interactions,
     ):
         None
+
+
+class MatchTaskManager(TaskManager):
+    def __init__(self):
+        super().__init__()
+
+    async def evaluate(
+        self,
+        interactions: MatchAnswer,
+        task: MatchTask,
+    ):
+        correct_pairs = task.correct_pairs
+        answers = interactions.matched
+
+        corrects = 0
+
+        for key, value in answers.items():
+            if key in correct_pairs and correct_pairs[key] == value:
+                corrects += 1
+
+        # result
+        result = corrects == len(correct_pairs) == len(answers)
+
+        score = corrects / len(correct_pairs) if correct_pairs else 0
+
+        return result, score
+
+    async def response(
+        self,
+        result,
+    ):
+        # Return the comments on whether or not
+        # the current task is correct ot not
+        # based on the result values
+        if result:
+            return random.sample(RESPONSES_IF_CORRECT, k=1)[0]
+
+        else:
+            return random.sample(RESPONSES_IF_INCORRECT, k=1)[0]
+
+
+class ReorderTaskManager(TaskManager):
+    def __init__(
+        self,
+    ):
+        super().__init__()
+
+    async def evaluate(
+        self,
+        interactions: ReorderAnswer,
+        task: ReorderTask,
+    ):
+        correct_order = task.correct_orders
+        answers = interactions.reordered
+
+        corrects = 0
+
+        # Compare position by position
+        for i, value in enumerate(answers):
+            if i < len(correct_order) and value == correct_order[i]:
+                corrects += 1
+
+        # Fully correct only if everything matches and lengths are equal
+        result = answers == correct_order
+
+        score = corrects / len(correct_order) if correct_order else 0
+
+        return result, score
+
+    async def response(
+        self,
+        result,
+    ):
+        # Return the comments on whether or not
+        # the current task is correct ot not
+        # based on the result values
+        if result:
+            return random.sample(RESPONSES_IF_CORRECT, k=1)[0]
+
+        else:
+            return random.sample(RESPONSES_IF_INCORRECT, k=1)[0]
 
 
 class FillTaskManager(TaskManager):

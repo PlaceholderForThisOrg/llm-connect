@@ -3,6 +3,7 @@ from openai import AsyncOpenAI
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect.models.Activity import MatchTask
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRelationRepository import (
     AtomicPointRelationRepository,
@@ -36,6 +37,8 @@ from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionMana
 from llm_connect.services.core.TaskManager import (
     FillTaskManager,
     GenerateTaskManager,
+    MatchTaskManager,
+    ReorderTaskManager,
     SelectTaskManager,
 )
 from llm_connect.services.immerse import Actor, Orchestrator, PromptBuilder
@@ -199,6 +202,14 @@ def get_fill_task_manager():
     return FillTaskManager()
 
 
+def get_match_task_manager():
+    return MatchTaskManager()
+
+
+def get_reorder_task_manager():
+    return ReorderTaskManager()
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
@@ -214,6 +225,8 @@ def get_orchestrator(
     session: AsyncSession = Depends(get_db_session),
     select_task_manager: SelectTaskManager = Depends(get_select_task_manager),
     fill_task_manager: FillTaskManager = Depends(get_fill_task_manager),
+    match_task_manager: MatchTaskManager = Depends(get_match_task_manager),
+    reorder_task_manager: ReorderTaskManager = Depends(get_reorder_task_manager),
 ):
     return Orchestrator(
         evaluator,
@@ -230,6 +243,8 @@ def get_orchestrator(
         session,
         select_task_manager,
         fill_task_manager,
+        match_task_manager,
+        reorder_task_manager,
     )
 
 
