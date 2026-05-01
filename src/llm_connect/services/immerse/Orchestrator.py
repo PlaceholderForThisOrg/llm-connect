@@ -1,5 +1,7 @@
+import random
 import uuid
 from datetime import datetime, timezone
+from enum import Enum
 from typing import Optional
 
 from fastapi import BackgroundTasks
@@ -24,6 +26,16 @@ from llm_connect.services.core.TaskManager import (
     TaskManager,
 )
 from llm_connect.services.immerse import Actor, Evaluator, PromptBuilder
+
+
+class SessionStatus(Enum):
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+
+
+class ProgressStatus(Enum):
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
 
 
 class Orchestrator:
@@ -82,6 +94,7 @@ class Orchestrator:
         interaction,
         answer,
     ):
+        # is_final = False
         logger.info("- Load metadata")
 
         # Session
@@ -99,13 +112,25 @@ class Orchestrator:
         task = activity.tasks.get(task_id)
         if not task:
             raise ValueError("Task not found")
-        # task_type = task.type
+
+        # Atomic point IDs
         ap_ids = task.atomic_points
 
         # Next possible tasks
-        # FIXME: ALways choose the second
-        next_task_id = task.next_possibles[0] if len(task.next_possibles) > 0 else None
-        next_task = activity.tasks.get(next_task_id, None)
+        # FIXME: ALways choose the first one
+
+        if len(task.next_possibles) == 0:
+            # That is the final task
+            # is_final = True
+            next_task_id = None
+            next_task = None
+
+        else:
+            next_task_id = random.sample(population=task.next_possibles, k=1)[0]
+            next_task = activity.tasks.get(next_task_id, None)
+
+        # next_task_id = task.next_possibles[0] if len(task.next_possibles) > 0 else None
+        # next_task = activity.tasks.get(next_task_id, None)
 
         # Current progress
         progress = next(
@@ -113,12 +138,19 @@ class Orchestrator:
             None,
         )
 
+        next_progress = next(
+            (p for p in session.progresses if p.task_id == next_task_id), None
+        )
+
         if not progress:
             raise ValueError("Progress not found")
 
+        # Increase attempt
         attempt = (progress.num_attempts or 0) + 1
+        progress.num_attempts = attempt
         now = datetime.now(timezone.utc)
 
+        # Start at logic
         if progress.started_at is None:
             progress.started_at = now
 
@@ -127,6 +159,7 @@ class Orchestrator:
         response = ""
 
         logger.info(f"------- Current task's type is {task.type}")
+
         result = await self.task_manager.evaluate(
             activity_id=activity.id,
             task=task,
@@ -134,6 +167,7 @@ class Orchestrator:
         )
 
         # Response the system
+        # next_task can be None
         async for token in self.task_manager.response(
             activity_id=activity.id,
             task=task,
@@ -163,7 +197,7 @@ class Orchestrator:
             input=answer.response,
             output=response,
             is_correct=result,
-            score=0.0,
+            score=1.0 if result else random.uniform(0, 1.0),
             created_at=now,
             meta="{}",
         )
@@ -172,8 +206,8 @@ class Orchestrator:
         progress.interactions.append(interaction)
         progress.num_attempts = attempt
 
-        # FIXME: Wrong in update the task
-        # Wrong in update the final task
+        # Correct result -> Finish task
+        # Wrong result -> Don't finish
         if result:
             # current progress is finished
             progress.status = "COMPLETED"
@@ -181,33 +215,30 @@ class Orchestrator:
         else:
             progress.status = "IN_PROGRESS"
 
-            # Move to the next goal if
-            if progress.status == "COMPLETED":
-                for next_id in task.next_possibles:
-                    next_progress = next(
-                        (p for p in session.progresses if p.task_id == next_id),
-                        None,
-                    )
-                if next_progress and next_progress.status == "LOCKED":
-                    next_progress.status = "UNLOCKED"
+        # Moving
+        if progress.status == "COMPLETED":
+            # Redo a task -> Move to the next task
 
-        # to check the next task id
-        # finish or not
-        if next_task_id:
-            session.current_task = next_task_id
+            # Move to the next task
+            if next_progress and next_progress.status == "LOCKED":
+                session.current_task = next_task_id
+                next_progress.status = "UNLOCKED"
+
+            else:
+                # Session is completed
+                logger.info("Session is done!")
+                session.status = "COMPLETED"
+                session.completed_at = now
+
         else:
-            session.status = "COMPLETED"
-            session.completed_at = now
+            # Don't move
+            None
 
         # calculate progress
         score_progress = self._compute_progress(session)
         session.progress = score_progress
 
         await self.session.commit()
-
-        # compute the progress
-        # compute the score
-        # Orchestrate on the interaction
 
     async def flow(
         self,
@@ -239,8 +270,15 @@ class Orchestrator:
 
         # Next possible tasks
         # FIXME: ALways choose the second
-        next_task_id = task.next_possibles[0] if len(task.next_possibles) > 0 else None
-        # next_task = activity.tasks.get(next_task_id, None)
+        if len(task.next_possibles) == 0:
+            # That is the final task
+            # is_final = True
+            next_task_id = None
+            # next_task = None
+
+        else:
+            next_task_id = random.sample(population=task.next_possibles, k=1)[0]
+            # next_task = activity.tasks.get(next_task_id, None)
 
         # Current progress
         progress = next(
@@ -250,6 +288,10 @@ class Orchestrator:
 
         if not progress:
             raise ValueError("Progress not found")
+
+        next_progress = next(
+            (p for p in session.progresses if p.task_id == next_task_id), None
+        )
 
         attempt = (progress.num_attempts or 0) + 1
         now = datetime.now(timezone.utc)
@@ -266,6 +308,7 @@ class Orchestrator:
                 interactions=answer,
                 task=task,
             )
+            score = 1.0 if result is True else 0.0
 
             response = await self.select_manager.response(
                 result=result,
@@ -280,7 +323,7 @@ class Orchestrator:
                 task=task,
             )
 
-            progress.score = score
+            # progress.score = score
 
             response = await self.fill_manager.response(result)
 
@@ -291,7 +334,7 @@ class Orchestrator:
                 interactions=answer, task=task
             )
 
-            progress.score = score
+            # progress.score = score
 
             response = await self.match_manager.response(result)
 
@@ -302,7 +345,7 @@ class Orchestrator:
                 interactions=answer, task=task
             )
 
-            progress.score = score
+            # progress.score = score
 
             response = await self.reorder_manager.response(result=result)
 
@@ -330,7 +373,7 @@ class Orchestrator:
             input=input,
             output=response,
             is_correct=result,
-            score=0.0,
+            score=score,
             created_at=now,
             meta="{}",
         )
@@ -345,15 +388,20 @@ class Orchestrator:
         else:
             progress.status = "IN_PROGRESS"
 
-            # Move to the next goal if
-            if progress.status == "COMPLETED":
-                for next_id in task.next_possibles:
-                    next_progress = next(
-                        (p for p in session.progresses if p.task_id == next_id),
-                        None,
-                    )
-                if next_progress and next_progress.status == "LOCKED":
-                    next_progress.status = "UNLOCKED"
+        # Moving
+        if progress.status == "COMPLETED":
+            # Redo a task -> Move to the next task
+
+            # Move to the next task
+            if next_progress and next_progress.status == "LOCKED":
+                session.current_task = next_task_id
+                next_progress.status = "UNLOCKED"
+
+            else:
+                # Session is completed
+                logger.info("Session is done!")
+                session.status = "COMPLETED"
+                session.completed_at = now
 
         # to check the next task id
         # finish or not
@@ -366,6 +414,8 @@ class Orchestrator:
         # calculate progress
         score_progress = self._compute_progress(session)
         session.progress = score_progress
+        progress_score = self._compute_score(session)
+        progress.score = progress_score
 
         logger.info(f"Progress calculated: {score_progress}")
 

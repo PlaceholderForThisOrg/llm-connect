@@ -271,10 +271,13 @@ class GenerateTaskManager(TaskManager):
             yield "I don't understand what you are saying!"
 
         else:
+            finished_goal = task.prompt
+            next_goal = next_task.prompt if next_task else "No further task any more"
+
             params = NPCParams(
                 learner_interaction=interactions,
-                finished_goal=task.prompt,
-                next_goal=next_task.prompt,
+                finished_goal=finished_goal,
+                next_goal=next_goal,
             )
 
             prompt = self.pb.npc(params)

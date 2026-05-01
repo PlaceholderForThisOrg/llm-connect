@@ -3,7 +3,6 @@ from openai import AsyncOpenAI
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from llm_connect.models.Activity import MatchTask
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRelationRepository import (
     AtomicPointRelationRepository,
