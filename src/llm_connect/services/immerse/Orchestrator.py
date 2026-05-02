@@ -195,6 +195,20 @@ class Orchestrator:
             ap_ids=ap_ids,
         )
 
+        # Response the system
+        # next_task can be None
+        async for token in self.generate_manager.responsev2(
+            activity_id=activity.id,
+            task=task,
+            next_task=next_task,
+            result=result,
+            interactions=answer.response,
+            history=history,
+            activity=activity,
+        ):
+            response += token
+            yield token
+
         # Update Session
         logger.info("[4] --- Update session")
 
@@ -211,6 +225,11 @@ class Orchestrator:
         )
 
         # update progress
+        # calculate progress
+        score_progress = self._compute_progress(session)
+        session.progress = score_progress
+
+        # add interaction
         progress.interactions.append(interaction)
         progress.num_attempts = attempt
 
@@ -242,24 +261,7 @@ class Orchestrator:
             # Don't move
             None
 
-        # calculate progress
-        score_progress = self._compute_progress(session)
-        session.progress = score_progress
-
         await self.session.commit()
-        # Response the system
-        # next_task can be None
-        async for token in self.generate_manager.responsev2(
-            activity_id=activity.id,
-            task=task,
-            next_task=next_task,
-            result=result,
-            interactions=answer.response,
-            history=history,
-            activity=activity,
-        ):
-            response += token
-            yield token
 
     async def flow(
         self,
@@ -307,12 +309,12 @@ class Orchestrator:
             None,
         )
 
-        if not progress:
-            raise ValueError("Progress not found")
-
         next_progress = next(
             (p for p in session.progresses if p.task_id == next_task_id), None
         )
+
+        if not progress:
+            raise ValueError("Progress not found")
 
         attempt = (progress.num_attempts or 0) + 1
         now = datetime.now(timezone.utc)
@@ -323,7 +325,7 @@ class Orchestrator:
         # Evaluation
         if task_type == TaskType.SELECT:
 
-            input = answer.selected
+            input = answer.response
 
             result = await self.select_manager.evaluate(
                 interactions=answer,
@@ -336,8 +338,9 @@ class Orchestrator:
             )
 
         elif task_type == TaskType.FILL:
+            logger.info("Task is fill")
 
-            input = answer.filled
+            input = answer.response
 
             result, score = await self.fill_manager.evaluate(
                 answer,
@@ -349,7 +352,7 @@ class Orchestrator:
             response = await self.fill_manager.response(result)
 
         elif task_type == TaskType.MATCH:
-            input = answer.matched
+            input = answer.response
 
             result, score = await self.match_manager.evaluate(
                 interactions=answer, task=task
@@ -360,7 +363,7 @@ class Orchestrator:
             response = await self.match_manager.response(result)
 
         elif task_type == TaskType.REORDER:
-            input = answer.reordered
+            input = answer.response
 
             result, score = await self.reorder_manager.evaluate(
                 interactions=answer, task=task
@@ -372,7 +375,7 @@ class Orchestrator:
 
         else:
             # fallback
-            result = True
+            result = False
             response = ""
 
             # MASTERY UPDATE
@@ -398,10 +401,18 @@ class Orchestrator:
             created_at=now,
             meta="{}",
         )
+
         # update progress
+        # calculate progress
+        score_progress = self._compute_progress(session)
+        session.progress = score_progress
+
+        # add interaction
         progress.interactions.append(interaction)
         progress.num_attempts = attempt
 
+        # Correct result -> Finish task
+        # Wrong result -> Don't finish
         if result:
             # current progress is finished
             progress.status = "COMPLETED"
@@ -424,21 +435,9 @@ class Orchestrator:
                 session.status = "COMPLETED"
                 session.completed_at = now
 
-        # to check the next task id
-        # finish or not
-        if next_task_id:
-            session.current_task = next_task_id
         else:
-            session.status = "COMPLETED"
-            session.completed_at = now
-
-        # calculate progress
-        score_progress = self._compute_progress(session)
-        session.progress = score_progress
-        progress_score = self._compute_score(session)
-        progress.score = progress_score
-
-        logger.info(f"Progress calculated: {score_progress}")
+            # Don't move
+            None
 
         await self.session.commit()
 

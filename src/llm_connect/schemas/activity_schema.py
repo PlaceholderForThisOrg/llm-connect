@@ -25,8 +25,9 @@ TaskRequest = Annotated[
 
 class Metadata(BaseModel):
     type: str
-    title: str
-    description: str
+    title: str = None
+    description: str = None
+    npc: str = None
     general_difficulty: str
     estimated_time: int
     tags: List[str] = Field(default_factory=list)

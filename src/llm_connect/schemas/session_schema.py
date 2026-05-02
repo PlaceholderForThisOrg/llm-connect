@@ -88,18 +88,22 @@ class GenerateAnswer(BaseModel):
 
 class SelectAnswer(BaseModel):
     selected: List[str] = None
+    response: List[str] = None
 
 
 class FillAnswer(BaseModel):
     filled: List[str] = None
+    response: List[str] = None
 
 
 class MatchAnswer(BaseModel):
-    matched: Dict[str | int, str | int]
+    matched: Dict[str | int, str | int] = None
+    response: Dict[str | int, str | int] = None
 
 
 class ReorderAnswer(BaseModel):
-    reordered: List[str | int]
+    reordered: List[str | int] = None
+    response: List[str | int] = None
 
 
 class SubmitInteraction(BaseModel):

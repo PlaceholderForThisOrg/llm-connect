@@ -112,10 +112,10 @@ Task = Union[
 
 
 class ActivityType(str, Enum):
-    ROLE_PLAY = "role_play"
-    EMAIL = "email"
-    ARTICLE = "article"
-    READING = "reading"
+    ROLE_PLAY = "ROLE_PLAY"
+    # EMAIL = "email"
+    # ARTICLE = "article"
+    READING = "READING"
 
 
 class Metadata(BaseModel):
