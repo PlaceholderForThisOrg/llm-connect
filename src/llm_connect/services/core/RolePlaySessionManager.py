@@ -213,7 +213,7 @@ class RolePlaySessionManager(SessionManager):
         # Create the history
         history = session["history"]
         hist = [
-            f"{interaction["of"]}: {interaction["content"]}" for interaction in history
+            f"{interaction['of']}: {interaction['content']}" for interaction in history
         ]
         hist = "\n".join(hist)
 
@@ -245,7 +245,7 @@ class RolePlaySessionManager(SessionManager):
 
         history = session["history"]
         hist = [
-            f"{interaction["of"]}: {interaction["content"]}" for interaction in history
+            f"{interaction['of']}: {interaction['content']}" for interaction in history
         ]
         hist = "\n".join(hist)
         latest = history[-1]["content"]

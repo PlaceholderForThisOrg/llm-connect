@@ -168,7 +168,7 @@ class PromptBuilder:
         messages = scenario["messages"]
         history = ""
         for record in messages:
-            m = f"{record["role"]}:{record["content"]}"
+            m = f"{record['role']}:{record['content']}"
 
             history += f"{m}\n"
 
@@ -192,7 +192,7 @@ class PromptBuilder:
         messages = scenario["messages"]
         history = ""
         for record in messages:
-            m = f"{record["role"]}:{record["content"]}"
+            m = f"{record['role']}:{record['content']}"
 
             history += f"{m}\n"
 
