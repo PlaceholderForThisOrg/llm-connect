@@ -32,10 +32,13 @@ class ActivityService:
         # list to dict
         task_dict = {task.id: task for task in request.tasks}
 
-        new_request = {
-            **request,
-            "task_count": len(task_dict),
-        }
+        # new_request = {
+        #     **request.model_dump(),
+        #     "task_count": len(task_dict),
+        # }
+
+        meta = request.metadata.model_dump()
+        meta["task_count"] = len(task_dict)
 
         # simple validation
         for task_id in request.start_tasks:
@@ -48,7 +51,7 @@ class ActivityService:
                     raise ValueError(f"Invalid next task reference: {next_id}")
 
         activity = Activity(
-            metadata=new_request.metadata.model_dump(),
+            metadata=meta,
             start_tasks=request.start_tasks,
             tasks=task_dict,
         )

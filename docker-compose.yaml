@@ -51,8 +51,6 @@ services:
       - "8000:8000"
     command: >
       uv run python -m llm_connect.main
-    volumes:
-      - .:/app
 
 volumes:
   postgres_data:
