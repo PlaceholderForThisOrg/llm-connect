@@ -309,12 +309,12 @@ class Orchestrator:
             None,
         )
 
-        if not progress:
-            raise ValueError("Progress not found")
-
         next_progress = next(
             (p for p in session.progresses if p.task_id == next_task_id), None
         )
+
+        if not progress:
+            raise ValueError("Progress not found")
 
         attempt = (progress.num_attempts or 0) + 1
         now = datetime.now(timezone.utc)
