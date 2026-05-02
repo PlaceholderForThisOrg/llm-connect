@@ -3,7 +3,7 @@
 services:
   postgres:
     image: postgres:16-alpine
-    restart: always
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -14,10 +14,16 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5  
 
   mongodb:
-    image: mongo:6
-    restart: always
+    image: mongo:4.4
+    restart: unless-stopped
+    command: ["mongod", "--wiredTigerCacheSizeGB", "0.25"]
     env_file:
       - .env
     environment:
@@ -27,11 +33,21 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'mongo --quiet -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval "db.adminCommand({ ping: 1 })"',
+        ]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
   flyway:
     image: flyway/flyway:10
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     command: >
       -url=jdbc:postgresql://postgres:5432/${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} migrate
     volumes:
@@ -40,17 +56,18 @@ services:
       - .env
 
   fastapi:
-    build: .
-    depends_on:
-      - postgres
-      - mongodb
-      - flyway
+    image: ${DOCKER_IMAGE}
+    container_name: llm-connect
+    restart: unless-stopped
     env_file:
       - .env
     ports:
-      - "8000:8000"
-    command: >
-      uv run python -m llm_connect.main
+      - "${APP_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
 
 volumes:
   postgres_data:

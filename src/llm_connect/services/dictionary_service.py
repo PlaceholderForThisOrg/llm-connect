@@ -43,7 +43,7 @@ async def cache_entry(entries, pool: Pool):
             entries,
         )
 
-    logger.info(f"Store {first_entry["word"]} into database")
+    logger.info(f"Store {first_entry['word']} into database")
 
 
 async def look_up_db(word: str, pool: Pool):
