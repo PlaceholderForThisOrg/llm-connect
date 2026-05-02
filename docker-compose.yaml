@@ -34,11 +34,10 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      # Root auth is enabled when MONGO_INITDB_ROOT_* is set; anonymous ping fails → unhealthy.
       test:
         [
           "CMD-SHELL",
-          'mongosh --quiet -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval "db.adminCommand({ ping: 1 })"',
+          'mongosh --quiet -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval "db.adminCommand({ ping: 1 })"',
         ]
       interval: 20s
       timeout: 10s
