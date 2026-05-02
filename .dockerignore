@@ -1,0 +1,15 @@
+.temp
+.venv
+.vscode
+.script
+tests
+.env.development
+.env.example
+.env.local
+
+.envrc
+.flake8
+.gitignore
+.docker-compose
+.Dockerfile
+flyway.conf

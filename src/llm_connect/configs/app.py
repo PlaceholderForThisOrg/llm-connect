@@ -1,6 +1,9 @@
-HOST = "0.0.0.0"
-PORT = 8002
-APP = "llm_connect"
+import os
+
+HOST = os.environ["HOST"]
+PORT = int(os.environ["PORT"])
+APP = os.environ["APP"]
+
 ORIGINS = [
     "*",
     "http://localhost:3000",

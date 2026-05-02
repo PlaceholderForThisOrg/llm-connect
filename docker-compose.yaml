@@ -1,0 +1,59 @@
+# version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:6
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  flyway:
+    image: flyway/flyway:10
+    depends_on:
+      - postgres
+    command: >
+      -url=jdbc:postgresql://postgres:5432/${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} migrate
+    volumes:
+      - ./db/migration:/flyway/sql
+    env_file:
+      - .env
+
+  fastapi:
+    build: .
+    depends_on:
+      - postgres
+      - mongodb
+      - flyway
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    command: >
+      uv run python -m llm_connect.main
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_data:
+  mongo_data:
