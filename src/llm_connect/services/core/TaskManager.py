@@ -84,7 +84,7 @@ class MatchTaskManager(TaskManager):
         task: MatchTask,
     ):
         correct_pairs = task.correct_pairs
-        answers = interactions.matched
+        answers = interactions.response
 
         corrects = 0
 
@@ -125,7 +125,7 @@ class ReorderTaskManager(TaskManager):
         task: ReorderTask,
     ):
         correct_order = task.correct_orders
-        answers = interactions.reordered
+        answers = interactions.response
 
         corrects = 0
 
@@ -167,20 +167,19 @@ class FillTaskManager(TaskManager):
         task: FillTask,
     ):
         correct_answers = [str.lower(a) for a in task.correct_answers]
-        answers = [str.lower(a) for a in interactions.filled]
+        answers = [str.lower(a) for a in interactions.response]
 
         corrects = 0
         result = True
 
-        for index, answer in enumerate(answers):
-            if answer == correct_answers[index]:
+        for answer, correct in zip(answers, correct_answers):
+            if answer == correct:
                 corrects += 1
-                result = result and True
-
             else:
-                result = result and False
+                result = False
 
-        return result, corrects / len(answers)
+        score = corrects / len(answers) if answers else 0
+        return result, score
 
     async def response(
         self,
@@ -212,7 +211,7 @@ class SelectTaskManager(TaskManager):
         task: SelectTask,
     ):
         correct_options = task.correct_options
-        answers = interactions.selected
+        answers = interactions.response
 
         # normalize corrects and answers
         correct_set = set(correct_options)

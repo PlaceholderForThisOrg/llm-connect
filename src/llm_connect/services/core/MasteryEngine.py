@@ -28,20 +28,33 @@ class MasteryEngine:
 
         logger.info("Mastery engine start!")
         atomic_points = await self.atomic_point_repo.get_by_ids(ap_ids)
-        ap_map = {ap.id: ap for ap in atomic_points}
+        ap_map = {str(ap.id): ap for ap in atomic_points}
 
         updated_masteries = []
 
+        logger.debug(f"Atomic point's IDs: {ap_ids}")
+
+        logger.debug(f"Atomic point's map: {ap_map}")
+
         for ap_id in ap_ids:
+            # ap is None ?
             ap = ap_map.get(ap_id)
+
+            logger.debug(f"Current atomic points: {ap.id}")
+
             if not ap:
                 continue
 
             mastery = await self.mastery_repo.get_mastery_by_id(learner_id, ap_id)
 
+            logger.debug(f"Mastery is None: {mastery is None}")
+
             is_new = False
 
             if not mastery:
+
+                logger.debug("There is no mastery, create a new one")
+
                 mastery = await self.mastery_repo.create_mastery(
                     learner_id=learner_id,
                     ap_id=ap_id,
