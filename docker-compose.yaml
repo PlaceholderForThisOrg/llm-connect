@@ -34,10 +34,11 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh localhost:27017/test"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 20s
-      timeout: 5s
-      retries: 5
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   flyway:
     image: flyway/flyway:10
