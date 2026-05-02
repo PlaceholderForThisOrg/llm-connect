@@ -3,7 +3,7 @@
 services:
   postgres:
     image: postgres:16-alpine
-    restart: always
+    restart: unless-stopped
     env_file:
       - .env
     environment:
@@ -14,10 +14,16 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5  
 
   mongodb:
-    image: mongo:6
-    restart: always
+    image: mongo:6.0
+    restart: unless-stopped
+    command: ["mongod", "--wiredTigerCacheSizeGB", "0.25"]
     env_file:
       - .env
     environment:
@@ -27,11 +33,17 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
 
   flyway:
     image: flyway/flyway:10
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     command: >
       -url=jdbc:postgresql://postgres:5432/${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} migrate
     volumes:
@@ -42,17 +54,16 @@ services:
   fastapi:
     build: .
     depends_on:
-      - postgres
-      - mongodb
-      - flyway
+      postgres:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     env_file:
       - .env
     ports:
-      - "8000:8000"
-    command: >
-      uv run python -m llm_connect.main
-    volumes:
-      - .:/app
+      - "${APP_PORT:-8000}:8000"
 
 volumes:
   postgres_data:
