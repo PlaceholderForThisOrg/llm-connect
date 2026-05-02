@@ -33,17 +33,6 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'mongosh --quiet -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --eval "db.adminCommand({ ping: 1 })"',
-        ]
-      interval: 20s
-      timeout: 10s
-      retries: 10
-      start_period: 40s
-
   flyway:
     image: flyway/flyway:10
     depends_on:
@@ -66,8 +55,6 @@ services:
       - "${APP_PORT:-8000}:8000"
     depends_on:
       postgres:
-        condition: service_healthy
-      mongodb:
         condition: service_healthy
       flyway:
         condition: service_completed_successfully
