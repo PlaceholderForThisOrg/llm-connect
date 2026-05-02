@@ -1,11 +1,19 @@
 import json
 import random
 from abc import ABC, abstractmethod
+from ast import List
 
 from openai import AsyncOpenAI
 
 from llm_connect.configs.llm import GPT4OMINI, GPT41
-from llm_connect.models.Activity import FillTask, MatchTask, ReorderTask, SelectTask
+from llm_connect.models.Activity import (
+    Activity,
+    FillTask,
+    GenerateTask,
+    MatchTask,
+    ReorderTask,
+    SelectTask,
+)
 from llm_connect.schemas.session_schema import (
     FillAnswer,
     MatchAnswer,
@@ -14,7 +22,9 @@ from llm_connect.schemas.session_schema import (
 )
 from llm_connect.services.immerse.PromptBuilder import (
     GoalEvaluateParams,
+    GoalEvaluateParamsv2,
     NPCParams,
+    NPCParamsv2,
     PromptBuilder,
 )
 
@@ -237,6 +247,41 @@ class GenerateTaskManager(TaskManager):
         self.pb = prompt_builder
         self.client = client
 
+    async def evaluatev2(
+        self,
+        context,
+        task: GenerateTask,
+        history,
+        interactions,
+        learner_input,
+    ) -> bool:
+        # params = GoalEvaluateParams(goal=task.prompt, learner_input=interactions)
+        params = GoalEvaluateParamsv2(
+            context=context,
+            history=history,
+            learner_input=interactions,
+            criteria=None,
+            goal=task.prompt,
+        )
+
+        prompt = self.pb.goal_evaluatev2(params=params)
+
+        # Call the LLM for evaluation
+        response = await self.client.chat.completions.create(
+            model=GPT4OMINI,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+        )
+
+        result = response.choices[0].message.content
+        result = json.loads(result)
+        result = result["result"]
+        return result
+
     async def evaluate(self, activity_id, task, interactions) -> bool:
         params = GoalEvaluateParams(goal=task.prompt, learner_input=interactions)
 
@@ -257,6 +302,35 @@ class GenerateTaskManager(TaskManager):
         result = json.loads(result)
         result = result["result"]
         return result
+
+    async def responsev2(
+        self,
+        activity_id,
+        task: GenerateTask,
+        next_task: GenerateTask,
+        result,
+        interactions,
+        activity: Activity,
+        history: List,
+    ):
+        params = NPCParamsv2(
+            context=activity.metadata.description,
+            npc=activity.metadata.npc,
+            current_task=task.prompt,
+            result=result,
+            next_task=next_task.prompt if next_task else "No task left",
+            history=history,
+            learner_input=interactions,
+        )
+
+        prompt = self.pb.npcv2(params)
+
+        async with self.client.chat.completions.stream(
+            model=GPT41, messages=[{"role": "user", "content": prompt}]
+        ) as stream_manager:
+            async for event in stream_manager:
+                if event.type == "content.delta":
+                    yield event.delta
 
     async def response(
         self,

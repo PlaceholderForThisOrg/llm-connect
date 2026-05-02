@@ -49,6 +49,24 @@ class GoalEvaluateParams(TypedDict):
     learner_input: str
 
 
+class GoalEvaluateParamsv2(TypedDict):
+    context: str
+    goal: str
+    criteria: str = None
+    history: List
+    learner_input: str
+
+
+class NPCParamsv2(TypedDict):
+    context: str
+    npc: str
+    current_task: str
+    result: bool
+    next_task: str
+    history: List
+    learner_input: str
+
+
 class NPCParams(TypedDict):
     learner_interaction: str
     finished_goal: str
@@ -85,6 +103,17 @@ class PromptBuilder:
         )
 
         self.env = Environment(loader=loader)
+
+    def npcv2(self, params: NPCParamsv2):
+        template = self.env.get_template(name="npc_v2.jinja")
+        return template.render(**params)
+
+    def goal_evaluatev2(
+        self,
+        params: GoalEvaluateParamsv2,
+    ):
+        template = self.env.get_template(name="task_evaluation_v2.jinja")
+        return template.render(**params)
 
     def companion_help_prompt_v1(self, params: CompanionHelpParams_v1):
         template = self.env.get_template(name="companion_help_v1.jinja")
