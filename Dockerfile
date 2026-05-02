@@ -19,4 +19,6 @@ COPY . .
 # install project
 RUN uv sync --frozen --no-cache --python python3.11
 
+RUN uv run python -m compileall -q src/llm_connect
+
 CMD ["uv", "run", "uvicorn", "llm_connect.app:app", "--host", "0.0.0.0", "--port", "8000"]
