@@ -20,3 +20,11 @@ Start the backend using the following command:
 
 ```bash
 uv run python -m llm_connect.main
+
+
+
+docker compose up postgres mongodb -d
+docker compose run --rm flyway
+uv run python -m llm_connect.main
+
+
