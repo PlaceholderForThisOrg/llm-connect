@@ -13,9 +13,11 @@ from llm_connect.repositories.MasteryRepository import MasteryRepository
 
 
 class RelationType(str, Enum):
-    PREREQUISITE = "prerequisite"
-    SIMILAR = "similar"
-    CONFUSABLE = "confusable"
+    PREREQUISITE = "PREREQUISITE"
+    SIMILAR = "SIMILAR"
+    CONFUSABLE = "CONFUSABLE"
+    RELATED = "RELATED"
+    CONTRASTS = "CONTRASTS"
 
 
 class Adapter:
