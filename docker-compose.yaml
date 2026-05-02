@@ -21,7 +21,7 @@ services:
       retries: 5  
 
   mongodb:
-    image: mongo:6.0
+    image: mongo:6-jammy
     restart: unless-stopped
     command: ["mongod", "--wiredTigerCacheSizeGB", "0.25"]
     env_file:
@@ -34,7 +34,7 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      test: ["CMD-SHELL", "echo 'db.runCommand({ ping: 1 })' | mongosh localhost:27017/test"]
       interval: 20s
       timeout: 5s
       retries: 5
@@ -52,7 +52,13 @@ services:
       - .env
 
   fastapi:
-    build: .
+    image: ${DOCKER_IMAGE}
+    container_name: llm-connect
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT:-8000}:8000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -60,10 +66,6 @@ services:
         condition: service_healthy
       flyway:
         condition: service_completed_successfully
-    env_file:
-      - .env
-    ports:
-      - "${APP_PORT:-8000}:8000"
 
 volumes:
   postgres_data:
