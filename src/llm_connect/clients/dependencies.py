@@ -10,6 +10,7 @@ from llm_connect.repositories.AtomicPointRelationRepository import (
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.AtomicPointTagRepository import AtomicPointTagRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
+from llm_connect.repositories.InteractionRepository import InteractionRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
 from llm_connect.repositories.MessageRepository import MessageRepository
@@ -209,6 +210,14 @@ def get_reorder_task_manager():
     return ReorderTaskManager()
 
 
+def get_interaction_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return InteractionRepository(
+        session=session,
+    )
+
+
 def get_orchestrator(
     evaluator: Evaluator = Depends(get_evaluator),
     actor: Actor = Depends(get_actor),
@@ -226,6 +235,8 @@ def get_orchestrator(
     fill_task_manager: FillTaskManager = Depends(get_fill_task_manager),
     match_task_manager: MatchTaskManager = Depends(get_match_task_manager),
     reorder_task_manager: ReorderTaskManager = Depends(get_reorder_task_manager),
+    generate_task_manager: GenerateTaskManager = Depends(get_generate_task_manager),
+    interaction_repo: InteractionRepository = Depends(get_interaction_repo),
 ):
     return Orchestrator(
         evaluator,
@@ -244,6 +255,8 @@ def get_orchestrator(
         fill_task_manager,
         match_task_manager,
         reorder_task_manager,
+        generate_task_manager,
+        interaction_repo,
     )
 
 

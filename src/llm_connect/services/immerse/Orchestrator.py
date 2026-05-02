@@ -12,6 +12,7 @@ from llm_connect.models import Interaction
 from llm_connect.models.Activity import TaskType
 from llm_connect.models.Session import Session
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.InteractionRepository import InteractionRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.analyzer.Analyzer import Analyzer
@@ -20,6 +21,7 @@ from llm_connect.services.core.MasteryEngine import MasteryEngine
 from llm_connect.services.core.RolePlaySessionManager import RolePlaySessionManager
 from llm_connect.services.core.TaskManager import (
     FillTaskManager,
+    GenerateTaskManager,
     MatchTaskManager,
     ReorderTaskManager,
     SelectTaskManager,
@@ -57,6 +59,8 @@ class Orchestrator:
         fill_manager: FillTaskManager,
         match_manager: MatchTaskManager,
         reorder_manager: ReorderTaskManager,
+        generate_manager: GenerateTaskManager,
+        interaction_repo: InteractionRepository,
     ):
         self.evaluator = evaluator
         self.actor = actor
@@ -74,6 +78,8 @@ class Orchestrator:
         self.fill_manager = fill_manager
         self.match_manager = match_manager
         self.reorder_manager = reorder_manager
+        self.generate_manager = generate_manager
+        self.interaction_repo = interaction_repo
 
     def _compute_progress(self, session: Session) -> float:
         total = len(session.progresses)
@@ -160,26 +166,28 @@ class Orchestrator:
 
         logger.info(f"------- Current task's type is {task.type}")
 
-        result = await self.task_manager.evaluate(
-            activity_id=activity.id,
+        # result = await self.task_manager.evaluate(
+        #     activity_id=activity.id,
+        #     task=task,
+        #     interactions=answer.response,
+        # )
+
+        history = await self.interaction_repo.get_session_history(session_id=session.id)
+
+        result = await self.generate_manager.evaluatev2(
+            context=activity.metadata.description,
             task=task,
             interactions=answer.response,
+            learner_input=answer.response,
+            history=history,
         )
 
-        # Response the system
-        # next_task can be None
-        async for token in self.task_manager.response(
-            activity_id=activity.id,
-            task=task,
-            next_task=next_task,
-            result=result,
-            interactions=answer.response,
-        ):
-            response += token
-            yield token
+        logger.info(f"Can the learner move to the next task {result}")
 
         # MASTERY UPDATE
         logger.info("[3] --- Core mastery update")
+
+        logger.info(f"Atomic points: {ap_ids}")
 
         await self.mastery_engine.update_v2(
             result=result,
@@ -239,6 +247,19 @@ class Orchestrator:
         session.progress = score_progress
 
         await self.session.commit()
+        # Response the system
+        # next_task can be None
+        async for token in self.generate_manager.responsev2(
+            activity_id=activity.id,
+            task=task,
+            next_task=next_task,
+            result=result,
+            interactions=answer.response,
+            history=history,
+            activity=activity,
+        ):
+            response += token
+            yield token
 
     async def flow(
         self,
