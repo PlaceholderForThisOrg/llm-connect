@@ -3,6 +3,7 @@ from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect import logger
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
 from llm_connect.services.core.BKTEngine import BKTEngine
@@ -24,6 +25,8 @@ class MasteryEngine:
         self.session = session
 
     async def update_v2(self, result: bool, learner_id: str, ap_ids: List[str]):
+
+        logger.info("Mastery engine start!")
         atomic_points = await self.atomic_point_repo.get_by_ids(ap_ids)
         ap_map = {ap.id: ap for ap in atomic_points}
 
@@ -45,6 +48,8 @@ class MasteryEngine:
                     p_L=ap.p_init,
                 )
                 is_new = True
+
+            logger.debug(f"We have mastery: {mastery is not None}?")
 
             # update based on Bayesian Knowledge Tracing
             new_p_L = self.e.run(

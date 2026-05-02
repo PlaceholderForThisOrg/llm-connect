@@ -184,22 +184,10 @@ class Orchestrator:
 
         logger.info(f"Can the learner move to the next task {result}")
 
-        # Response the system
-        # next_task can be None
-        async for token in self.generate_manager.responsev2(
-            activity_id=activity.id,
-            task=task,
-            next_task=next_task,
-            result=result,
-            interactions=answer.response,
-            history=history,
-            activity=activity,
-        ):
-            response += token
-            yield token
-
         # MASTERY UPDATE
         logger.info("[3] --- Core mastery update")
+
+        logger.info(f"Atomic points: {ap_ids}")
 
         await self.mastery_engine.update_v2(
             result=result,
@@ -259,6 +247,19 @@ class Orchestrator:
         session.progress = score_progress
 
         await self.session.commit()
+        # Response the system
+        # next_task can be None
+        async for token in self.generate_manager.responsev2(
+            activity_id=activity.id,
+            task=task,
+            next_task=next_task,
+            result=result,
+            interactions=answer.response,
+            history=history,
+            activity=activity,
+        ):
+            response += token
+            yield token
 
     async def flow(
         self,
