@@ -5,6 +5,7 @@ from ast import List
 
 from openai import AsyncOpenAI
 
+from llm_connect.configs import gpt41mini_semaphore
 from llm_connect.configs.llm import GPT4OMINI, GPT41
 from llm_connect.models.Activity import (
     Activity,
@@ -262,19 +263,20 @@ class GenerateTaskManager(TaskManager):
             criteria=None,
             goal=task.prompt,
         )
-
         prompt = self.pb.goal_evaluatev2(params=params)
 
         # Call the LLM for evaluation
-        response = await self.client.chat.completions.create(
-            model=GPT4OMINI,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
-        )
+
+        async with gpt41mini_semaphore:
+            response = await self.client.chat.completions.create(
+                model=GPT4OMINI,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    }
+                ],
+            )
 
         result = response.choices[0].message.content
         result = json.loads(result)
@@ -287,6 +289,7 @@ class GenerateTaskManager(TaskManager):
         prompt = self.pb.goal_evaluate(params=params)
 
         # Call the LLM for evaluation
+
         response = await self.client.chat.completions.create(
             model=GPT4OMINI,
             messages=[
