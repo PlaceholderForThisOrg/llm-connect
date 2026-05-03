@@ -25,6 +25,14 @@ class ActivityService:
         self.learner_repo = learner_repo
         self.ap_repo = ap_repo
 
+    async def delete_activity(self, activity_id: str):
+        activity = await self.repo.get_by_id(activity_id)
+
+        if not activity:
+            raise ValueError("Activity not found")
+
+        await self.repo.delete(activity)
+
     async def create_activity_v2(
         self,
         request: CreateNewActivityRequest,
@@ -102,7 +110,11 @@ class ActivityService:
         }
 
     async def get_activity(self, activity_id):
-        return await self.activity_repo.get_by_id(activity_id)
+        activity = await self.activity_repo.get_by_id(activity_id)
+        if not activity:
+            raise ValueError(f"No activity with id: {activity_id}")
+
+        return activity
 
     def get_activities(self):
         return self.activity_repo.get_activities()
