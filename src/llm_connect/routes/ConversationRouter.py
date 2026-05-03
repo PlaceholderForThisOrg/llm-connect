@@ -40,6 +40,7 @@ async def get_messages(
     response = CursorPaginatedResponse(
         items=res["items"],
         nextCursor=res["next_cursor"],
+        hasNext=res["has_next"],
     )
 
     return response

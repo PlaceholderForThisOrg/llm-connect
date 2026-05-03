@@ -17,7 +17,7 @@ class MessageService:
         cursor: datetime | None,
         limit: int,
     ):
-        messages = await self.repo.get_messages_by_cursor(
+        messages, has_next = await self.repo.get_messages_by_cursor(
             conversation_id, cursor, limit
         )
 
@@ -36,4 +36,5 @@ class MessageService:
                 for m in messages
             ],
             "next_cursor": next_cursor.isoformat() if next_cursor else None,
+            "has_next": has_next,
         }

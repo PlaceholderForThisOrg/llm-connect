@@ -1,4 +1,4 @@
-from typing import Any, Generic, List, Literal, TypeVar
+from typing import Any, Generic, List, Literal, Optional, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -35,3 +35,4 @@ class PaginatedResponse(BaseModel, Generic[T]):
 class CursorPaginatedResponse(BaseModel, Generic[T]):
     items: List[T]
     nextCursor: Any
+    hasNext: Optional[bool] = None
