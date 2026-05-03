@@ -3,7 +3,6 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends
-from fastapi.responses import StreamingResponse
 
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import (
@@ -118,21 +117,32 @@ async def submit_interaction(
 
     if task_type == TaskType.GENERATE:
 
-        async def token_stream():
+        # async def token_stream():
 
-            async for chunk in service.submit_interaction_stream(
-                learner_id=learner_id,
-                session_id=sessionId,
-                task_id=taskId,
-                interaction=request.interaction,
-                answer=request.answer,
-            ):
-                yield chunk
+        #     async for chunk in service.submit_interaction_stream(
+        #         learner_id=learner_id,
+        #         session_id=sessionId,
+        #         task_id=taskId,
+        #         interaction=request.interaction,
+        #         answer=request.answer,
+        #     ):
+        #         yield chunk
 
-        return StreamingResponse(
-            token_stream(),
-            media_type="text/plain",
+        # return StreamingResponse(
+        #     token_stream(),
+        #     media_type="text/plain",
+        # )
+        res = await service.submit_interaction_stream(
+            learner_id=learner_id,
+            session_id=sessionId,
+            task_id=taskId,
+            interaction=request.interaction,
+            answer=request.answer,
         )
+
+        response = res
+
+        return response
 
     else:
         # Normal task

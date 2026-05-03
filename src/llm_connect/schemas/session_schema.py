@@ -1,8 +1,22 @@
 from datetime import datetime
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
+
+
+class SubmitInteractionResponse(BaseModel):
+    id: Union[UUID, str] = None
+    progress_id: Optional[Union[UUID, str]] = None
+    attempt: Optional[int] = None
+    input: Optional[Any] = None
+    output: Optional[Any] = None
+    is_correct: Optional[bool] = None
+    score: Optional[float] = (None,)
+    created_at: Optional[datetime] = None
+    meta: Optional[Dict] = None
+    hint: Optional[List[str]] = (None,)
+    is_finished: Optional[bool] = None
 
 
 class InteractionResponse(BaseModel):
