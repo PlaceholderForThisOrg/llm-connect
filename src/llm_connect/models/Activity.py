@@ -122,13 +122,14 @@ class Metadata(BaseModel):
     type: str
     title: str
     description: str
-    npc: str = None
+    npc: Optional[str] = None
     general_difficulty: str
     estimated_time: int
     tags: List[str] = Field(default_factory=list)
     media: Optional[List[str]] = None
     content: Optional[str] = None
-    task_count: int = None
+    task_count: Optional[int] = None
+    image_url: Optional[str] = None
 
 
 class Activity(Document):

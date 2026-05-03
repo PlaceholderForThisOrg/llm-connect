@@ -1,10 +1,13 @@
 from typing import List, Optional
 
+from fastapi import HTTPException
+
 from llm_connect.models import Activity
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.schemas.activity_schema import (
+    ActivityUpdate,
     CreateActivityRequest,
     CreateNewActivityRequest,
 )
@@ -24,6 +27,43 @@ class ActivityService:
         self.adapter = adapter
         self.learner_repo = learner_repo
         self.ap_repo = ap_repo
+
+    async def patch_activity(
+        self, activity_id: str, payload: ActivityUpdate
+    ) -> Activity:
+        activity = await self.repo.get_by_id(activity_id)
+
+        if not activity:
+            raise HTTPException(status_code=404, detail="Activity not found")
+
+        update_data = payload.model_dump(exclude_unset=True)
+
+        # Update metadata
+        if "metadata" in update_data:
+            for key, value in update_data["metadata"].items():
+                setattr(activity.metadata, key, value)
+
+        # Update start_tasks
+        if "start_tasks" in update_data:
+            activity.start_tasks = update_data["start_tasks"]
+
+        # Update tasks
+        if "tasks" in update_data:
+            for task_id, task_update in update_data["tasks"].items():
+
+                # If task doesn't exist → create new
+                if task_id not in activity.tasks:
+                    activity.tasks[task_id] = task_update
+                    continue
+
+                existing_task = activity.tasks[task_id]
+
+                # Merge fields
+                for key, value in task_update.items():
+                    setattr(existing_task, key, value)
+
+        await self.repo.save(activity)
+        return activity
 
     async def delete_activity(self, activity_id: str):
         activity = await self.repo.get_by_id(activity_id)

@@ -11,6 +11,27 @@ from llm_connect.models.Activity import (
     SelectTask,
 )
 
+
+class MetadataUpdate(BaseModel):
+    type: Optional[str] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    npc: Optional[str] = None
+    general_difficulty: Optional[str] = None
+    estimated_time: Optional[int] = None
+    tags: Optional[List[str]] = None
+    media: Optional[List[str]] = None
+    content: Optional[str] = None
+    task_count: Optional[int] = None
+    image_url: Optional[str] = None
+
+
+class ActivityUpdate(BaseModel):
+    metadata: Optional[MetadataUpdate] = None
+    start_tasks: Optional[List[str]] = None
+    tasks: Optional[Dict[str, dict]] = None  # raw dict for flexibility
+
+
 TaskRequest = Annotated[
     Union[
         GenerateTask,
@@ -33,6 +54,7 @@ class Metadata(BaseModel):
     tags: List[str] = Field(default_factory=list)
     media: Optional[List[str]] = None
     content: Optional[str] = None
+    image_url: Optional[str] = None
 
 
 class CreateNewActivityRequest(BaseModel):
