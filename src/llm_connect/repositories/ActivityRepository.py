@@ -12,6 +12,10 @@ class ActivityRepository:
     def __init__(self):
         pass
 
+    async def save(self, activity: Activity) -> Activity:
+        await activity.save()
+        return activity
+
     async def delete(self, activity: Activity):
         await activity.delete()
 

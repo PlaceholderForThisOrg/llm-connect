@@ -5,12 +5,26 @@ from fastapi import APIRouter, Depends, Query
 from llm_connect.auth.auth import verify_token
 from llm_connect.clients.dependencies import get_activity_service
 from llm_connect.schemas.activity_schema import (
+    ActivityUpdate,
     CreateNewActivityRequest,
 )
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.types.auth import Payload
 
 router = APIRouter(prefix="/api/v1/activities", tags=["Activities"])
+
+
+@router.patch("/{id}")
+async def update_activity(
+    id: str,
+    payload: ActivityUpdate,
+    service: ActivityService = Depends(get_activity_service),
+):
+    updated_activity = await service.patch_activity(
+        id,
+        payload,
+    )
+    return updated_activity
 
 
 @router.delete("/{id}")
