@@ -3,6 +3,7 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect import logger
 from llm_connect.models import Conversation
 from llm_connect.repositories.ConversationRepository import ConversationRepository
 from llm_connect.repositories.MessageRepository import MessageRepository
@@ -29,11 +30,30 @@ class ConversationService:
         conversation_id: UUID,
         user_input: str,
         learner_id: str,
-        activity_id: str,
-        session_id: str,
-        type: str,
+        # activity_id: str,
+        # session_id: str,
+        # type: str,
     ):
-        conversation = await self.con_repo.get_by_id(conversation_id)
+        conversation = await self.con_repo.get_conversation_with_session(
+            conversation_id
+        )
+
+        if not conversation:
+            raise ValueError(f"No conversation with id: {conversation_id}")
+
+        logger.info(f"The current conversation type is {conversation.type}")
+
+        conversation_type = conversation.type
+
+        if conversation_type == "EMBEDDED":
+            session = conversation.session
+            activity_id = session.activity_id
+            session_id = session.id
+
+        else:
+            session = None
+            activity_id = None
+            session_id = None
 
         # Save user message
         await self.message_repo.create_message(
@@ -67,16 +87,18 @@ class ConversationService:
         #         full_response += delta
         #         yield delta  # 🔥 streaming happens here
 
+        # use conversationId to check the current conversation
+
         async for token in self.companion.response_v3(
             learner_id=learner_id,
-            conversation_id=conversation_id,
+            conversation_id=conversation.id,
             message=user_input,
             activity_id=activity_id,
             session_id=session_id,
             type=conversation.type,
         ):
             response += token
-            yield token
+            # yield token
 
         # Save companion response
         await self.message_repo.create_message(
@@ -84,6 +106,13 @@ class ConversationService:
             role="companion",
             content=response,
         )
+
+        await self.session.commit()
+
+        return {
+            "conversation_id": conversation_id,
+            "content": response,
+        }
 
     async def get_conversations(
         self,
@@ -123,8 +152,8 @@ class ConversationService:
     async def create_conversation(
         self,
         learner_id: str,
-        title: str | None,
-        type: str | None,
+        title: str = None,
+        type: str = None,
     ) -> Conversation:
 
         if not learner_id:
