@@ -9,7 +9,7 @@ from llm_connect.types.auth import Payload
 router = APIRouter(prefix="/api/v1/me/mastery", tags=["Mastery"])
 
 
-@router.get("{id}")
+@router.get("/{id}")
 async def get_mastery_detail(
     id: str,
     service: MasteryService = Depends(get_mastery_service),
