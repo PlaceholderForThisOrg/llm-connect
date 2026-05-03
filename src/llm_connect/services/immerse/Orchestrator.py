@@ -17,6 +17,7 @@ from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.InteractionRepository import InteractionRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.schemas.session_schema import SubmitInteractionResponse
 from llm_connect.services.analyzer.Analyzer import Analyzer
 from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.core.MasteryEngine import MasteryEngine
@@ -213,10 +214,12 @@ class Orchestrator:
                 activity=activity,
             ):
                 response += token
-                yield token
+                # yield token
 
         # Update Session
         logger.info("[4] --- Update session")
+
+        score = 1.0 if result else random.uniform(0, 1.0)
 
         interaction = Interaction(
             id=uuid.uuid4(),
@@ -225,7 +228,7 @@ class Orchestrator:
             input=answer.response,
             output=response,
             is_correct=result,
-            score=1.0 if result else random.uniform(0, 1.0),
+            score=score,
             created_at=now,
             meta="{}",
         )
@@ -257,7 +260,7 @@ class Orchestrator:
                 session.current_task = next_task_id
                 next_progress.status = "UNLOCKED"
 
-            else:
+            elif not next_progress:
                 # Session is completed
                 logger.info("Session is done!")
                 session.status = "COMPLETED"
@@ -268,6 +271,22 @@ class Orchestrator:
             None
 
         await self.session.commit()
+
+        logger.info(f"Session status: {session.status}")
+
+        return SubmitInteractionResponse(
+            id=interaction.id,
+            progress_id=progress.id,
+            attempt=attempt,
+            input=answer.response,
+            output=response,
+            is_correct=result,
+            score=score,
+            created_at=now,
+            meta={},
+            hint=task.hints,
+            is_finished=session.status == "COMPLETED",
+        )
 
     async def flow(
         self,
@@ -435,7 +454,7 @@ class Orchestrator:
                 session.current_task = next_task_id
                 next_progress.status = "UNLOCKED"
 
-            else:
+            elif not next_progress:
                 # Session is completed
                 logger.info("Session is done!")
                 session.status = "COMPLETED"
@@ -447,6 +466,20 @@ class Orchestrator:
 
         await self.session.commit()
 
+        return SubmitInteractionResponse(
+            id=interaction.id,
+            progress_id=progress.id,
+            attempt=attempt,
+            input=input,
+            output=response,
+            is_correct=result,
+            score=score,
+            created_at=now,
+            meta={},
+            hint=task.hints,
+            is_finished=session.status == "COMPLETED",
+        )
+
         return {
             "id": interaction.id,
             "progress_id": progress.id,
@@ -457,6 +490,8 @@ class Orchestrator:
             "score": 0.0,
             "created_at": now,
             "meta": {},
+            "hint": task.hints,
+            "is_finished": session.status == "COMPLETED",
         }
 
         # compute the progress

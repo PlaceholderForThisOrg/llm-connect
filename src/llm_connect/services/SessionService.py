@@ -146,14 +146,23 @@ class SessionService:
 
         if task_type == TaskType.GENERATE:
             # handle generate type
-            async for token in self.orchestrator.stream_flow(
+            # async for token in self.orchestrator.stream_flow(
+            #     learner_id=learner_id,
+            #     session_id=session_id,
+            #     task_id=task_id,
+            #     interaction=interaction,
+            #     answer=answer,
+            # ):
+            #     yield token
+
+            return await self.orchestrator.stream_flow(
                 learner_id=learner_id,
                 session_id=session_id,
                 task_id=task_id,
                 interaction=interaction,
                 answer=answer,
-            ):
-                yield token
+            )
+
         else:
             None
 
