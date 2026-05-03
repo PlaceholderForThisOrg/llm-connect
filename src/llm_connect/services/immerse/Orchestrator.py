@@ -1,3 +1,4 @@
+import asyncio
 import random
 import uuid
 from datetime import datetime, timezone
@@ -8,6 +9,7 @@ from fastapi import BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect import logger
+from llm_connect.configs import gpt41_semaphore
 from llm_connect.models import Interaction
 from llm_connect.models.Activity import TaskType
 from llm_connect.models.Session import Session
@@ -182,6 +184,8 @@ class Orchestrator:
             history=history,
         )
 
+        await asyncio.sleep(0)
+
         logger.info(f"Can the learner move to the next task {result}")
 
         # MASTERY UPDATE
@@ -197,17 +201,19 @@ class Orchestrator:
 
         # Response the system
         # next_task can be None
-        async for token in self.generate_manager.responsev2(
-            activity_id=activity.id,
-            task=task,
-            next_task=next_task,
-            result=result,
-            interactions=answer.response,
-            history=history,
-            activity=activity,
-        ):
-            response += token
-            yield token
+
+        async with gpt41_semaphore:
+            async for token in self.generate_manager.responsev2(
+                activity_id=activity.id,
+                task=task,
+                next_task=next_task,
+                result=result,
+                interactions=answer.response,
+                history=history,
+                activity=activity,
+            ):
+                response += token
+                yield token
 
         # Update Session
         logger.info("[4] --- Update session")
