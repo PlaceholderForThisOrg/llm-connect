@@ -25,12 +25,13 @@ class CreateConversationResponse(BaseModel):
 
 class PostMessageRequest(BaseModel):
     content: str
-    activityId: str = None
-    sessionId: str = None
-    type: str = None
+    # activityId: str = None
+    # sessionId: str = None
+    # type: str = None
 
 
 class PostMessageResponse(BaseModel):
+    conversationId: Optional[str] = None
     content: str
 
 

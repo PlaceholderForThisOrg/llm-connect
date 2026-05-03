@@ -5,6 +5,7 @@ from typing import List, Tuple
 
 from sqlalchemy import desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from llm_connect.models import Conversation, Message
 from llm_connect.proto.conversations_v1 import conversations_v1
@@ -14,6 +15,7 @@ class ConversationRepository:
     def __init__(self, session: AsyncSession):
 
         self.session = session
+        self.db = session
 
         self.file_path = os.path.abspath(
             os.path.join(
@@ -36,6 +38,18 @@ class ConversationRepository:
 
         # Initial sync to ensure file exists
         self.sync()
+
+    async def get_conversation_with_session(
+        self, conversation_id: uuid.UUID
+    ) -> Conversation | None:
+        stmt = (
+            select(Conversation)
+            .options(joinedload(Conversation.session))
+            .where(Conversation.id == conversation_id)
+        )
+
+        result = await self.db.execute(stmt)
+        return result.scalar_one_or_none()
 
     async def get_by_id(self, id):
         stmt = select(Conversation).where(Conversation.id == id)
