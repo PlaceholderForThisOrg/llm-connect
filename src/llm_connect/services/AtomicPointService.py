@@ -35,6 +35,26 @@ class AtomicPointService:
         self.repo = ap_repo
         self.ap_relation_repo = ap_relation_repo
 
+    async def delete_atomic_point(self, ap_id: uuid.UUID, force: bool = False):
+        atomic_point = await self.repo.get_by_id_with_relations(ap_id)
+
+        if not atomic_point:
+            raise ValueError("Atomic point not found")
+
+        if not force:
+            if atomic_point.incoming_relations:
+                raise ValueError(
+                    "Cannot delete: other atomic points depend on this one"
+                )
+
+            if atomic_point.mastery_records:
+                raise ValueError("Cannot delete: mastery records exist")
+
+        # Remove atomic points, all mastery, all relation
+        await self.repo.delete(atomic_point)
+
+        return ap_id
+
     async def create_relation(self, request: CreateAtomicPointRelationRequest):
 
         # node validation
