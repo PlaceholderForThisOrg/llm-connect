@@ -40,7 +40,7 @@ class MasteryEngine:
             # ap is None ?
             ap = ap_map.get(ap_id)
 
-            logger.debug(f"Current atomic points: {ap.id}")
+            # logger.debug(f"Current atomic points: {ap.id}")
 
             if not ap:
                 continue

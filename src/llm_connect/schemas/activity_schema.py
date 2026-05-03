@@ -27,7 +27,7 @@ class Metadata(BaseModel):
     type: str
     title: str = None
     description: str = None
-    npc: str = None
+    npc: Optional[str] = None
     general_difficulty: str
     estimated_time: int
     tags: List[str] = Field(default_factory=list)
