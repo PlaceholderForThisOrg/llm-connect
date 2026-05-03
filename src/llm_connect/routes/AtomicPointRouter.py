@@ -1,4 +1,5 @@
 from typing import List, Optional
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
 
@@ -19,6 +20,18 @@ router = APIRouter(prefix="/api/v1/atomic-points", tags=["Atomic points"])
 #     # payload: Payload = Depends(verify_token),
 # ):
 #     return {"message": "OK"}
+
+
+@router.delete("/{id}")
+async def delete_atomic_point(
+    id: UUID,
+    force: bool = False,
+    service: AtomicPointService = Depends(get_ap_s),
+):
+    await service.delete_atomic_point(id, force=force)
+    return {
+        "deleted": id,
+    }
 
 
 @router.post("/relations")

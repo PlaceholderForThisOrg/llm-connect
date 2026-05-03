@@ -13,6 +13,15 @@ from llm_connect.types.auth import Payload
 router = APIRouter(prefix="/api/v1/activities", tags=["Activities"])
 
 
+@router.delete("/{id}")
+async def delete_activity(
+    id: str,
+    service: ActivityService = Depends(get_activity_service),
+):
+    await service.delete_activity(id)
+    return {"deleted": id}
+
+
 @router.get("/recommendation")
 async def recommend_activities(
     service: ActivityService = Depends(get_activity_service),

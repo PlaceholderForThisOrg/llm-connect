@@ -12,6 +12,9 @@ class ActivityRepository:
     def __init__(self):
         pass
 
+    async def delete(self, activity: Activity):
+        await activity.delete()
+
     async def get_all_activities(self) -> List[Activity]:
         return await Activity.find_all().to_list()
 

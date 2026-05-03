@@ -3,7 +3,7 @@
 
 from typing import List, Optional, Tuple
 
-from sqlalchemy import func, select
+from sqlalchemy import UUID, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -19,6 +19,22 @@ class AtomicPointRepository:
         session: AsyncSession,
     ):
         self.session = session
+
+    async def get_by_id_with_relations(self, ap_id: UUID) -> Optional[AtomicPoint]:
+        result = await self.session.execute(
+            select(AtomicPoint)
+            .where(AtomicPoint.id == ap_id)
+            .options(
+                selectinload(AtomicPoint.incoming_relations),
+                selectinload(AtomicPoint.outgoing_relations),
+                selectinload(AtomicPoint.mastery_records),
+            )
+        )
+        return result.scalar_one_or_none()
+
+    async def delete(self, atomic_point: AtomicPoint):
+        await self.session.delete(atomic_point)
+        await self.session.commit()
 
     async def get_all_atomic_points(self) -> List[AtomicPoint]:
         stmt = select(AtomicPoint).options(
