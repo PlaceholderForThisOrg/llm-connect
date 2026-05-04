@@ -55,3 +55,15 @@ class MessageRepository:
         messages = messages[:limit]
 
         return messages, has_next
+
+    async def get_conversation_messages(
+        self,
+        conversation_id: UUID,
+    ) -> list[Message]:
+
+        result = await self.session.execute(
+            select(Message)
+            .where(Message.conversation_id == conversation_id)
+            .order_by(Message.created_at.asc())
+        )
+        return list(result.scalars())
