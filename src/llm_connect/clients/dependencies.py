@@ -4,6 +4,9 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from llm_connect.repositories.ActivityRepository import ActivityRepository
+from llm_connect.repositories.AtomicPointEmbeddingRepository import (
+    AtomicPointEmbeddingRepository,
+)
 from llm_connect.repositories.AtomicPointRelationRepository import (
     AtomicPointRelationRepository,
 )
@@ -19,6 +22,9 @@ from llm_connect.repositories.TagRepository import TagRepository
 from llm_connect.services.ActivityService import ActivityService
 from llm_connect.services.analyzer import Analyzer
 from llm_connect.services.AtomicPointService import AtomicPointService
+from llm_connect.services.AtomicPointEmbeddingService import (
+    AtomicPointEmbeddingService,
+)
 from llm_connect.services.ChatService import ChatService
 from llm_connect.services.ConversationService import ConversationService
 from llm_connect.services.core.Adapter import Adapter
@@ -324,6 +330,19 @@ def get_message_repo(
     )
 
 
+def get_ap_embedding_repo(
+    session: AsyncSession = Depends(get_db_session),
+):
+    return AtomicPointEmbeddingRepository(session)
+
+
+def get_ap_embedding_service(
+    llm: AsyncOpenAI = Depends(get_llm),
+    repo: AtomicPointEmbeddingRepository = Depends(get_ap_embedding_repo),
+):
+    return AtomicPointEmbeddingService(llm=llm, repo=repo)
+
+
 def get_companion(
     llm=Depends(get_llm),
     learner_repo=Depends(get_learner_repository),
@@ -335,6 +354,7 @@ def get_companion(
     message_repo=Depends(get_message_repo),
     mastery_repo=Depends(get_mastery_repo),
     interaction_repo=Depends(get_interaction_repo),
+    embedding_service: AtomicPointEmbeddingService = Depends(get_ap_embedding_service),
 ):
     # Create the brain of the companion
     # Not dpendencies, but like
@@ -368,6 +388,7 @@ def get_companion(
         p,
         pb,
         tool,
+        embedding_service,
     )
 
 
@@ -411,6 +432,7 @@ def get_ap_s(
     ap_tag_repo: AtomicPointTagRepository = Depends(get_apt_repo),
     session: AsyncSession = Depends(get_db_session),
     ap_relation_repo: AtomicPointRelationRepository = Depends(get_ap_relation_repo),
+    embedding_service: AtomicPointEmbeddingService = Depends(get_ap_embedding_service),
 ):
     return AtomicPointService(
         ap_repo=ap_repo,
@@ -418,6 +440,7 @@ def get_ap_s(
         ap_tag_repo=ap_tag_repo,
         session=session,
         ap_relation_repo=ap_relation_repo,
+        embedding_service=embedding_service,
     )
 
 

@@ -1,18 +1,46 @@
 from typing import List, Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
-from llm_connect.clients.dependencies import get_ap_s
+from llm_connect.clients.dependencies import (
+    get_ap_embedding_service,
+    get_ap_s,
+)
 from llm_connect.schemas.ap_schema import (
     CreateAPRequest,
     CreateAtomicPointRelationRequest,
     GetAtomicPointResponse,
+    RAGSearchHit,
 )
 from llm_connect.schemas.pagination import PaginatedResponse
+from llm_connect.services.AtomicPointEmbeddingService import (
+    AtomicPointEmbeddingService,
+)
 from llm_connect.services.AtomicPointService import AtomicPointService
 
 router = APIRouter(prefix="/api/v1/atomic-points", tags=["Atomic points"])
+
+
+@router.get("/rag/search", response_model=List[RAGSearchHit])
+async def rag_search_atomic_points(
+    q: str = Query(..., min_length=1),
+    limit: int = Query(5, ge=1, le=50),
+    embedding_service: AtomicPointEmbeddingService = Depends(get_ap_embedding_service),
+):
+    return await embedding_service.search(query=q, limit=limit)
+
+
+@router.post("/{ap_id}/rag/reindex")
+async def rag_reindex_atomic_point(
+    ap_id: UUID,
+    service: AtomicPointService = Depends(get_ap_s),
+):
+    try:
+        await service.reindex_atomic_point_for_rag(ap_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    return {"reindexed": ap_id}
 
 
 # @router.post("/")

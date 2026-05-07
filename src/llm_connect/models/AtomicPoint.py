@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from llm_connect.models.Base import Base
 
 if TYPE_CHECKING:
+    from llm_connect.models.AtomicPointEmbedding import AtomicPointEmbedding
     from llm_connect.models.AtomicPointRelation import AtomicPointRelation
     from llm_connect.models.AtomicPointTag import AtomicPointTag
     from llm_connect.models.Mastery import Mastery
@@ -55,5 +56,12 @@ class AtomicPoint(Base):
         "AtomicPointRelation",
         foreign_keys="AtomicPointRelation.to_id",
         back_populates="to_point",
+        cascade="all, delete-orphan",
+    )
+
+    embedding_row: Mapped[Optional["AtomicPointEmbedding"]] = relationship(
+        "AtomicPointEmbedding",
+        back_populates="atomic_point",
+        uselist=False,
         cascade="all, delete-orphan",
     )

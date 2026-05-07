@@ -45,6 +45,15 @@ class CreateAPResponse(BaseModel):
     tagIds: List[str]
 
 
+class RAGSearchHit(BaseModel):
+    atomic_point_id: uuid.UUID
+    name: str
+    type: str
+    level: str
+    cosine_distance: float
+    semantic_text: str
+
+
 class GetAtomicPointResponse(BaseModel):
     id: uuid.UUID
     name: str

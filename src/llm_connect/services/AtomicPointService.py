@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from llm_connect import logger
 from llm_connect.models import AtomicPointRelation
 from llm_connect.models.AtomicPoint import AtomicPoint
 from llm_connect.models.AtomicPointTag import AtomicPointTag
@@ -16,6 +17,9 @@ from llm_connect.schemas.ap_schema import (
     CreateAPRequest,
     CreateAtomicPointRelationRequest,
 )
+from llm_connect.services.AtomicPointEmbeddingService import (
+    AtomicPointEmbeddingService,
+)
 
 
 class AtomicPointService:
@@ -26,6 +30,7 @@ class AtomicPointService:
         ap_tag_repo: AtomicPointTagRepository,
         session: AsyncSession,
         ap_relation_repo: AtomicPointRelationRepository,
+        embedding_service: AtomicPointEmbeddingService,
     ):
         self.ap_repo = ap_repo
         self.tag_repo = tag_repo
@@ -34,6 +39,7 @@ class AtomicPointService:
         self.db = session
         self.repo = ap_repo
         self.ap_relation_repo = ap_relation_repo
+        self.embedding_service = embedding_service
 
     async def delete_atomic_point(self, ap_id: uuid.UUID, force: bool = False):
         atomic_point = await self.repo.get_by_id_with_relations(ap_id)
@@ -147,6 +153,14 @@ class AtomicPointService:
         # finalize the transaction
         await self.db.commit()
 
+        try:
+            await self.embedding_service.index_atomic_point(atomic_point)
+        except Exception:
+            logger.exception(
+                "RAG embedding index failed for atomic_point id=%s",
+                atomic_point.id,
+            )
+
         return atomic_point
 
     async def search_atomic_points(
@@ -175,3 +189,9 @@ class AtomicPointService:
             "page": page,
             "page_size": page_size,
         }
+
+    async def reindex_atomic_point_for_rag(self, ap_id: uuid.UUID):
+        atomic_point = await self.repo.get_by_id(str(ap_id))
+        if atomic_point is None:
+            raise ValueError("Atomic point not found")
+        await self.embedding_service.index_atomic_point(atomic_point)
