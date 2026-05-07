@@ -6,17 +6,21 @@ from openai import AsyncOpenAI, BaseModel
 
 from llm_connect import logger
 from llm_connect.configs.llm import GPT4OMINI, GPT41
+from llm_connect.models.Activity import BaseTask, TaskType
 from llm_connect.proto.atomic_points import ap2str
 from llm_connect.repositories.ActivityRepository import ActivityRepository
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.ConversationRepository import ConversationRepository
+from llm_connect.repositories.InteractionRepository import InteractionRepository
 from llm_connect.repositories.LearnerRepository import LearnerRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
 from llm_connect.repositories.MessageRepository import MessageRepository
 from llm_connect.repositories.SessionRepository import SessionRepository
+from llm_connect.services.core.Bridge import Bridge
 from llm_connect.services.immerse.PromptBuilder import (
     CompanionHelpParams,
     CompanionHelpParams_v1,
+    CompanionHelpParams_v2,
     CompanionParams,
     CompanionSessionParams,
     IntentClassifierParams,
@@ -76,6 +80,11 @@ class Knowledge:
         aps = [ap2str(self.ap_repo.get_atomic_point_by_id(id)) for id in ids]
 
         return "\n".join(aps)
+
+
+class Tool:
+    def __init__(self, bridge: Bridge):
+        self.bridge = bridge
 
 
 class Brain:
@@ -277,6 +286,7 @@ class Memory:
         message_repo: MessageRepository,
         mastery_repo: MasteryRepository,
         ap_repo: AtomicPointRepository,
+        interaction_repo: InteractionRepository,
     ):
         self.long_term = learner_repo
         self.short_term = con_repo
@@ -287,6 +297,17 @@ class Memory:
         self.session_repo = ses_repo
         self.activity_repo = ac_repo
         self.ap_repo = ap_repo
+        self.interaction_repo = interaction_repo
+
+    async def get_latest_interaction(self, session_id, progress_id):
+        interaction = await self.interaction_repo.get_latest_interaction(
+            session_id, progress_id
+        )
+
+        if not interaction:
+            return None
+
+        return interaction
 
     async def get_current_session(self, session_id: str):
         session = await self.session_repo.get_full_session(session_id)
@@ -394,6 +415,7 @@ class Companion:
         k: Knowledge,
         p: Persionality,
         pb: PromptBuilder,
+        tool: Tool,
     ):
         self.b = brain
         self.m = memory
@@ -402,9 +424,113 @@ class Companion:
         self.pb = pb
         self.memory = self.m
         self.brain = self.b
+        self.tool = tool
 
     def mode_explanation():
         None
+
+    # use this to convert a task to the prompt
+    def task_to_prompt(self, task: BaseTask) -> str:
+        lines = []
+
+        lines.append(f"Task ID: {task.id}")
+        lines.append(f"Task Type: {task.type}")
+
+        if task.prompt:
+            lines.append(f"Prompt: {task.prompt}")
+
+        if task.context:
+            lines.append(f"Context: {task.context}")
+
+        if task.hints:
+            lines.append("Hints:")
+            lines.extend(f"- {h}" for h in task.hints)
+
+        # Type-specific fields
+        match task.type:
+            case TaskType.GENERATE:
+                if task.sample_answers:
+                    lines.append("Sample Answers:")
+                    lines.extend(f"- {a}" for a in task.sample_answers)
+
+                if task.keywords:
+                    lines.append("Keywords:")
+                    lines.extend(f"- {k}" for k in task.keywords)
+
+            case TaskType.SELECT:
+                if task.options:
+                    lines.append("Options:")
+                    lines.extend(f"{i}. {opt}" for i, opt in enumerate(task.options))
+
+            case TaskType.FILL:
+                if task.correct_answers:
+                    lines.append("Accepted Answers:")
+                    lines.extend(f"- {a}" for a in task.correct_answers)
+
+                lines.append(f"Case Sensitive: {task.case_sensitive}")
+
+            case TaskType.MATCH:
+                if task.a:
+                    lines.append("List A:")
+                    lines.extend(f"{i}. {v}" for i, v in enumerate(task.a))
+
+                if task.b:
+                    lines.append("List B:")
+                    lines.extend(f"{i}. {v}" for i, v in enumerate(task.b))
+
+            case TaskType.REORDER:
+                if task.options:
+                    lines.append("Options:")
+                    lines.extend(f"{i}. {v}" for i, v in enumerate(task.options))
+
+        return "\n".join(lines)
+
+    async def mode_task_help_v2(
+        self,
+        conversation_id: str,
+        session_id: str,
+        learner_id: str,
+        message: str,
+    ):
+        # Load metadata
+        personality = "You are a helpful English companion"
+        session = await self.memory.get_current_session(session_id)
+        activity = await self.memory.get_current_activity(session.activity_id)
+        current_task = await self.memory.get_current_task(session_id, learner_id)
+        # interaction = await self.memory.get_latest_interaction(session_id, current_task.id)
+
+        logger.info("- Task to prompt")
+
+        # Get related atomic points
+        atomic_points = [
+            await self.k.get_atomic_point(id) for id in current_task.atomic_points
+        ]
+
+        # Get messages
+        messages = await self.m.shortterm_v2(conversation_id)
+
+        params = CompanionHelpParams_v2(
+            persionality=personality,
+            type=activity.metadata.type,
+            title=activity.metadata.title,
+            description=current_task.prompt,
+            npc=activity.metadata.npc,
+            difficulty=activity.metadata.general_difficulty,
+            content=activity.metadata.content,
+            task=self.task_to_prompt(current_task),
+            atomic_points=atomic_points,
+            history=messages,
+            # learner_input="",
+            # help_level=HelpLevel.NUDGE,
+            message=message,
+        )
+
+        prompt = self.pb.companion_help_prompt_v2(params)
+
+        logger.info(prompt)
+
+        async for token in self.b.think(prompt):
+            yield token
 
     async def mode_task_help(
         self,
@@ -477,9 +603,12 @@ class Companion:
         activity_id: str,
         session_id: str,
     ):
+        # check whether or it is in the session
         has_active_task = True if type == "EMBEDDED" else False
 
         logger.info("[1] Get the intention of the current message")
+
+        # rule-based and LLM-based
         intention = await self.b.detect_intent(
             message=message,
             has_active_task=has_active_task,
@@ -487,11 +616,11 @@ class Companion:
             history="",
         )
 
-        logger.info(
-            f"[2] Check the intention with {intention.intent} and return the result"
-        )
+        logger.info(f"Intention {intention.intent}")
+
+        ##########
         if intention.intent == Intent.TASK_HELP:
-            async for token in self.mode_task_help(
+            async for token in self.mode_task_help_v2(
                 conversation_id,
                 session_id,
                 learner_id,
@@ -499,6 +628,7 @@ class Companion:
             ):
                 yield token
 
+        ##########
         else:
             async for token in self.mode_other(
                 learner_id,
@@ -508,8 +638,7 @@ class Companion:
             ):
                 yield token
 
-    # TODO: Emulate the companion role
-    # need learner_id, the current con_id, the current message
+    # FIXME: Delete
     async def response_v2(
         self,
         learner_id: str,

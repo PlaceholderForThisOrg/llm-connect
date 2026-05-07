@@ -19,6 +19,22 @@ class CompanionHelpParams_v1(TypedDict):
     message: str
 
 
+class CompanionHelpParams_v2(TypedDict):
+    persionality: str
+    type: str
+    title: str
+    description: str
+    npc: str
+    difficulty: str
+    content: str
+    task: str
+    atomic_points: List[Dict]
+    history: List[Message] = []
+    learner_input: str
+    help_level: str
+    message: str
+
+
 class IntentClassifierParams(TypedDict):
     message: str
     has_active_task: bool
@@ -103,6 +119,10 @@ class PromptBuilder:
         )
 
         self.env = Environment(loader=loader)
+
+    def companion_help_prompt_v2(self, params: CompanionHelpParams_v2):
+        template = self.env.get_template(name="companion_help_v2.jinja")
+        return template.render(**params)
 
     def npcv2(self, params: NPCParamsv2):
         template = self.env.get_template(name="npc_v2.jinja")
