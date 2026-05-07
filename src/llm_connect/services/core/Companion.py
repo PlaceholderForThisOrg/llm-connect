@@ -19,6 +19,7 @@ from llm_connect.repositories.SessionRepository import SessionRepository
 from llm_connect.services.core.Bridge import Bridge
 from llm_connect.services.immerse.PromptBuilder import (
     CompanionExplainRagParams,
+    CompanionFlashcardParams,
     CompanionHelpParams,
     CompanionHelpParams_v1,
     CompanionHelpParams_v2,
@@ -44,6 +45,7 @@ class Intent(str, Enum):
     TASK_HELP = "task_help"
     META = "meta"
     RECITE = "recite"
+    FLASHCARD = "flashcard"
     RECOMMEND = "recommend"
     OTHER = "other"
 
@@ -163,7 +165,7 @@ class Brain:
             )
 
         # explain
-        if any(x in msg for x in ["what is", "explain", "define", "what does mean"]):
+        if any(x in msg for x in ["/rag", "what is", "explain", "define", "what does mean"]):
             return IntentionResult(
                 intent=Intent.EXPLANATION,
                 scope=Scope.GLOBAL,
@@ -180,10 +182,27 @@ class Brain:
                 confidence=0.85,
             )
 
+        # flashcard creation
+        if any(
+            x in msg
+            for x in [
+                "flashcard",
+                "create flashcard",
+                "make flashcard",
+                "generate flashcard",
+                "flash card",
+            ]
+        ):
+            return IntentionResult(
+                intent=Intent.FLASHCARD,
+                scope=Scope.GLOBAL,
+                confidence=0.9,
+            )
+
         # recite
         if any(
             x in msg
-            for x in ["quiz me", "test me", "flashcard", "recite", "practice words"]
+            for x in ["quiz me", "test me", "recite", "practice words"]
         ):
             return IntentionResult(
                 intent=Intent.RECITE,
@@ -614,6 +633,24 @@ class Companion:
         async for token in self.brain.think(prompt):
             yield token
 
+    async def mode_flashcard(
+        self,
+        conversation_id: str,
+        message: str,
+    ):
+        logger.info("mode_flashcard")
+        messages = await self.memory.shortterm_v2(conversation_id)
+
+        params = CompanionFlashcardParams(
+            user_memory="Currently not specified",
+            history=messages,
+            learner_message=message,
+        )
+        prompt = self.pb.companion_flashcard_prompt(params)
+
+        async for token in self.brain.think(prompt):
+            yield token
+
     def mode_meta():
         None
 
@@ -685,6 +722,13 @@ class Companion:
                 conversation_id,
                 message,
                 activity_context=activity_context,
+            ):
+                yield token
+
+        elif intention.intent == Intent.FLASHCARD:
+            async for token in self.mode_flashcard(
+                conversation_id,
+                message,
             ):
                 yield token
 

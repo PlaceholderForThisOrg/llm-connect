@@ -109,6 +109,12 @@ class CompanionExplainRagParams(TypedDict):
     learner_message: str
 
 
+class CompanionFlashcardParams(TypedDict):
+    user_memory: str
+    history: List
+    learner_message: str
+
+
 class CompanionHelpParams(TypedDict):
     activity: str
     goal: str
@@ -180,6 +186,13 @@ class PromptBuilder:
         params: CompanionExplainRagParams,
     ):
         template = self.env.get_template(name="companion_explain_rag.jinja")
+        return template.render(**params)
+
+    def companion_flashcard_prompt(
+        self,
+        params: CompanionFlashcardParams,
+    ):
+        template = self.env.get_template(name="companion_flashcard.jinja")
         return template.render(**params)
 
     def npc(
