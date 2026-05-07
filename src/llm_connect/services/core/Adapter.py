@@ -20,6 +20,13 @@ class RelationType(str, Enum):
     CONTRASTS = "CONTRASTS"
 
 
+class MasteryType(str, Enum):
+    MASTER = "MASTER"
+    ALMOST_MASTER = "ALMOST_MASTER"
+    LEARNING = "LEARNING"
+    BEGINNER = "BEGINNER"
+
+
 class Adapter:
     def __init__(
         self,
@@ -36,19 +43,16 @@ class Adapter:
         self.mastery_repo = mastery_repo
         self.ap_repo = ap_repo
 
-    async def recommend(learner_id: str):
-        None
-
+    # Build the knowledge state
     def build_knowledge_state(
         self,
         learner: Learner,
         atomic_points: List[AtomicPoint],
     ) -> Dict[str, float]:
-        """
-        K[atomic_point_id] = probability learner knows it
-        """
+        # Get the init probability
         K = {str(ap.id): ap.p_init for ap in atomic_points}
 
+        # Override
         for m in learner.mastery_records:
             K[str(m.atomic_point_id)] = m.p_l
 
@@ -70,6 +74,15 @@ class Adapter:
         return prereq_map, similar_map
 
     def classify(self, p: float):
+        if p > 0.9:
+            return MasteryType.MASTER
+        elif p > 0.7:
+            return MasteryType.ALMOST_MASTER
+        elif p > 0.3:
+            return MasteryType.LEARNING
+        else:
+            return MasteryType.BEGINNER
+
         if p < 0.3:
             return "weak"
         elif p < 0.7:
@@ -82,8 +95,7 @@ class Adapter:
         for ap, p in K.items():
             c = self.classify(p)
 
-            # A. weak → highest priority
-            if c == "weak":
+            if c == MasteryType.BEGINNER:
                 T[ap] += 1.0
 
                 # B. prerequisite gaps
@@ -92,7 +104,7 @@ class Adapter:
                         T[pre] += 0.8
 
             # C. reinforcement
-            elif c == "learning":
+            elif c == MasteryType.LEARNING:
                 for sim in similar_map.get(ap, []):
                     T[sim] += 0.5
 
@@ -120,13 +132,18 @@ class Adapter:
             "elementary": 0.4,
             "intermediate": 0.6,
             "advanced": 0.85,
-            "B1": 0.2,
-            "B2": 0.4,
+            "B1": 0.4,
+            "B2": 0.5,
+            "A1": 0.2,
+            "A2": 0.3,
+            "C1": 0.6,
+            "C2": 0.8,
+            "Advanced": 1.0,
         }.get(level, 0.5)
 
     def score_activity(self, activity, A_points, T, K, prereq_map, mastery_map, now):
         if not A_points:
-            return 0, {}
+            return float("-inf"), {"error": "activity has no atomic points"}
 
         # 1. coverage
         coverage = sum(T.get(p, 0) for p in A_points)
@@ -185,7 +202,7 @@ class Adapter:
         if reinforce:
             reasons.append(f"reinforces related concepts: {reinforce[:3]}")
 
-        avg = sum(K.get(p, 0) for p in A_points) / len(A_points)
+        avg = sum(K.get(p, 0) for p in A_points) / (len(A_points) + 1)
         reasons.append(f"fits your level (avg mastery ≈ {avg:.2f})")
 
         return reasons
@@ -239,6 +256,7 @@ class Adapter:
 
         return results[:top_k]
 
+    # TODO: FIX ME
     def next(self, learner_id: str, t: str):
         # TODO: Based on the current mastery levels
         # recommend ...

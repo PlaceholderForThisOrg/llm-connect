@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from llm_connect import logger
 from llm_connect.repositories.AtomicPointRepository import AtomicPointRepository
 from llm_connect.repositories.MasteryRepository import MasteryRepository
+from llm_connect.services.core.Adapter import MasteryType
 from llm_connect.services.core.BKTEngine import BKTEngine
 
 
@@ -85,13 +86,13 @@ class MasteryEngine:
             mastery.last_attempt_at = now
 
             if new_p_L > 0.9:
-                mastery.mastery_level = "MASTER"
+                mastery.mastery_level = MasteryType.MASTER
             elif new_p_L > 0.7:
-                mastery.mastery_level = "ALMOST_MASTER"
+                mastery.mastery_level = MasteryType.ALMOST_MASTER
             elif new_p_L > 0.3:
-                mastery.mastery_level = "LEARNING"
+                mastery.mastery_level = MasteryType.LEARNING
             else:
-                mastery.mastery_level = "BEGINNER"
+                mastery.mastery_level = MasteryType.BEGINNER
 
             # only add this record if
             # this is new
