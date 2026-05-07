@@ -141,9 +141,10 @@ class Adapter:
             "Advanced": 1.0,
         }.get(level, 0.5)
 
+    # The activity is scored
     def score_activity(self, activity, A_points, T, K, prereq_map, mastery_map, now):
         if not A_points:
-            return float("-inf"), {"error": "activity has no atomic points"}
+            return -1e9, {"error": "activity has no atomic points"}
 
         # 1. coverage
         coverage = sum(T.get(p, 0) for p in A_points)
