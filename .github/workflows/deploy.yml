@@ -57,10 +57,12 @@ jobs:
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} 'bash -s' <<'REMOTE'
           set -euo pipefail
+          cd /home/llm-connect
+          git fetch origin main
+          git reset --hard origin/main
           IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/llm-connect:${{ needs.build-and-push.outputs.image_tag }}"
           echo "Pulling image: ${IMAGE}"
           docker pull "${IMAGE}"
-          cd /home/llm-connect
           export DOCKER_IMAGE="${IMAGE}"
           docker compose down
           docker compose up -d
