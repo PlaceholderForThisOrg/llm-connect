@@ -165,7 +165,7 @@ class Brain:
             )
 
         # explain
-        if any(x in msg for x in ["/rag", "what is", "explain", "define", "what does mean"]):
+        if any(x in msg for x in ["/rag", "what is", "explain", "define", "what does mean", "atomic point"]):
             return IntentionResult(
                 intent=Intent.EXPLANATION,
                 scope=Scope.GLOBAL,
@@ -613,7 +613,8 @@ class Companion:
             parts = []
             for i, h in enumerate(hits, 1):
                 parts.append(
-                    f"### {i}. {h.name} ({h.type}, {h.level})\n"
+                    f"### {i}. atomic_point_id={h.atomic_point_id} | {h.name} "
+                    f"({h.type}, {h.level})\n"
                     f"{h.semantic_text}\n"
                     f"(cosine distance: {h.cosine_distance:.4f})"
                 )
