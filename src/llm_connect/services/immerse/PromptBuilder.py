@@ -101,6 +101,14 @@ class CompanionSessionParams(TypedDict):
     input: str
 
 
+class CompanionExplainRagParams(TypedDict):
+    user_memory: str
+    rag_knowledge: str
+    activity_context: str | None
+    history: List
+    learner_message: str
+
+
 class CompanionHelpParams(TypedDict):
     activity: str
     goal: str
@@ -165,6 +173,13 @@ class PromptBuilder:
         params: CompanionParams,
     ):
         template = self.env.get_template(name="companion.jinja")
+        return template.render(**params)
+
+    def companion_explain_rag_prompt(
+        self,
+        params: CompanionExplainRagParams,
+    ):
+        template = self.env.get_template(name="companion_explain_rag.jinja")
         return template.render(**params)
 
     def npc(

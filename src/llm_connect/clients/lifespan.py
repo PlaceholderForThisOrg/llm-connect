@@ -10,6 +10,8 @@ from beanie import init_beanie
 from fastapi import FastAPI
 from motor.motor_asyncio import AsyncIOMotorClient
 from openai import AsyncOpenAI
+from pgvector.asyncpg import register_vector
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -53,12 +55,18 @@ async def lifespan(app: FastAPI):
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY_ID(),
     )
 
-    # 😵‍💫 Engine for SQLAlchemy
-    app.state.sqlalchemy_engine = create_async_engine(
+    # 😵‍💫 Engine for SQLAlchemy (+ pgvector codecs on asyncpg connections)
+    _engine = create_async_engine(
         url=POSTGRE_URL_v1(),
         echo=True,
         future=True,
     )
+
+    @event.listens_for(_engine.sync_engine, "connect")
+    def _register_pgvector(dbapi_connection, connection_record):
+        dbapi_connection.run_async(register_vector)
+
+    app.state.sqlalchemy_engine = _engine
 
     app.state.session_maker = sessionmaker(
         app.state.sqlalchemy_engine, class_=AsyncSession, expire_on_commit=False

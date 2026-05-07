@@ -1,5 +1,6 @@
 from .Activity import Activity, TaskType
 from .AtomicPoint import AtomicPoint
+from .AtomicPointEmbedding import AtomicPointEmbedding
 from .AtomicPointRelation import AtomicPointRelation
 from .AtomicPointTag import AtomicPointTag
 from .Base import Base
@@ -14,6 +15,7 @@ from .Tag import Tag
 
 __all__ = [
     "AtomicPoint",
+    "AtomicPointEmbedding",
     "Tag",
     "AtomicPointTag",
     "Message",
