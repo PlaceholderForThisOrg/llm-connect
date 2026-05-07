@@ -575,6 +575,7 @@ class Companion:
         activity_context: str | None = None,
         rag_limit: int = 5,
     ):
+        logger.info("mode_explain")
         try:
             hits = await self.embedding_service.search(
                 query=message, limit=rag_limit
