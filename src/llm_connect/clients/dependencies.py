@@ -24,12 +24,14 @@ from llm_connect.services.ConversationService import ConversationService
 from llm_connect.services.core.Adapter import Adapter
 from llm_connect.services.core.aevaluator import AEvaluator
 from llm_connect.services.core.BKTEngine import BKTEngine
+from llm_connect.services.core.Bridge import Bridge
 from llm_connect.services.core.Companion import (
     Brain,
     Companion,
     Knowledge,
     Memory,
     Persionality,
+    Tool,
 )
 from llm_connect.services.core.Evaluator import Evaluator
 from llm_connect.services.core.MasteryEngine import MasteryEngine
@@ -332,6 +334,7 @@ def get_companion(
     ap_repo=Depends(get_ap_repo),
     message_repo=Depends(get_message_repo),
     mastery_repo=Depends(get_mastery_repo),
+    interaction_repo=Depends(get_interaction_repo),
 ):
     # Create the brain of the companion
     # Not dpendencies, but like
@@ -346,6 +349,7 @@ def get_companion(
         message_repo=message_repo,
         mastery_repo=mastery_repo,
         ap_repo=ap_repo,
+        interaction_repo=interaction_repo,
     )
 
     k = Knowledge(ap_repo)
@@ -354,12 +358,16 @@ def get_companion(
 
     p = Persionality()
 
+    bridge = Bridge()
+    tool = Tool(bridge=bridge)
+
     return Companion(
         brain,
         memory,
         k,
         p,
         pb,
+        tool,
     )
 
 

@@ -1,10 +1,11 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from llm_connect.models import Progress, Session
+from llm_connect.models import Interaction, Progress, Session
 
 
 class InteractionRepository:
@@ -66,3 +67,23 @@ class InteractionRepository:
                     )
 
         return history
+
+    async def get_latest_interaction(
+        self,
+        session_id: UUID,
+        progress_id: UUID,
+    ) -> Optional[Interaction]:
+        stmt = (
+            select(Interaction)
+            .join(Progress, Interaction.progress_id == Progress.id)
+            .where(
+                Progress.session_id == session_id,
+                Interaction.progress_id == progress_id,
+            )
+            .order_by(Interaction.created_at.desc())
+            .limit(1)
+        )
+
+        result = await self.db.execute(stmt)
+
+        return result.scalar_one_or_none()
