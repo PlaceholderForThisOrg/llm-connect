@@ -165,7 +165,7 @@ class Brain:
             )
 
         # explain
-        if any(x in msg for x in ["/rag", "what is", "explain", "define", "what does mean", "atomic point"]):
+        if any(x in msg for x in ["/rag", "what is", "explain", "define", "what does mean", "atomic point", "fix this sentence", "check grammar"]):
             return IntentionResult(
                 intent=Intent.EXPLANATION,
                 scope=Scope.GLOBAL,
