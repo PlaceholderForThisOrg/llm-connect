@@ -1,3 +1,25 @@
-{"id":"q1","question":"What is the difference between present simple and present continuous?","expected_keywords":["habit","routine","now","currently"]}
-{"id":"q2","question":"Explain when to use 'a' and 'an' in English.","expected_keywords":["vowel sound","consonant sound"]}
+{"id":"q1","question":"Explain the difference between present simple and present continuous.","expected_keywords":["habits","routines","happening now"]}
+{"id":"q2","question":"Explain when to use 'a' and 'an' in English.","expected_keywords":["consonant sound","vowel sound"]}
 {"id":"q3","question":"Fix this sentence: She go to school every day.","expected_keywords":["She goes to school every day"]}
+{"id":"q4","question":"What is the difference between 'some' and 'any'?","expected_keywords":["affirmative","questions","negatives"]}
+{"id":"q5","question":"Explain how to use 'could' and 'would' for polite requests.","expected_keywords":["polite","requests","less direct"]}
+{"id":"q6","question":"Give me a polite way to order food at a restaurant.","expected_keywords":["I'd like","Could I have"]}
+{"id":"q7","question":"How do I ask for the bill politely in English?","expected_keywords":["Could I have the bill","please"]}
+{"id":"q8","question":"What does 'I'd like' mean when ordering?","expected_keywords":["polite expression","order"]}
+{"id":"q9","question":"Explain the phrase 'make a reservation'.","expected_keywords":["book","in advance"]}
+{"id":"q10","question":"Correct this sentence: I would like order a coffee.","expected_keywords":["I would like to order a coffee"]}
+{"id":"q11","question":"Correct this sentence: Could I to have some water?","expected_keywords":["Could I have some water"]}
+{"id":"q12","question":"Correct this sentence: We made a reservation to two people.","expected_keywords":["for two people"]}
+{"id":"q13","question":"Explain why 'Could I have a glass of water?' is polite.","expected_keywords":["indirect request","could","polite"]}
+{"id":"q14","question":"When should I say 'I'd like a cheeseburger' instead of 'Give me a cheeseburger'?","expected_keywords":["polite","ordering food"]}
+{"id":"q15","question":"What is a natural English sentence for booking a table for two?","expected_keywords":["I'd like to make a reservation for two"]}
+{"id":"q16","question":"Fix this sentence: Do you have some vegetarian dishes?","expected_keywords":["Do you have any vegetarian dishes"]}
+{"id":"q17","question":"Explain the difference between 'Could I have...?' and 'I'd like...'.","expected_keywords":["polite request","state what you want"]}
+{"id":"q18","question":"What does 'some water' mean in 'Could I have some water?'","expected_keywords":["unspecified quantity","polite requests"]}
+{"id":"q19","question":"Correct this sentence: He is play football now.","expected_keywords":["He is playing football now"]}
+{"id":"q20","question":"Correct this sentence: She have an umbrella.","expected_keywords":["She has an umbrella"]}
+{"id":"q21","question":"Explain when to use present continuous with 'now'.","expected_keywords":["actions happening","moment of speaking"]}
+{"id":"q22","question":"How do I ask whether a restaurant has vegetarian dishes?","expected_keywords":["Do you have any vegetarian dishes"]}
+{"id":"q23","question":"Give me a polite sentence to ask for the menu.","expected_keywords":["Could I see the menu","please"]}
+{"id":"q24","question":"What is wrong with 'Would you bring us some water?' if I say it to a waiter?","expected_keywords":["nothing","grammatically","polite request"]}
+{"id":"q25","question":"Explain how to talk politely in a restaurant in simple English.","expected_keywords":["I'd like","Could I have","menu"]}

@@ -1,0 +1,58 @@
+{
+  "total_cases": 40,
+  "successful_cases": 40,
+  "error_cases": 0,
+  "intent_accuracy": 0.925,
+  "scope_accuracy": 1.0,
+  "avg_latency_ms": 965.04,
+  "latency_p50_ms": 563.64,
+  "latency_p95_ms": 3170.93,
+  "latency_p99_ms": 4341.45,
+  "classifier_sources": {
+    "rule": 20,
+    "llm": 20
+  },
+  "per_intent": {
+    "correction": {
+      "count": 10,
+      "intent_accuracy": 0.9,
+      "scope_accuracy": 1.0,
+      "avg_latency_ms": 1320.05
+    },
+    "explanation": {
+      "count": 10,
+      "intent_accuracy": 1.0,
+      "scope_accuracy": 1.0,
+      "avg_latency_ms": 791.64
+    },
+    "flashcard": {
+      "count": 10,
+      "intent_accuracy": 0.9,
+      "scope_accuracy": 1.0,
+      "avg_latency_ms": 663.22
+    },
+    "task_help": {
+      "count": 10,
+      "intent_accuracy": 0.9,
+      "scope_accuracy": 1.0,
+      "avg_latency_ms": 1085.27
+    }
+  },
+  "confusion_matrix": {
+    "correction": {
+      "correction": 9,
+      "explanation": 1
+    },
+    "explanation": {
+      "explanation": 10
+    },
+    "flashcard": {
+      "flashcard": 9,
+      "task_help": 1
+    },
+    "task_help": {
+      "task_help": 9,
+      "explanation": 1
+    }
+  }
+}

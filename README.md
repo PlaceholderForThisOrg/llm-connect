@@ -26,5 +26,11 @@ uv run python -m llm_connect.main
 docker compose up postgres mongodb -d
 docker compose run --rm flyway
 uv run python -m llm_connect.main
+```
+
+### 4. Eval AI
+
+$env:GITHUB_MODEL_TOKEN="token"
+.venv\Scripts\python.exe tools/eval/intent_eval.py --mode full
 
 

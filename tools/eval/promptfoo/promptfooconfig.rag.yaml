@@ -1,0 +1,134 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: llm-connect RAG chatbot evaluation
+
+prompts:
+  - "{{query}}"
+
+providers:
+  - id: file://tools/eval/promptfoo/chatbot_provider.py
+    config:
+      baseUrl: "{{env.EVAL_BASE_URL}}"
+      authToken: "{{env.EVAL_AUTH_TOKEN}}"
+      conversationId: "{{env.EVAL_CONVERSATION_ID}}"
+      ragLimit: 5
+      timeoutSeconds: 60
+
+defaultTest:
+  options:
+    transform: output.answer
+  assert:
+    - type: factuality
+      value: "{{expected_answer}}"
+      threshold: 0.7
+    - type: context-faithfulness
+      contextTransform: output.context.map(hit => hit.semantic_text).join("\n\n")
+      threshold: 0.7
+    - type: context-recall
+      value: "{{expected_answer}}"
+      contextTransform: output.context.map(hit => hit.semantic_text).join("\n\n")
+      threshold: 0.7
+    - type: context-relevance
+      contextTransform: output.context.map(hit => hit.semantic_text).join("\n\n")
+      threshold: 0.7
+
+tests:
+  - description: Grammar explanation should stay grounded in retrieved atomic points
+    vars:
+      query: Explain the difference between present simple and present continuous.
+      expected_answer: Present simple is used for habits or routines, while present continuous is used for actions happening now or around now.
+  - description: Article usage answer should reflect pronunciation-based rule
+    vars:
+      query: Explain when to use a and an in English.
+      expected_answer: Use a before a consonant sound and an before a vowel sound.
+  - description: Grammar correction should produce the corrected sentence
+    vars:
+      query: Fix this sentence: She go to school every day.
+      expected_answer: She goes to school every day.
+  - description: Some and any usage should be explained clearly
+    vars:
+      query: What is the difference between some and any?
+      expected_answer: Some is commonly used in affirmative statements and polite offers or requests, while any is often used in negatives and questions.
+  - description: Polite request modal verbs should be explained
+    vars:
+      query: Explain how to use could and would for polite requests.
+      expected_answer: Could and would are used to make requests sound more polite and less direct, especially in formal or service situations.
+  - description: Ordering food politely should mention natural expressions
+    vars:
+      query: Give me a polite way to order food at a restaurant.
+      expected_answer: A polite way to order food is to say I'd like or Could I have.
+  - description: Asking for the bill should be polite and direct
+    vars:
+      query: How do I ask for the bill politely in English?
+      expected_answer: You can say Could I have the bill, please to ask politely.
+  - description: Ordering phrase meaning should be explained
+    vars:
+      query: What does I'd like mean when ordering?
+      expected_answer: I'd like is a polite expression used to say what you want to order.
+  - description: Reservation phrase should be defined
+    vars:
+      query: Explain the phrase make a reservation.
+      expected_answer: Make a reservation means to book a table or place in advance.
+  - description: Missing infinitive should be corrected
+    vars:
+      query: Correct this sentence: I would like order a coffee.
+      expected_answer: I would like to order a coffee.
+  - description: Incorrect polite request form should be corrected
+    vars:
+      query: Correct this sentence: Could I to have some water?
+      expected_answer: Could I have some water.
+  - description: Wrong preposition in reservation sentence should be corrected
+    vars:
+      query: Correct this sentence: We made a reservation to two people.
+      expected_answer: We made a reservation for two people.
+  - description: Politeness rationale should be grounded
+    vars:
+      query: Explain why Could I have a glass of water is polite.
+      expected_answer: It is polite because it uses an indirect request form with could instead of giving a direct command.
+  - description: Polite ordering should be contrasted with command form
+    vars:
+      query: When should I say I'd like a cheeseburger instead of Give me a cheeseburger?
+      expected_answer: You should say I'd like a cheeseburger when you want to sound polite while ordering food.
+  - description: Natural booking sentence should be produced
+    vars:
+      query: What is a natural English sentence for booking a table for two?
+      expected_answer: A natural sentence is I'd like to make a reservation for two.
+  - description: Some versus any correction should be accurate
+    vars:
+      query: Fix this sentence: Do you have some vegetarian dishes?
+      expected_answer: Do you have any vegetarian dishes.
+  - description: Two polite patterns should be distinguished
+    vars:
+      query: Explain the difference between Could I have and I'd like.
+      expected_answer: Could I have is a polite request form, while I'd like is a polite way to state what you want.
+  - description: Quantity meaning in request should be explained
+    vars:
+      query: What does some water mean in Could I have some water?
+      expected_answer: Some water refers to an unspecified quantity of water and is natural in polite requests.
+  - description: Present continuous error should be corrected
+    vars:
+      query: Correct this sentence: He is play football now.
+      expected_answer: He is playing football now.
+  - description: Subject verb agreement should be corrected
+    vars:
+      query: Correct this sentence: She have an umbrella.
+      expected_answer: She has an umbrella.
+  - description: Present continuous with now should be explained
+    vars:
+      query: Explain when to use present continuous with now.
+      expected_answer: Present continuous is used with now for actions happening at the moment of speaking.
+  - description: Asking about vegetarian dishes should sound natural
+    vars:
+      query: How do I ask whether a restaurant has vegetarian dishes?
+      expected_answer: You can ask Do you have any vegetarian dishes.
+  - description: Asking for the menu should use polite form
+    vars:
+      query: Give me a polite sentence to ask for the menu.
+      expected_answer: A polite sentence is Could I see the menu, please.
+  - description: Waiter request sentence should be judged correctly
+    vars:
+      query: What is wrong with Would you bring us some water if I say it to a waiter?
+      expected_answer: Nothing is grammatically wrong; it is a polite request used in a service situation.
+  - description: Restaurant politeness should be summarized simply
+    vars:
+      query: Explain how to talk politely in a restaurant in simple English.
+      expected_answer: Use polite expressions like I'd like, Could I have, and Could I see the menu, please when speaking to restaurant staff.

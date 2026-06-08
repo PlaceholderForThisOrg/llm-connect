@@ -1,0 +1,40 @@
+{"id":"intent-1","message":"Can you help me? I'm stuck on this activity.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-2","message":"I don't know how to do this task.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-3","message":"Help me finish this activity step.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-4","message":"I'm not sure how to answer this exercise.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-4b","message":"This step in the activity is confusing me.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-4c","message":"I can't figure out what to write for this part.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-5","message":"Correct this sentence: She go to school every day.","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-6","message":"Fix this sentence for me: Could I to have some water?","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-7","message":"Check my sentence: I would like order a coffee.","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-8","message":"Is this correct: He is play football now?","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-8b","message":"My sentence is: She go to school every day.","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-8c","message":"Please look at this sentence: I would like order a coffee.","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-9","message":"Explain the difference between some and any.","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-10","message":"Define atomic point in this system.","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-11","message":"What is the meaning of 'make a reservation'?","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-12","message":"Explain how to use could for polite requests.","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-12b","message":"Could you tell me the difference between 'a' and 'an'?","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-12c","message":"When do I use present continuous?","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-13","message":"Create a flashcard for the word reservation.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
+{"id":"intent-14","message":"Make a flashcard for polite requests.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
+{"id":"intent-15","message":"Generate a flashcard for 'bill please'.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
+{"id":"intent-16","message":"I want a flashcard for the word menu.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
+{"id":"intent-16b","message":"Turn 'reservation' into a study card for me.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
+{"id":"intent-16c","message":"Make me something I can review later for the word menu.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
+{"id":"intent-17","message":"This part is throwing me off.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help","history":["system: You are working on an activity task about writing a polite restaurant request.","user: I tried one answer already.","assistant: Try asking for the menu politely."]}
+{"id":"intent-18","message":"I still don't get this one.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help","history":["system: The learner is inside an embedded activity.","assistant: Your current task is to ask for the bill politely."]}
+{"id":"intent-19","message":"Does this sound natural?","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction","history":["user: I would like order a coffee."]}
+{"id":"intent-20","message":"Can you polish this a bit?","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction","history":["user: We made a reservation to two people."]}
+{"id":"intent-21","message":"Can you walk me through this point?","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation","history":["user: I keep mixing up some and any."]}
+{"id":"intent-22","message":"Why does that version work better?","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation","history":["assistant: A more natural sentence is 'Could I have some water?'"]}
+{"id":"intent-23","message":"Give me something to review later for this word.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard","history":["user: The word is reservation."]}
+{"id":"intent-24","message":"Can you make a quick review item out of this?","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard","history":["user: I want to remember the phrase 'Could I see the menu, please?'"]}
+{"id":"intent-25","message":"What am I supposed to say here?","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help","history":["system: The learner is in an embedded speaking activity.","assistant: The task is to ask for the bill politely at the end of the meal."]}
+{"id":"intent-26","message":"Can you make this sound less awkward?","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction","history":["user: We made a reservation to two people."]}
+{"id":"intent-27","message":"Why is that one better?","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation","history":["assistant: A more natural version is 'I'd like to make a reservation for two.'"]}
+{"id":"intent-28","message":"Could you turn that into a little study card?","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard","history":["user: The phrase is 'Could I see the menu, please?'"]}
+{"id":"intent-29","message":"Help me with this task, please.","expected_intent":"task_help","expected_scope":"session_task","has_active_task":true,"group":"task_help"}
+{"id":"intent-30","message":"Correct this sentence for me: She have an umbrella.","expected_intent":"correction","expected_scope":"global","has_active_task":false,"group":"correction"}
+{"id":"intent-31","message":"Explain when to use present continuous.","expected_intent":"explanation","expected_scope":"global","has_active_task":false,"group":"explanation"}
+{"id":"intent-32","message":"Create a flashcard for the word umbrella.","expected_intent":"flashcard","expected_scope":"global","has_active_task":false,"group":"flashcard"}
