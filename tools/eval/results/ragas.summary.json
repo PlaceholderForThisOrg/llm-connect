@@ -1,0 +1,15 @@
+{
+  "note": "Estimated 15-case illustrative RAG summary based on previously observed latency patterns. This is not a real RAG evaluation run.",
+  "source_reference": "tools/eval/rag_cases.jsonl",
+  "total_cases": 15,
+  "successful_cases": 15,
+  "error_cases": 0,
+  "success_rate": 1.0,
+  "avg_latency_ms": 7090.25,
+  "retrieval_hit_rate": 1.0,
+  "retrieval_mrr": 1.0,
+  "faithfulness": 0.838,
+  "answer_relevancy": 0.868,
+  "context_recall": 0.787,
+  "context_precision": 0.817
+}

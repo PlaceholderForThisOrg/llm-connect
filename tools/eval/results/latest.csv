@@ -1,0 +1,221 @@
+id,question,answer,status,http_status,latency_ms,keyword_score,error
+q1,Explain the difference between present simple and present continuous.,"Great question! Here’s a clear, step-by-step explanation:
+
+**Present Simple**  
+- Use it for habits, routines, and things that are always true.
+- Example (from atomic_point_id=7f1e4a3e-4f23-48f7-9818-6d6d5b1cb0a3 | Present simple for habits and routines):  
+  ""I start work at nine every day.""  
+  (This happens regularly.)
+
+**Present Continuous**  
+- Use it for actions happening now or around the present moment.
+- Example:  
+  ""I am starting work now.""  
+  (This is happening right now.)
+
+**Summary:**  
+- Present simple = repeated actions, habits, facts (""She goes to school every day."")
+- Present continuous = actions happening now or temporarily (""She is going to school now."")
+
+Would you like to try making your own sentences?",ok,200,3985.02,1.0,
+q2,Explain when to use 'a' and 'an' in English.,"Great question! Here’s a simple explanation:
+
+- **Use 'a'** before words that start with a consonant sound.
+  - Example: a dog, a car, a pencil
+
+- **Use 'an'** before words that start with a vowel sound (a, e, i, o, u).
+  - Example: an apple, an umbrella, an egg
+
+**Remember:**  
+It’s about the sound, not always the letter:
+- an hour (starts with a vowel sound)
+- a university (starts with a “yu” sound)
+
+If you want to practice, try making your own examples!",ok,200,4889.96,1.0,
+q3,Fix this sentence: She go to school every day.,"The correct sentence is: **She goes to school every day.**
+
+**Explanation:**  
+For ""she"" (he/she/it), we add **-s** or **-es** to the verb in the present simple tense.  
+So, ""go"" becomes ""goes"" for ""she.""",ok,200,3104.09,1.0,
+q4,What is the difference between 'some' and 'any'?,"Great question! Here’s a clear explanation based on atomic_point_id=8b51b23a-a490-45f3-a361-68a991a8beaf (""Using 'some' and 'any' for requests""):
+
+- **'Some'** is used in positive sentences and polite requests or offers.
+  - Example: ""Can I have some water?""
+  (You are asking politely for a certain amount.)
+
+- **'Any'** is used in questions and negative sentences.
+  - Example: ""Do you have any vegetarian dishes?""
+  (You are asking if vegetarian dishes are available.)
+
+**Summary:**
+- Use **'some'** for positive sentences and polite requests.
+- Use **'any'** for questions and negative statements.
+
+Would you like more examples or practice?",ok,200,3982.76,0.333,
+q5,Explain how to use 'could' and 'would' for polite requests.,"Great question! Here’s a step-by-step explanation, based on atomic_point_id=a65b91e3-b7e2-4692-88f6-a7b0b77595e2 (""Polite requests with 'could' and 'would""):
+
+**'Could'** and **'Would'** are used to make your requests sound polite and friendly, especially in service situations like restaurants.
+
+**How to use them:**
+
+1. Start your sentence with ""Could I..."" or ""Would you...""
+2. Add what you are asking for.
+3. Finish with ""please"" for extra politeness.
+
+**Examples:**
+- ""Could I see the menu, please?""
+- ""Would you bring us some water, please?""
+
+**Summary:**  
+- Use ""Could I..."" when asking for something for yourself.
+- Use ""Would you..."" when asking someone to do something.
+
+These forms show good manners and respect. Would you like to practice making some polite requests?",ok,200,5012.28,0.667,
+q6,Give me a polite way to order food at a restaurant.,"Certainly! Here’s a polite way to order food at a restaurant:
+
+**""Could I have the chicken salad, please?""**
+
+or
+
+**""I'd like the chicken salad, please.""**
+
+Both are friendly and respectful ways to order. Adding ""please"" makes your request extra polite!
+
+Would you like more examples or help with other phrases?",ok,200,8246.91,1.0,
+q7,How do I ask for the bill politely in English?,"A polite way to ask for the bill in English is:
+
+**""We'll have the bill, please.""**  
+(from atomic_point_id=ec50f1d8-76fc-4fb1-8979-02f665c3a158 | Ordering food politely)
+
+You can also say:
+- ""Could we get the bill, please?""
+- ""Could you bring us the bill, please?""
+
+Adding ""please"" makes your request especially polite and friendly. Would you like to practice other polite phrases?",ok,200,6348.72,0.5,
+q8,What does 'I'd like' mean when ordering?,"Great question! When you say **“I’d like”** (which is short for “I would like”) while ordering, you are politely saying what you want.
+
+- Example: “I’d like the pasta, please.”
+
+**“I’d like”** is a friendly, respectful way to tell the server your choice. It is more polite than saying “I want.”
+
+So, ""I'd like"" means you are expressing your request or choice politely when ordering food or drinks. Would you like to practice making your own sentences?",ok,200,6623.92,0.5,
+q9,Explain the phrase 'make a reservation'.,"Of course! To **""make a reservation""** means to book or save a place in advance—usually at a restaurant, hotel, or for an event.
+
+**In simple English:**  
+If you ""make a reservation,"" you contact the restaurant or hotel before you go and ask them to save a table or room for you.
+
+**Examples:**
+- ""I'd like to make a reservation for two, please.""  
+- ""We made a reservation at the hotel for next weekend.""
+
+This way, you know there will be a place ready for you when you arrive. Would you like more examples or help with reservation phrases?",ok,200,5571.33,1.0,
+q10,Correct this sentence: I would like order a coffee.,"The correct sentence is: **I would like to order a coffee.**
+
+**Explanation:**  
+After ""would like,"" you need to use ""to"" + verb (“to order”).  
+So, say: ""I would like to order a coffee.""
+
+Would you like to practice more sentences?",ok,200,3410.65,1.0,
+q11,Correct this sentence: Could I to have some water?,,error,,45014.42,0.0,timed out
+q12,Correct this sentence: We made a reservation to two people.,"The correct sentence is: **We made a reservation for two people.**
+
+**Explanation:**  
+Use ""for"" (not ""to"") when saying how many people the reservation is for.
+
+Would you like to practice more sentences?",ok,200,20468.78,1.0,
+q13,Explain why 'Could I have a glass of water?' is polite.,"Great question! Here’s a clear explanation using atomic_point_id=a65b91e3-b7e2-4692-88f6-a7b0b77595e2 (“Polite requests with 'could' and 'would'”):
+
+- The phrase **""Could I have a glass of water?""** starts with **""Could I""**, which is a polite, soft way to make a request.
+- Using **""could""** makes your request less direct and more friendly, instead of demanding.
+- You are asking if it is possible, showing respect for the other person.
+- Adding **""please""** makes it even more polite.
+
+**Summary:**  
+""Could I have a glass of water?"" is polite because it uses ""could"" to ask kindly, and it respects the listener’s choice to help you.
+
+Would you like to practice other polite requests?",ok,200,5000.33,0.667,
+q14,When should I say 'I'd like a cheeseburger' instead of 'Give me a cheeseburger'?,"Great question! You should say **""I'd like a cheeseburger""** when you want to be polite and friendly, like when you order food at a restaurant or café.  
+(reference: atomic_point_id=ec50f1d8-76fc-4fb1-8979-02f665c3a158 | Ordering food politely)
+
+**""I'd like...""** is a polite way to tell the server what you want.  
+**""Give me a cheeseburger""** sounds very direct and can seem rude or bossy.
+
+**So, use ""I'd like a cheeseburger""** when:
+- You are speaking to a waiter or someone in a service situation.
+- You want to show good manners.
+
+Would you like to practice more polite phrases for ordering food?",ok,200,9191.84,1.0,
+q15,What is a natural English sentence for booking a table for two?,"A natural English sentence for booking a table for two is:
+
+""I'd like to make a reservation for two, please.""
+
+This is polite and commonly used when speaking or calling a restaurant.  
+(Reference: general English usage, as the retrieved curriculum does not directly cover making reservations.)
+
+Would you like to see more examples or practice saying it?",ok,200,5392.32,1.0,
+q16,Fix this sentence: Do you have some vegetarian dishes?,"The correct sentence is: **Do you have any vegetarian dishes?**
+
+**Explanation:**  
+In questions (like this one), we usually use **""any""** instead of **""some""** when talking about options or availability.
+
+Let me know if you’d like to practice more!",ok,200,3154.38,1.0,
+q17,Explain the difference between 'Could I have...?' and 'I'd like...'.,"Great question! Here’s a clear explanation grounded in:
+
+- atomic_point_id=a65b91e3-b7e2-4692-88f6-a7b0b77595e2 (“Polite requests with 'could' and 'would'”)
+- atomic_point_id=ec50f1d8-76fc-4fb1-8979-02f665c3a158 (“Ordering food politely”)
+
+**‘Could I have...?’**  
+- This is a polite question.
+- You are asking for something and usually want permission.
+- Example: “Could I have a glass of water, please?”
+
+**‘I’d like...’**  
+- This is a polite statement.
+- You are saying what you want or your choice.
+- Example: “I’d like the pasta, please.”
+
+**Difference:**  
+- “Could I have...?” asks if it is possible — you are requesting.
+- “I’d like...” tells what you want — you are ordering or expressing your choice.
+
+Both are polite and natural in restaurants or cafes. You can use either, and adding “please” makes them even nicer!
+
+Would you like to practice making your own sentences?",ok,200,5355.46,0.5,
+q18,What does 'some water' mean in 'Could I have some water?',"Great question! Here’s a clear explanation, using atomic_point_id=8b51b23a-a490-45f3-a361-68a991a8beaf (""Using 'some' and 'any' for requests""):
+
+In “Could I have some water?”, **‘some water’** means you are asking for a certain amount of water—not all the water, but enough to drink. The word **‘some’** shows you want a quantity but not a fixed amount (like a glass or a bottle). It is a polite way to ask.
+
+So, “some water” = a little water, not all, just enough.  
+Would you like more examples?",ok,200,32575.32,0.0,
+q19,Correct this sentence: He is play football now.,"The correct sentence is: **He is playing football now.**
+
+**Explanation:**  
+When talking about what someone is doing right now (present continuous), use ""am/is/are + verb-ing.""  
+- ""He is playing football now.""
+
+Great job practicing! Would you like to try more sentences?",ok,200,2944.04,1.0,
+q20,Correct this sentence: She have an umbrella.,"The correct sentence is: **She has an umbrella.**
+
+**Explanation:**  
+With ""she/he/it,"" use ""has,"" not ""have,"" in the present simple tense.
+
+Great work practicing! Would you like to try more corrections?",ok,200,2986.42,1.0,
+q21,Explain when to use present continuous with 'now'.,"Great question! Here’s a simple explanation:
+
+We use the **present continuous** tense with **""now""** to talk about actions happening at this exact moment.
+
+**Present continuous form:**  
+am / is / are + verb-ing
+
+**When to use it with ""now"":**
+- When someone is doing something right at this moment.
+  - Example: ""She is eating breakfast now.""
+  - Example: ""They are talking now.""
+
+**Tip:**  
+If you want to describe what is happening right now, use present continuous.
+
+Would you like to try making your own sentence?",ok,200,4773.32,0.5,
+q22,How do I ask whether a restaurant has vegetarian dishes?,,error,,7665.47,0.0,"Server error '500 Internal Server Error' for url 'http://127.0.0.1:8000/api/v1/me/conversations/83b1f1df-d566-40c2-be07-4428a871d7e0/messages/'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+

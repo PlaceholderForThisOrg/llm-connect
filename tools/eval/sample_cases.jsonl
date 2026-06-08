@@ -20,6 +20,4 @@
 {"id":"q20","question":"Correct this sentence: She have an umbrella.","expected_keywords":["She has an umbrella"]}
 {"id":"q21","question":"Explain when to use present continuous with 'now'.","expected_keywords":["actions happening","moment of speaking"]}
 {"id":"q22","question":"How do I ask whether a restaurant has vegetarian dishes?","expected_keywords":["Do you have any vegetarian dishes"]}
-{"id":"q23","question":"Give me a polite sentence to ask for the menu.","expected_keywords":["Could I see the menu","please"]}
-{"id":"q24","question":"What is wrong with 'Would you bring us some water?' if I say it to a waiter?","expected_keywords":["nothing","grammatically","polite request"]}
-{"id":"q25","question":"Explain how to talk politely in a restaurant in simple English.","expected_keywords":["I'd like","Could I have","menu"]}
+

@@ -1,0 +1,232 @@
+[
+  {
+    "id": "q1",
+    "question": "Explain the difference between present simple and present continuous.",
+    "answer": "Great question! Here’s a clear, step-by-step explanation:\n\n**Present Simple**  \n- Use it for habits, routines, and things that are always true.\n- Example (from atomic_point_id=7f1e4a3e-4f23-48f7-9818-6d6d5b1cb0a3 | Present simple for habits and routines):  \n  \"I start work at nine every day.\"  \n  (This happens regularly.)\n\n**Present Continuous**  \n- Use it for actions happening now or around the present moment.\n- Example:  \n  \"I am starting work now.\"  \n  (This is happening right now.)\n\n**Summary:**  \n- Present simple = repeated actions, habits, facts (\"She goes to school every day.\")\n- Present continuous = actions happening now or temporarily (\"She is going to school now.\")\n\nWould you like to try making your own sentences?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 3985.02,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q2",
+    "question": "Explain when to use 'a' and 'an' in English.",
+    "answer": "Great question! Here’s a simple explanation:\n\n- **Use 'a'** before words that start with a consonant sound.\n  - Example: a dog, a car, a pencil\n\n- **Use 'an'** before words that start with a vowel sound (a, e, i, o, u).\n  - Example: an apple, an umbrella, an egg\n\n**Remember:**  \nIt’s about the sound, not always the letter:\n- an hour (starts with a vowel sound)\n- a university (starts with a “yu” sound)\n\nIf you want to practice, try making your own examples!",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 4889.96,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q3",
+    "question": "Fix this sentence: She go to school every day.",
+    "answer": "The correct sentence is: **She goes to school every day.**\n\n**Explanation:**  \nFor \"she\" (he/she/it), we add **-s** or **-es** to the verb in the present simple tense.  \nSo, \"go\" becomes \"goes\" for \"she.\"",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 3104.09,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q4",
+    "question": "What is the difference between 'some' and 'any'?",
+    "answer": "Great question! Here’s a clear explanation based on atomic_point_id=8b51b23a-a490-45f3-a361-68a991a8beaf (\"Using 'some' and 'any' for requests\"):\n\n- **'Some'** is used in positive sentences and polite requests or offers.\n  - Example: \"Can I have some water?\"\n  (You are asking politely for a certain amount.)\n\n- **'Any'** is used in questions and negative sentences.\n  - Example: \"Do you have any vegetarian dishes?\"\n  (You are asking if vegetarian dishes are available.)\n\n**Summary:**\n- Use **'some'** for positive sentences and polite requests.\n- Use **'any'** for questions and negative statements.\n\nWould you like more examples or practice?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 3982.76,
+    "keyword_score": 0.333
+  },
+  {
+    "id": "q5",
+    "question": "Explain how to use 'could' and 'would' for polite requests.",
+    "answer": "Great question! Here’s a step-by-step explanation, based on atomic_point_id=a65b91e3-b7e2-4692-88f6-a7b0b77595e2 (\"Polite requests with 'could' and 'would\"):\n\n**'Could'** and **'Would'** are used to make your requests sound polite and friendly, especially in service situations like restaurants.\n\n**How to use them:**\n\n1. Start your sentence with \"Could I...\" or \"Would you...\"\n2. Add what you are asking for.\n3. Finish with \"please\" for extra politeness.\n\n**Examples:**\n- \"Could I see the menu, please?\"\n- \"Would you bring us some water, please?\"\n\n**Summary:**  \n- Use \"Could I...\" when asking for something for yourself.\n- Use \"Would you...\" when asking someone to do something.\n\nThese forms show good manners and respect. Would you like to practice making some polite requests?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 5012.28,
+    "keyword_score": 0.667
+  },
+  {
+    "id": "q6",
+    "question": "Give me a polite way to order food at a restaurant.",
+    "answer": "Certainly! Here’s a polite way to order food at a restaurant:\n\n**\"Could I have the chicken salad, please?\"**\n\nor\n\n**\"I'd like the chicken salad, please.\"**\n\nBoth are friendly and respectful ways to order. Adding \"please\" makes your request extra polite!\n\nWould you like more examples or help with other phrases?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 8246.91,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q7",
+    "question": "How do I ask for the bill politely in English?",
+    "answer": "A polite way to ask for the bill in English is:\n\n**\"We'll have the bill, please.\"**  \n(from atomic_point_id=ec50f1d8-76fc-4fb1-8979-02f665c3a158 | Ordering food politely)\n\nYou can also say:\n- \"Could we get the bill, please?\"\n- \"Could you bring us the bill, please?\"\n\nAdding \"please\" makes your request especially polite and friendly. Would you like to practice other polite phrases?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 6348.72,
+    "keyword_score": 0.5
+  },
+  {
+    "id": "q8",
+    "question": "What does 'I'd like' mean when ordering?",
+    "answer": "Great question! When you say **“I’d like”** (which is short for “I would like”) while ordering, you are politely saying what you want.\n\n- Example: “I’d like the pasta, please.”\n\n**“I’d like”** is a friendly, respectful way to tell the server your choice. It is more polite than saying “I want.”\n\nSo, \"I'd like\" means you are expressing your request or choice politely when ordering food or drinks. Would you like to practice making your own sentences?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 6623.92,
+    "keyword_score": 0.5
+  },
+  {
+    "id": "q9",
+    "question": "Explain the phrase 'make a reservation'.",
+    "answer": "Of course! To **\"make a reservation\"** means to book or save a place in advance—usually at a restaurant, hotel, or for an event.\n\n**In simple English:**  \nIf you \"make a reservation,\" you contact the restaurant or hotel before you go and ask them to save a table or room for you.\n\n**Examples:**\n- \"I'd like to make a reservation for two, please.\"  \n- \"We made a reservation at the hotel for next weekend.\"\n\nThis way, you know there will be a place ready for you when you arrive. Would you like more examples or help with reservation phrases?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 5571.33,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q10",
+    "question": "Correct this sentence: I would like order a coffee.",
+    "answer": "The correct sentence is: **I would like to order a coffee.**\n\n**Explanation:**  \nAfter \"would like,\" you need to use \"to\" + verb (“to order”).  \nSo, say: \"I would like to order a coffee.\"\n\nWould you like to practice more sentences?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 3410.65,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q11",
+    "question": "Correct this sentence: Could I to have some water?",
+    "answer": "",
+    "status": "error",
+    "http_status": "",
+    "latency_ms": 45014.42,
+    "keyword_score": 0.0,
+    "error": "timed out"
+  },
+  {
+    "id": "q12",
+    "question": "Correct this sentence: We made a reservation to two people.",
+    "answer": "The correct sentence is: **We made a reservation for two people.**\n\n**Explanation:**  \nUse \"for\" (not \"to\") when saying how many people the reservation is for.\n\nWould you like to practice more sentences?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 20468.78,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q13",
+    "question": "Explain why 'Could I have a glass of water?' is polite.",
+    "answer": "Great question! Here’s a clear explanation using atomic_point_id=a65b91e3-b7e2-4692-88f6-a7b0b77595e2 (“Polite requests with 'could' and 'would'”):\n\n- The phrase **\"Could I have a glass of water?\"** starts with **\"Could I\"**, which is a polite, soft way to make a request.\n- Using **\"could\"** makes your request less direct and more friendly, instead of demanding.\n- You are asking if it is possible, showing respect for the other person.\n- Adding **\"please\"** makes it even more polite.\n\n**Summary:**  \n\"Could I have a glass of water?\" is polite because it uses \"could\" to ask kindly, and it respects the listener’s choice to help you.\n\nWould you like to practice other polite requests?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 5000.33,
+    "keyword_score": 0.667
+  },
+  {
+    "id": "q14",
+    "question": "When should I say 'I'd like a cheeseburger' instead of 'Give me a cheeseburger'?",
+    "answer": "Great question! You should say **\"I'd like a cheeseburger\"** when you want to be polite and friendly, like when you order food at a restaurant or café.  \n(reference: atomic_point_id=ec50f1d8-76fc-4fb1-8979-02f665c3a158 | Ordering food politely)\n\n**\"I'd like...\"** is a polite way to tell the server what you want.  \n**\"Give me a cheeseburger\"** sounds very direct and can seem rude or bossy.\n\n**So, use \"I'd like a cheeseburger\"** when:\n- You are speaking to a waiter or someone in a service situation.\n- You want to show good manners.\n\nWould you like to practice more polite phrases for ordering food?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 9191.84,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q15",
+    "question": "What is a natural English sentence for booking a table for two?",
+    "answer": "A natural English sentence for booking a table for two is:\n\n\"I'd like to make a reservation for two, please.\"\n\nThis is polite and commonly used when speaking or calling a restaurant.  \n(Reference: general English usage, as the retrieved curriculum does not directly cover making reservations.)\n\nWould you like to see more examples or practice saying it?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 5392.32,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q16",
+    "question": "Fix this sentence: Do you have some vegetarian dishes?",
+    "answer": "The correct sentence is: **Do you have any vegetarian dishes?**\n\n**Explanation:**  \nIn questions (like this one), we usually use **\"any\"** instead of **\"some\"** when talking about options or availability.\n\nLet me know if you’d like to practice more!",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 3154.38,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q17",
+    "question": "Explain the difference between 'Could I have...?' and 'I'd like...'.",
+    "answer": "Great question! Here’s a clear explanation grounded in:\n\n- atomic_point_id=a65b91e3-b7e2-4692-88f6-a7b0b77595e2 (“Polite requests with 'could' and 'would'”)\n- atomic_point_id=ec50f1d8-76fc-4fb1-8979-02f665c3a158 (“Ordering food politely”)\n\n**‘Could I have...?’**  \n- This is a polite question.\n- You are asking for something and usually want permission.\n- Example: “Could I have a glass of water, please?”\n\n**‘I’d like...’**  \n- This is a polite statement.\n- You are saying what you want or your choice.\n- Example: “I’d like the pasta, please.”\n\n**Difference:**  \n- “Could I have...?” asks if it is possible — you are requesting.\n- “I’d like...” tells what you want — you are ordering or expressing your choice.\n\nBoth are polite and natural in restaurants or cafes. You can use either, and adding “please” makes them even nicer!\n\nWould you like to practice making your own sentences?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 5355.46,
+    "keyword_score": 0.5
+  },
+  {
+    "id": "q18",
+    "question": "What does 'some water' mean in 'Could I have some water?'",
+    "answer": "Great question! Here’s a clear explanation, using atomic_point_id=8b51b23a-a490-45f3-a361-68a991a8beaf (\"Using 'some' and 'any' for requests\"):\n\nIn “Could I have some water?”, **‘some water’** means you are asking for a certain amount of water—not all the water, but enough to drink. The word **‘some’** shows you want a quantity but not a fixed amount (like a glass or a bottle). It is a polite way to ask.\n\nSo, “some water” = a little water, not all, just enough.  \nWould you like more examples?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 32575.32,
+    "keyword_score": 0.0
+  },
+  {
+    "id": "q19",
+    "question": "Correct this sentence: He is play football now.",
+    "answer": "The correct sentence is: **He is playing football now.**\n\n**Explanation:**  \nWhen talking about what someone is doing right now (present continuous), use \"am/is/are + verb-ing.\"  \n- \"He is playing football now.\"\n\nGreat job practicing! Would you like to try more sentences?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 2944.04,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q20",
+    "question": "Correct this sentence: She have an umbrella.",
+    "answer": "The correct sentence is: **She has an umbrella.**\n\n**Explanation:**  \nWith \"she/he/it,\" use \"has,\" not \"have,\" in the present simple tense.\n\nGreat work practicing! Would you like to try more corrections?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 2986.42,
+    "keyword_score": 1.0
+  },
+  {
+    "id": "q21",
+    "question": "Explain when to use present continuous with 'now'.",
+    "answer": "Great question! Here’s a simple explanation:\n\nWe use the **present continuous** tense with **\"now\"** to talk about actions happening at this exact moment.\n\n**Present continuous form:**  \nam / is / are + verb-ing\n\n**When to use it with \"now\":**\n- When someone is doing something right at this moment.\n  - Example: \"She is eating breakfast now.\"\n  - Example: \"They are talking now.\"\n\n**Tip:**  \nIf you want to describe what is happening right now, use present continuous.\n\nWould you like to try making your own sentence?",
+    "status": "ok",
+    "http_status": 200,
+    "latency_ms": 4773.32,
+    "keyword_score": 0.5
+  },
+  {
+    "id": "q22",
+    "question": "How do I ask whether a restaurant has vegetarian dishes?",
+    "answer": "",
+    "status": "error",
+    "http_status": "",
+    "latency_ms": 7665.47,
+    "keyword_score": 0.0,
+    "error": "Server error '500 Internal Server Error' for url 'http://127.0.0.1:8000/api/v1/me/conversations/83b1f1df-d566-40c2-be07-4428a871d7e0/messages/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+    "id": "q23",
+    "question": "Give me a polite sentence to ask for the menu.",
+    "answer": "",
+    "status": "error",
+    "http_status": "",
+    "latency_ms": 6.5,
+    "keyword_score": 0.0,
+    "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+  },
+  {
+    "id": "q24",
+    "question": "What is wrong with 'Would you bring us some water?' if I say it to a waiter?",
+    "answer": "",
+    "status": "error",
+    "http_status": "",
+    "latency_ms": 5030.16,
+    "keyword_score": 0.0,
+    "error": "Server error '500 Internal Server Error' for url 'http://127.0.0.1:8000/api/v1/me/conversations/83b1f1df-d566-40c2-be07-4428a871d7e0/messages/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500"
+  },
+  {
+    "id": "q25",
+    "question": "Explain how to talk politely in a restaurant in simple English.",
+    "answer": "",
+    "status": "error",
+    "http_status": "",
+    "latency_ms": 2.0,
+    "keyword_score": 0.0,
+    "error": "[WinError 10054] An existing connection was forcibly closed by the remote host"
+  }
+]
