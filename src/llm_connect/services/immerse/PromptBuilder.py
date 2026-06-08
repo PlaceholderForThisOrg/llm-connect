@@ -157,7 +157,7 @@ class PromptBuilder:
         self,
         params: IntentClassifierParams,
     ):
-        template = self.env.get_template(name="companion_session.jinja")
+        template = self.env.get_template(name="intent.jinja")
         return template.render(**params)
 
     def companion_session_prompt(
